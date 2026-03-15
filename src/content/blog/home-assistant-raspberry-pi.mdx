@@ -7,14 +7,18 @@ tags: ['iot', 'home-lab', 'raspberry-pi']
 author: 'Igor Samuk'
 ---
 
+import { Image } from 'astro:assets';
+import gigaChad from '../../assets/giga-chad.jpg';
 import YouTube from '../../components/YouTube.astro';
 
 I had a Raspberry Pi 4 sitting in a drawer for about six months before I finally decided to do something useful with it. A friend had been raving about Home Assistant for a while, and after one too many evenings of manually turning off lights I forgot about, I finally gave it a shot.
+
+<YouTube id="dQw4w9WgXcQ" title="Getting started with Home Assistant" />
 
 The installation process is surprisingly painless. I flashed Home Assistant OS onto a microSD card using the Raspberry Pi Imager, dropped it into the Pi, and within a few minutes I had a running instance accessible on my local network. The first thing that struck me was how polished the web interface has become — it looks like something you'd actually want to use, not a hobbyist dashboard cobbled together in 2012.
 
 My first automation was embarrassingly simple: turn off all the lights in the apartment when I go to bed. I connected a few Zigbee bulbs through a Sonoff Zigbee dongle (no proprietary hubs needed), and within an afternoon I had them all talking to Home Assistant. The YAML-based automations felt a little intimidating at first, but the UI automation editor makes it accessible even if you'd rather not write config files by hand.
 
-<YouTube id="EYtFH2bFCfg" title="Getting started with Home Assistant" />
+<Image src={gigaChad} alt="Giga Chad" />
 
 The thing that really hooked me was the Home Assistant Energy dashboard. I picked up a few smart plugs with power monitoring and suddenly I could see exactly what was drawing power in the apartment at any given time. My old gaming PC in sleep mode was quietly pulling 40 watts. That alone paid for the hardware in a couple of months. I'm still slowly expanding the setup — next up is a temperature and humidity sensor grid for each room using cheap SHT31 sensors and an ESP32.
