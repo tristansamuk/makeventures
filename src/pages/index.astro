@@ -14,7 +14,7 @@ const recentPosts = posts.slice(0, 3);
 
 const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
 const postCount = posts.length;
-const firstYear = Math.min(...posts.map((p) => p.data.pubDate.getFullYear()));
+const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullYear()), Infinity);
 ---
 
 <!doctype html>
@@ -52,9 +52,7 @@ const firstYear = Math.min(...posts.map((p) => p.data.pubDate.getFullYear()));
 				</div>
 
 				<div class="hero-topics" aria-label="Topics covered">
-					{allTags.map((tag) => (
-						<a href={`/blog/tags/${tag}/`} class="topic-tag">#{tag}</a>
-					))}
+					<TagList tags={allTags} />
 				</div>
 			</section>
 
@@ -91,7 +89,6 @@ const firstYear = Math.min(...posts.map((p) => p.data.pubDate.getFullYear()));
 </html>
 
 <script>
-	// Typewriter effect on the hero label
 	// Typewriter on the eyebrow label — starts after the title has faded in
 	const label = document.querySelector('.hero-label') as HTMLElement;
 	if (label) {
@@ -257,27 +254,8 @@ const firstYear = Math.min(...posts.map((p) => p.data.pubDate.getFullYear()));
 
 	/* ── Topics strip ── */
 	.hero-topics {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--sp-2);
 		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 		animation-delay: 0.3s;
-	}
-	.topic-tag {
-		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
-		font-weight: 500;
-		letter-spacing: 0.02em;
-		color: var(--color-accent);
-		background-color: var(--color-accent-subtle);
-		text-decoration: none;
-		padding: 2px var(--sp-2);
-		border-radius: var(--radius-sm);
-		transition: background-color var(--ease), color var(--ease);
-	}
-	.topic-tag:hover {
-		background-color: var(--color-accent);
-		color: #fff;
 	}
 
 	/* ── Recent Posts ── */
@@ -391,6 +369,6 @@ const firstYear = Math.min(...posts.map((p) => p.data.pubDate.getFullYear()));
 			gap: var(--sp-5);
 		}
 		.hero-description { font-size: var(--fs-md); }
-		.hero-stats { font-size: 0.6rem; gap: var(--sp-2); }
+		.hero-stats { font-size: var(--fs-xs); gap: var(--sp-2); }
 	}
 </style>

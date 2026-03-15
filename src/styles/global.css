@@ -112,6 +112,7 @@ body {
   font-family: var(--font-body);
   margin: 0;
   padding: 0;
+  position: relative;
   background-color: var(--color-bg);
   color: var(--color-ink);
   font-size: var(--fs-base);
@@ -272,7 +273,7 @@ input {
 /* ─── Noise texture overlay ───────────────────────────────────────────────── */
 body::before {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 9999;

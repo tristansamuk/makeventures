@@ -5,6 +5,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import PostCard from '../../components/PostCard.astro';
 import TagList from '../../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
@@ -54,31 +55,7 @@ const [featured, ...rest] = posts;
 
 			<!-- Remaining posts -->
 			<ul class="post-grid" role="list">
-				{
-					rest.map((post) => (
-						<li class="post-card">
-							{post.data.heroImage && (
-								<div class="card-image">
-									<Image width={720} height={400} src={post.data.heroImage} alt="" />
-								</div>
-							)}
-							<div class="card-body">
-								<time class="card-date">
-									<FormattedDate date={post.data.pubDate} />
-								</time>
-								<h2 class="card-title">
-									<a href={`/blog/${post.id}/`} class="card-link">
-										{post.data.title}
-									</a>
-								</h2>
-								<p class="card-description">{post.data.description}</p>
-								{post.data.tags && post.data.tags.length > 0 && (
-									<TagList tags={post.data.tags} />
-								)}
-							</div>
-						</li>
-					))
-				}
+				{rest.map((post) => <PostCard post={post} />)}
 			</ul>
 		</main>
 		<Footer />
@@ -103,7 +80,7 @@ const [featured, ...rest] = posts;
 		letter-spacing: 0.02em;
 	}
 
-/* ── Featured card ── */
+	/* ── Featured card ── */
 	.featured-card {
 		position: relative;
 		display: grid;
@@ -155,6 +132,13 @@ const [featured, ...rest] = posts;
 		padding: 2px var(--sp-2);
 		border-radius: var(--radius-sm);
 	}
+	.card-date {
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		color: var(--color-accent);
+	}
 	.featured-title {
 		margin: 0;
 		font-family: var(--font-display);
@@ -167,64 +151,6 @@ const [featured, ...rest] = posts;
 		color: var(--color-ink-muted);
 		line-height: 1.65;
 	}
-
-	/* ── Grid ── */
-	.post-grid {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--sp-8);
-	}
-
-	/* ── Card ── */
-	.post-card {
-		position: relative;
-		background: var(--color-bg);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-lg);
-		overflow: hidden;
-		transition: box-shadow var(--ease), transform var(--ease), border-color var(--ease);
-	}
-	.post-card:hover {
-		box-shadow: var(--shadow-md);
-		transform: translateY(-2px);
-		border-color: var(--color-accent);
-	}
-	.card-image {
-		aspect-ratio: 16 / 9;
-		overflow: hidden;
-	}
-	.card-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		border-radius: 0;
-		transition: transform var(--ease-slow);
-	}
-	.post-card:hover .card-image img {
-		transform: scale(1.04);
-	}
-	.card-body {
-		padding: var(--sp-6);
-		display: flex;
-		flex-direction: column;
-		gap: var(--sp-3);
-	}
-	.card-date {
-		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
-		font-weight: 500;
-		letter-spacing: 0.06em;
-		color: var(--color-accent);
-	}
-	.card-title {
-		margin: 0;
-		font-family: var(--font-display);
-		font-size: var(--fs-xl);
-		line-height: 1.25;
-	}
 	.card-link {
 		text-decoration: none;
 		color: inherit;
@@ -235,19 +161,18 @@ const [featured, ...rest] = posts;
 		position: absolute;
 		inset: 0;
 	}
-	.post-card:hover .card-link,
 	.featured-card:hover .card-link {
 		color: var(--color-accent);
 	}
-	.card-description {
+
+	/* ── Grid ── */
+	.post-grid {
+		list-style: none;
 		margin: 0;
-		font-size: var(--fs-sm);
-		color: var(--color-ink-muted);
-		line-height: 1.65;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--sp-8);
 	}
 
 	/* ── Responsive ── */
