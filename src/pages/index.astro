@@ -130,8 +130,9 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		title.style.fontSize = lo + 'px';
 	}
 
-	fitTitle();
+	requestAnimationFrame(fitTitle);
 	window.addEventListener('resize', fitTitle);
+	window.visualViewport?.addEventListener('resize', fitTitle);
 </script>
 
 <style>
