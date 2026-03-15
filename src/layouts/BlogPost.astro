@@ -5,10 +5,11 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import TagList from '../components/TagList.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, author } = Astro.props;
 ---
 
 <html lang="en">
@@ -31,6 +32,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 							<time class="post-date">
 								<FormattedDate date={pubDate} />
 							</time>
+							{author && <span class="post-author">by {author}</span>}
 							{updatedDate && (
 								<span class="updated-date">
 									Updated <FormattedDate date={updatedDate} />
@@ -39,6 +41,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						</div>
 						<h1>{title}</h1>
 						{description && <p class="post-description">{description}</p>}
+						{tags && tags.length > 0 && <TagList tags={tags} />}
 						<hr />
 					</header>
 					<slot />
@@ -88,6 +91,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--color-accent);
+	}
+	.post-author {
+		font-size: var(--fs-xs);
+		color: var(--color-ink-muted);
 	}
 	.updated-date {
 		font-size: var(--fs-xs);

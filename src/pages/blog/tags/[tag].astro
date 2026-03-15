@@ -1,30 +1,45 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import TagList from '../../components/TagList.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import Header from '../../../components/Header.astro';
+import TagList from '../../../components/TagList.astro';
+import { SITE_TITLE } from '../../../consts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
+	return allTags.map((tag) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+
+const posts = (await getCollection('blog'))
+	.filter((p) => p.data.tags?.includes(tag!))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Blog — ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead
+			title={`Posts tagged "${tag}" — ${SITE_TITLE}`}
+			description={`All posts tagged with "${tag}"`}
+		/>
 	</head>
 	<body>
 		<Header />
 		<main>
 			<header class="page-header">
-				<h1>Blog</h1>
-				<p class="page-subtitle">Thoughts, stories, and ideas.</p>
+				<p class="page-eyebrow">Tag</p>
+				<h1>{tag}</h1>
+				<p class="page-subtitle">
+					{posts.length} post{posts.length !== 1 ? 's' : ''}
+				</p>
 			</header>
+
 			<ul class="post-grid" role="list">
 				{
 					posts.map((post) => (
@@ -61,13 +76,21 @@ const posts = (await getCollection('blog')).sort(
 		padding-bottom: var(--sp-8);
 		border-bottom: 1px solid var(--color-border);
 	}
+	.page-eyebrow {
+		margin: 0 0 var(--sp-2);
+		font-size: var(--fs-xs);
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-accent);
+	}
 	.page-header h1 {
 		margin-bottom: var(--sp-2);
 	}
 	.page-subtitle {
 		margin: 0;
 		color: var(--color-ink-muted);
-		font-size: var(--fs-lg);
+		font-size: var(--fs-md);
 	}
 
 	.post-grid {

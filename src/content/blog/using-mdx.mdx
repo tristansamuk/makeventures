@@ -1,31 +1,23 @@
 ---
-title: 'Using MDX'
-description: 'Lorem ipsum dolor sit amet'
+title: 'Automating My Balcony Garden with ESP8266 and MQTT'
+description: 'Building a soil moisture monitoring system with a $3 microcontroller, a handful of sensors, and way too much time reading datasheets.'
 pubDate: 'Jun 01 2024'
 heroImage: '../../assets/blog-placeholder-5.jpg'
+tags: ['iot', 'coding']
+author: 'Igor Samuk'
 ---
 
-This theme comes with the [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/) integration installed and configured in your `astro.config.mjs` config file. If you prefer not to use MDX, you can disable support by removing the integration from your config file.
+It started with a dead basil plant. I travel for work a few times a month, and despite my best efforts to convince my family that plants need water, I came home in May to find my balcony herb garden in various states of distress. The obvious solution was to buy a self-watering pot. The solution I actually chose was to build a sensor network and automate the whole thing.
 
-## Why MDX?
+The hardware is simple: a NodeMCU ESP8266 board (around $3 from the usual suppliers), a capacitive soil moisture sensor per plant, and a DHT22 for ambient temperature and humidity. I went capacitive rather than resistive for the moisture sensors — resistive ones corrode quickly when they're constantly in damp soil, which rather defeats the purpose. The ESP8266 reads all the sensors every five minutes and publishes the values over MQTT to a broker running in my home lab.
 
-MDX is a special flavor of Markdown that supports embedded JavaScript & JSX syntax. This unlocks the ability to [mix JavaScript and UI Components into your Markdown content](https://docs.astro.build/en/guides/integrations-guide/mdx/#mdx-in-astro) for things like interactive charts or alerts.
+```cpp
+// Publish soil moisture to MQTT
+float moisture = analogRead(MOISTURE_PIN);
+float percentage = map(moisture, AIR_VALUE, WATER_VALUE, 0, 100);
+client.publish("garden/basil/moisture", String(percentage).c_str());
+```
 
-If you have existing content authored in MDX, this integration will hopefully make migrating to Astro a breeze.
+Home Assistant picks up the MQTT messages and logs them as sensor entities, which means I get history graphs and can build automations on top of them. The automation I actually wanted: send a notification to my phone when any plant drops below 30% moisture. It took about twenty minutes to set up once the sensors were publishing reliably.
 
-## Example
-
-Here is how you import and use a UI component inside of MDX.  
-When you open this page in the browser, you should see the clickable button below.
-
-import HeaderLink from '../../components/HeaderLink.astro';
-
-<HeaderLink href="#" onclick="alert('clicked!')">
-	Embedded component in MDX
-</HeaderLink>
-
-## More Links
-
-- [MDX Syntax Documentation](https://mdxjs.com/docs/what-is-mdx)
-- [Astro Usage Documentation](https://docs.astro.build/en/basics/astro-pages/#markdownmdx-pages)
-- **Note:** [Client Directives](https://docs.astro.build/en/reference/directives-reference/#client-directives) are still required to create interactive components. Otherwise, all components in your MDX will render as static HTML (no JavaScript) by default.
+The watering side is still manual — I haven't wired up any solenoid valves yet, partly because my balcony setup makes it complicated and partly because I want to observe a full growing season before I commit to automating the response. But having visibility into what's happening has already helped. I know which plants dry out fastest (the rosemary, surprisingly). I know that a sunny day raises the ambient temperature sensor by about 8°C compared to a cloudy one. And the basil survived my last two trips without incident, which is the only metric that really matters.
