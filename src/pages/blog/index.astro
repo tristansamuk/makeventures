@@ -43,8 +43,10 @@ const posts = (await getCollection('blog')).sort(
 										{post.data.title}
 									</a>
 								</h2>
-								{post.data.tags && <TagList tags={post.data.tags} />}
 								<p class="card-description">{post.data.description}</p>
+								{post.data.tags && post.data.tags.length > 0 && (
+									<TagList tags={post.data.tags} />
+								)}
 							</div>
 						</li>
 					))

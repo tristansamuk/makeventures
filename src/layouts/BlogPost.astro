@@ -41,7 +41,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 						</div>
 						<h1>{title}</h1>
 						{description && <p class="post-description">{description}</p>}
-						{tags && tags.length > 0 && <TagList tags={tags} />}
+					{tags && tags.length > 0 && <TagList tags={tags} />}
 						<hr />
 					</header>
 					<slot />
