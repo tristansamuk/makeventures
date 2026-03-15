@@ -12,7 +12,7 @@ const { tags } = Astro.props;
 			{tags.map((tag) => (
 				<li>
 					<a href={`/blog/tags/${tag}/`} class="tag">
-						{tag}
+						#{tag}
 					</a>
 				</li>
 			))}
@@ -32,19 +32,19 @@ const { tags } = Astro.props;
 	.tag {
 		/*
 		 * position + z-index lifts tags above the card-link::after overlay
-		 * that makes the whole card clickable, so tag links remain interactive.
+		 * so they remain clickable even when inside a stretched-link card.
 		 */
 		position: relative;
 		z-index: 1;
 		display: inline-block;
-		padding: 2px var(--sp-3);
-		background-color: transparent;
-		border: 1px solid var(--color-accent);
-		border-radius: var(--radius-sm);
+		font-family: var(--font-mono);
 		font-size: var(--fs-xs);
-		font-weight: 600;
-		letter-spacing: 0.04em;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		padding: 2px var(--sp-2);
 		color: var(--color-accent);
+		background-color: var(--color-accent-subtle);
+		border-radius: var(--radius-sm);
 		text-decoration: none;
 		transition: background-color var(--ease), color var(--ease);
 	}

@@ -1,20 +1,27 @@
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 :root {
-  /* Colors — light mode */
-  --color-bg:           #ffffff;
-  --color-surface:      #f5f5f5;
-  --color-border:       #e5e5e5;
-  --color-ink:          #0a0a0a;
-  --color-ink-muted:    #525252;
-  --color-accent:       #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-code-bg:      #f0f0f0;
-  --color-pre-bg:       #111111;
+  /* Colors — light mode (warm cream & amber) */
+  --color-bg:            #FAF8F4;
+  --color-surface:       #F0EAE0;
+  --color-border:        #DDD3C5;
+  --color-border-subtle: #EBE4DA;
+  --color-ink:           #1C1712;
+  --color-ink-muted:     #7A6E66;
+  --color-accent:        #0E7490;
+  --color-accent-hover:  #0C6070;
+  --color-accent-subtle: #E0F2F7;
+  --color-code-bg:       #EDE6DC;
+  --color-pre-bg:        #1C1712;
 
-  /* Shadows — light mode */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+  /* Shadows — warm-tinted */
+  --shadow-sm: 0 1px 3px rgba(28, 23, 18, 0.08), 0 1px 2px rgba(28, 23, 18, 0.04);
+  --shadow-md: 0 4px 16px rgba(28, 23, 18, 0.10), 0 2px 4px rgba(28, 23, 18, 0.06);
+  --shadow-lg: 0 8px 32px rgba(28, 23, 18, 0.13), 0 4px 8px rgba(28, 23, 18, 0.08);
+
+  /* Typography */
+  --font-display: 'Bricolage Grotesque', 'Arial Black', system-ui, sans-serif;
+  --font-body:    'Figtree', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 
   /* Spacing */
   --sp-1:  0.25rem;
@@ -31,70 +38,70 @@
   --sp-24: 6rem;
 
   /* Font sizes */
-  --fs-xs:   0.75rem;
+  --fs-xs:   0.6875rem;
   --fs-sm:   0.875rem;
   --fs-base: 1.0625rem;
   --fs-md:   1.125rem;
   --fs-lg:   1.25rem;
   --fs-xl:   1.5rem;
   --fs-2xl:  1.875rem;
-  --fs-3xl:  2.25rem;
-  --fs-4xl:  3rem;
-  --fs-5xl:  3.75rem;
+  --fs-3xl:  2.375rem;
+  --fs-4xl:  3.125rem;
+  --fs-5xl:  4rem;
 
   /* Layout */
   --container:  72rem;
-  --prose:      44rem;
-  --nav-height: 4rem;
+  --prose:      46rem;
+  --nav-height: 3.5rem;
 
   /* Shape */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 12px;
 
   /* Transitions */
   --ease:      200ms ease;
-  --ease-slow: 350ms ease;
+  --ease-slow: 380ms ease;
 }
 
 /* ─── Dark mode ───────────────────────────────────────────────────────────── */
 [data-theme="dark"] {
-  --color-bg:           #0a0a0a;
-  --color-surface:      #141414;
-  --color-border:       #2a2a2a;
-  --color-ink:          #fafafa;
-  --color-ink-muted:    #a3a3a3;
-  --color-accent:       #3b82f6;
-  --color-accent-hover: #60a5fa;
-  --color-code-bg:      #1e1e1e;
-  --color-pre-bg:       #1a1a1a;
+  --color-bg:            #100E0B;
+  --color-surface:       #1A1712;
+  --color-border:        #2E261C;
+  --color-border-subtle: #241E16;
+  --color-ink:           #F0EBE3;
+  --color-ink-muted:     #9A8E84;
+  --color-accent:        #22D3EE;
+  --color-accent-hover:  #67E8F9;
+  --color-accent-subtle: #083344;
+  --color-code-bg:       #211C16;
+  --color-pre-bg:        #0C0A07;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.7);
 }
 
-/* System preference when no manual override is set */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-bg:           #0a0a0a;
-    --color-surface:      #141414;
-    --color-border:       #2a2a2a;
-    --color-ink:          #fafafa;
-    --color-ink-muted:    #a3a3a3;
-    --color-accent:       #3b82f6;
-    --color-accent-hover: #60a5fa;
-    --color-code-bg:      #1e1e1e;
-    --color-pre-bg:       #1a1a1a;
+    --color-bg:            #100E0B;
+    --color-surface:       #1A1712;
+    --color-border:        #2E261C;
+    --color-border-subtle: #241E16;
+    --color-ink:           #F0EBE3;
+    --color-ink-muted:     #9A8E84;
+    --color-accent:        #22D3EE;
+    --color-accent-hover:  #67E8F9;
+    --color-accent-subtle: #083344;
+    --color-code-bg:       #211C16;
+    --color-pre-bg:        #0C0A07;
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.7);
   }
 }
-
-/* ─── Font ────────────────────────────────────────────────────────────────── */
-@import "@fontsource-variable/inter";
 
 /* ─── Reset & base ────────────────────────────────────────────────────────── */
 *, *::before, *::after {
@@ -102,7 +109,7 @@
 }
 
 body {
-  font-family: "Inter Variable", "Inter", system-ui, sans-serif;
+  font-family: var(--font-body);
   margin: 0;
   padding: 0;
   background-color: var(--color-bg);
@@ -124,9 +131,10 @@ main {
 /* ─── Typography ──────────────────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 var(--sp-4) 0;
+  font-family: var(--font-display);
   color: var(--color-ink);
   line-height: 1.2;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   font-weight: 700;
 }
 h1 { font-size: var(--fs-4xl); }
@@ -155,14 +163,20 @@ strong, b {
 }
 
 /* ─── Prose (blog post body) ──────────────────────────────────────────────── */
+.prose {
+  font-size: var(--fs-md);
+  line-height: 1.8;
+}
 .prose p {
   margin-bottom: var(--sp-6);
 }
 .prose h2 {
   margin-top: var(--sp-12);
+  font-size: var(--fs-2xl);
 }
 .prose h3 {
   margin-top: var(--sp-8);
+  font-size: var(--fs-xl);
 }
 .prose ul,
 .prose ol {
@@ -196,11 +210,11 @@ blockquote {
   margin: var(--sp-8) 0;
   font-size: var(--fs-lg);
   color: var(--color-ink-muted);
-  font-style: italic;
 }
 
 code {
-  font-size: 0.875em;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
   padding: 2px 6px;
   background-color: var(--color-code-bg);
   border-radius: var(--radius-sm);
@@ -215,7 +229,8 @@ pre {
 
 pre > code {
   all: unset;
-  color: #f8f6f1;
+  font-family: var(--font-mono);
+  color: #F0E8D8;
   font-size: var(--fs-sm);
   line-height: 1.7;
 }
@@ -236,7 +251,7 @@ input {
   :root {
     --fs-5xl: 2.5rem;
     --fs-4xl: 2.25rem;
-    --fs-3xl: 1.75rem;
+    --fs-3xl: 1.875rem;
     --fs-2xl: 1.5rem;
   }
   main {

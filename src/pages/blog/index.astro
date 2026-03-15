@@ -23,7 +23,7 @@ const posts = (await getCollection('blog')).sort(
 		<main>
 			<header class="page-header">
 				<h1>Blog</h1>
-				<p class="page-subtitle">Thoughts, stories, and ideas.</p>
+				<p class="page-subtitle">Thoughts, experiments, and field notes.</p>
 			</header>
 			<ul class="post-grid" role="list">
 				{
@@ -64,12 +64,15 @@ const posts = (await getCollection('blog')).sort(
 		border-bottom: 1px solid var(--color-border);
 	}
 	.page-header h1 {
+
 		margin-bottom: var(--sp-2);
 	}
 	.page-subtitle {
 		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--fs-sm);
 		color: var(--color-ink-muted);
-		font-size: var(--fs-lg);
+		letter-spacing: 0.02em;
 	}
 
 	.post-grid {
@@ -83,15 +86,16 @@ const posts = (await getCollection('blog')).sort(
 
 	.post-card {
 		position: relative;
-		background: var(--color-surface);
+		background: var(--color-bg);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-lg);
 		overflow: hidden;
-		transition: box-shadow var(--ease), transform var(--ease);
+		transition: box-shadow var(--ease), transform var(--ease), border-color var(--ease);
 	}
 	.post-card:hover {
 		box-shadow: var(--shadow-md);
 		transform: translateY(-2px);
+		border-color: var(--color-accent);
 	}
 
 	.card-image {
@@ -106,7 +110,7 @@ const posts = (await getCollection('blog')).sort(
 		transition: transform var(--ease-slow);
 	}
 	.post-card:hover .card-image img {
-		transform: scale(1.03);
+		transform: scale(1.04);
 	}
 
 	.card-body {
@@ -116,16 +120,18 @@ const posts = (await getCollection('blog')).sort(
 		gap: var(--sp-3);
 	}
 	.card-date {
+		font-family: var(--font-mono);
 		font-size: var(--fs-xs);
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
+		font-weight: 500;
+		letter-spacing: 0.06em;
 		color: var(--color-accent);
 	}
 	.card-title {
 		margin: 0;
+		font-family: var(--font-display);
 		font-size: var(--fs-xl);
-		line-height: 1.3;
+
+		line-height: 1.25;
 	}
 	.card-link {
 		text-decoration: none;
@@ -144,7 +150,7 @@ const posts = (await getCollection('blog')).sort(
 		margin: 0;
 		font-size: var(--fs-sm);
 		color: var(--color-ink-muted);
-		line-height: 1.6;
+		line-height: 1.65;
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;

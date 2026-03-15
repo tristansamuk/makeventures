@@ -41,7 +41,11 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 						</div>
 						<h1>{title}</h1>
 						{description && <p class="post-description">{description}</p>}
-					{tags && tags.length > 0 && <TagList tags={tags} />}
+						{tags && tags.length > 0 && (
+							<div class="post-tags">
+								<TagList tags={tags} />
+							</div>
+						)}
 						<hr />
 					</header>
 					<slot />
@@ -83,34 +87,42 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 		display: flex;
 		align-items: center;
 		gap: var(--sp-4);
-		margin-bottom: var(--sp-4);
+		margin-bottom: var(--sp-5);
+		flex-wrap: wrap;
 	}
 	.post-date {
+		font-family: var(--font-mono);
 		font-size: var(--fs-xs);
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
+		font-weight: 500;
+		letter-spacing: 0.06em;
 		color: var(--color-accent);
 	}
 	.post-author {
+		font-family: var(--font-mono);
 		font-size: var(--fs-xs);
 		color: var(--color-ink-muted);
+		letter-spacing: 0.02em;
 	}
 	.updated-date {
+		font-family: var(--font-mono);
 		font-size: var(--fs-xs);
 		color: var(--color-ink-muted);
-		font-style: italic;
+
 	}
 	.post-header h1 {
 		font-size: var(--fs-4xl);
+
 		margin-bottom: var(--sp-4);
-		line-height: 1.15;
+		line-height: 1.1;
 	}
 	.post-description {
 		font-size: var(--fs-lg);
 		color: var(--color-ink-muted);
-		line-height: 1.6;
-		margin-bottom: var(--sp-6);
+		line-height: 1.65;
+		margin-bottom: var(--sp-5);
+	}
+	.post-tags {
+		margin-bottom: var(--sp-5);
 	}
 
 	@media (max-width: 768px) {
@@ -120,6 +132,9 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 		}
 		.prose {
 			padding: 0 var(--sp-4);
+		}
+		.post-header h1 {
+			font-size: var(--fs-3xl);
 		}
 	}
 </style>
