@@ -7,6 +7,12 @@ tags: ['iot', 'coding']
 author: 'Igor Samuk'
 ---
 
+import { Image } from 'astro:assets';
+import gigaChad from '../../assets/giga-chad.jpg';
+import YouTube from '../../components/YouTube.astro';
+
+<Image src={gigaChad} alt="Giga Chad" />
+
 It started with a dead basil plant. I travel for work a few times a month, and despite my best efforts to convince my family that plants need water, I came home in May to find my balcony herb garden in various states of distress. The obvious solution was to buy a self-watering pot. The solution I actually chose was to build a sensor network and automate the whole thing.
 
 The hardware is simple: a NodeMCU ESP8266 board (around $3 from the usual suppliers), a capacitive soil moisture sensor per plant, and a DHT22 for ambient temperature and humidity. I went capacitive rather than resistive for the moisture sensors — resistive ones corrode quickly when they're constantly in damp soil, which rather defeats the purpose. The ESP8266 reads all the sensors every five minutes and publishes the values over MQTT to a broker running in my home lab.
@@ -19,5 +25,7 @@ client.publish("garden/basil/moisture", String(percentage).c_str());
 ```
 
 Home Assistant picks up the MQTT messages and logs them as sensor entities, which means I get history graphs and can build automations on top of them. The automation I actually wanted: send a notification to my phone when any plant drops below 30% moisture. It took about twenty minutes to set up once the sensors were publishing reliably.
+
+<YouTube id="dQw4w9WgXcQ" title="Balcony garden sensor build walkthrough" />
 
 The watering side is still manual — I haven't wired up any solenoid valves yet, partly because my balcony setup makes it complicated and partly because I want to observe a full growing season before I commit to automating the response. But having visibility into what's happening has already helped. I know which plants dry out fastest (the rosemary, surprisingly). I know that a sunny day raises the ambient temperature sensor by about 8°C compared to a cloudy one. And the basil survived my last two trips without incident, which is the only metric that really matters.

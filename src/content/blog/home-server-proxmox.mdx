@@ -7,9 +7,14 @@ tags: ['home-lab', 'hardware']
 author: 'Igor Samuk'
 ---
 
+import { Image } from 'astro:assets';
+import gigaChad from '../../assets/giga-chad.jpg';
+
 The catalyst was simple: I needed somewhere to run Home Assistant that wasn't a Raspberry Pi. The Pi is great, but SD cards fail, it runs warm in an enclosure, and I wanted to start experimenting with virtual machines without buying dedicated hardware. I had a five-year-old gaming rig with an i7-8700K and 32GB of RAM that had been largely replaced by my newer machine. It was time to put it to work.
 
 My first instinct was to slap Ubuntu Server on it and call it a day. But after a few weeks reading about Proxmox, I went that route instead. Proxmox is a bare-metal hypervisor built on Debian — you install it directly on the machine and run everything else (Linux installs, containers, appliances) as virtual machines or LXC containers. The management interface is a web UI you access from another machine on the network, which is a surprisingly comfortable way to work.
+
+<Image src={gigaChad} alt="Giga Chad" />
 
 Getting the hardware set up took an afternoon. I added a spare HDD alongside the existing SSD, giving me somewhere to store backups and larger files separately from the OS drives. Proxmox installed cleanly, and within an hour I had Home Assistant running as a dedicated VM — which meant I could snapshot it, back it up, and restore it in minutes if something went wrong. That alone was worth the whole migration.
 
