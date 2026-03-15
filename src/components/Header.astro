@@ -35,9 +35,11 @@ import HeaderLink from './HeaderLink.astro';
 <script>
 	const toggle = document.getElementById('theme-toggle');
 	toggle?.addEventListener('click', () => {
+		document.documentElement.classList.add('theme-transitioning');
 		const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
 		document.documentElement.dataset.theme = next;
 		localStorage.setItem('theme', next);
+		setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 400);
 	});
 </script>
 

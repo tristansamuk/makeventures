@@ -1,0 +1,98 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`404 — ${SITE_TITLE}`} description="Page not found." />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="container">
+				<p class="code">404</p>
+				<h1>Page not found.</h1>
+				<p class="message">
+					Whatever you were looking for isn't here — it may have moved, been deleted, or never existed in the first place.
+				</p>
+				<div class="actions">
+					<a href="/" class="btn-primary">Go home</a>
+					<a href="/blog" class="btn-secondary">Browse the blog</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main {
+		display: flex;
+		align-items: center;
+		min-height: calc(100dvh - var(--nav-height) - 6rem);
+	}
+	.container {
+		max-width: 36rem;
+	}
+	.code {
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-accent);
+		margin: 0 0 var(--sp-4);
+	}
+	h1 {
+		font-size: var(--fs-4xl);
+		margin-bottom: var(--sp-4);
+		line-height: 1.1;
+	}
+	.message {
+		font-size: var(--fs-lg);
+		color: var(--color-ink-muted);
+		line-height: 1.65;
+		margin-bottom: var(--sp-8);
+	}
+	.actions {
+		display: flex;
+		gap: var(--sp-3);
+		flex-wrap: wrap;
+	}
+	.btn-primary {
+		font-family: var(--font-mono);
+		font-size: var(--fs-sm);
+		font-weight: 500;
+		padding: var(--sp-3) var(--sp-5);
+		background-color: var(--color-accent-subtle);
+		color: var(--color-accent);
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		transition: background-color var(--ease), color var(--ease);
+	}
+	.btn-primary:hover {
+		background-color: var(--color-accent);
+		color: var(--color-bg);
+	}
+	.btn-secondary {
+		font-family: var(--font-mono);
+		font-size: var(--fs-sm);
+		font-weight: 500;
+		padding: var(--sp-3) var(--sp-5);
+		background-color: transparent;
+		color: var(--color-ink-muted);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		transition: border-color var(--ease), color var(--ease);
+	}
+	.btn-secondary:hover {
+		border-color: var(--color-ink-muted);
+		color: var(--color-ink);
+	}
+</style>
