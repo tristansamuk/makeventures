@@ -11,6 +11,8 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const [featured, ...rest] = posts;
 ---
 
 <!doctype html>
@@ -25,9 +27,35 @@ const posts = (await getCollection('blog')).sort(
 				<h1>Blog</h1>
 				<p class="page-subtitle">Thoughts, experiments, and field notes.</p>
 			</header>
+
+			<!-- Featured post -->
+			<div class="featured-card">
+				{featured.data.heroImage && (
+					<div class="featured-image">
+						<Image width={1200} height={630} src={featured.data.heroImage} alt="" />
+					</div>
+				)}
+				<div class="featured-body">
+					<div class="featured-meta">
+						<span class="featured-label">Latest</span>
+						<time class="card-date"><FormattedDate date={featured.data.pubDate} /></time>
+					</div>
+					<h2 class="featured-title">
+						<a href={`/blog/${featured.id}/`} class="card-link">
+							{featured.data.title}
+						</a>
+					</h2>
+					<p class="featured-description">{featured.data.description}</p>
+					{featured.data.tags && featured.data.tags.length > 0 && (
+						<TagList tags={featured.data.tags} />
+					)}
+				</div>
+			</div>
+
+			<!-- Remaining posts -->
 			<ul class="post-grid" role="list">
 				{
-					posts.map((post) => (
+					rest.map((post) => (
 						<li class="post-card">
 							{post.data.heroImage && (
 								<div class="card-image">
@@ -58,13 +86,13 @@ const posts = (await getCollection('blog')).sort(
 </html>
 
 <style>
+	/* ── Page header ── */
 	.page-header {
 		margin-bottom: var(--sp-12);
 		padding-bottom: var(--sp-8);
 		border-bottom: 1px solid var(--color-border);
 	}
 	.page-header h1 {
-
 		margin-bottom: var(--sp-2);
 	}
 	.page-subtitle {
@@ -75,6 +103,72 @@ const posts = (await getCollection('blog')).sort(
 		letter-spacing: 0.02em;
 	}
 
+/* ── Featured card ── */
+	.featured-card {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		margin-bottom: var(--sp-8);
+		background: var(--color-bg);
+		transition: box-shadow var(--ease), border-color var(--ease);
+	}
+	.featured-card:hover {
+		box-shadow: var(--shadow-md);
+		border-color: var(--color-accent);
+	}
+	.featured-image {
+		overflow: hidden;
+	}
+	.featured-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 0;
+		transition: transform var(--ease-slow);
+	}
+	.featured-card:hover .featured-image img {
+		transform: scale(1.04);
+	}
+	.featured-body {
+		padding: var(--sp-10);
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-4);
+		justify-content: center;
+	}
+	.featured-meta {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+	}
+	.featured-label {
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-bg);
+		background-color: var(--color-accent);
+		padding: 2px var(--sp-2);
+		border-radius: var(--radius-sm);
+	}
+	.featured-title {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--fs-3xl);
+		line-height: 1.15;
+	}
+	.featured-description {
+		margin: 0;
+		font-size: var(--fs-md);
+		color: var(--color-ink-muted);
+		line-height: 1.65;
+	}
+
+	/* ── Grid ── */
 	.post-grid {
 		list-style: none;
 		margin: 0;
@@ -84,6 +178,7 @@ const posts = (await getCollection('blog')).sort(
 		gap: var(--sp-8);
 	}
 
+	/* ── Card ── */
 	.post-card {
 		position: relative;
 		background: var(--color-bg);
@@ -97,7 +192,6 @@ const posts = (await getCollection('blog')).sort(
 		transform: translateY(-2px);
 		border-color: var(--color-accent);
 	}
-
 	.card-image {
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
@@ -112,7 +206,6 @@ const posts = (await getCollection('blog')).sort(
 	.post-card:hover .card-image img {
 		transform: scale(1.04);
 	}
-
 	.card-body {
 		padding: var(--sp-6);
 		display: flex;
@@ -130,7 +223,6 @@ const posts = (await getCollection('blog')).sort(
 		margin: 0;
 		font-family: var(--font-display);
 		font-size: var(--fs-xl);
-
 		line-height: 1.25;
 	}
 	.card-link {
@@ -143,7 +235,8 @@ const posts = (await getCollection('blog')).sort(
 		position: absolute;
 		inset: 0;
 	}
-	.post-card:hover .card-link {
+	.post-card:hover .card-link,
+	.featured-card:hover .card-link {
 		color: var(--color-accent);
 	}
 	.card-description {
@@ -157,7 +250,20 @@ const posts = (await getCollection('blog')).sort(
 		overflow: hidden;
 	}
 
+	/* ── Responsive ── */
 	@media (max-width: 720px) {
+		.featured-card {
+			grid-template-columns: 1fr;
+		}
+		.featured-image {
+			aspect-ratio: 16 / 9;
+		}
+		.featured-body {
+			padding: var(--sp-6);
+		}
+		.featured-title {
+			font-size: var(--fs-2xl);
+		}
 		.post-grid {
 			grid-template-columns: 1fr;
 			gap: var(--sp-5);
