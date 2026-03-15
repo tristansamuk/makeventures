@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
+import ComputerChipIcon from '../components/ComputerChipIcon.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
@@ -20,9 +21,12 @@ const recentPosts = (await getCollection('blog'))
 		<Header />
 		<main>
 			<section class="hero">
-				<h1>{SITE_TITLE}</h1>
-				<p class="hero-description">{SITE_DESCRIPTION}</p>
-				<a href="/blog" class="cta-button">Read the blog &rarr;</a>
+				<div class="hero-text">
+					<h1>{SITE_TITLE}</h1>
+					<p class="hero-description">{SITE_DESCRIPTION}</p>
+					<a href="/blog" class="cta-button">Read the blog &rarr;</a>
+				</div>
+				<ComputerChipIcon class="hero-icon" />
 			</section>
 
 			<section class="recent-posts">
@@ -54,7 +58,13 @@ const recentPosts = (await getCollection('blog'))
 
 <style>
 	.hero {
+		display: grid;
+		grid-template-columns: 1fr 400px;
+		align-items: center;
+		gap: var(--sp-12);
 		padding: var(--sp-20) 0 var(--sp-16);
+	}
+	.hero-text {
 		max-width: var(--prose);
 	}
 	.hero h1 {
@@ -67,6 +77,22 @@ const recentPosts = (await getCollection('blog'))
 		color: var(--color-ink-muted);
 		margin-bottom: var(--sp-8);
 		line-height: 1.6;
+	}
+	.hero-icon {
+		width: 100%;
+		height: auto;
+		color: var(--color-ink);
+		opacity: 0.12;
+		transition: color var(--ease);
+		animation: chipIn 0.2s ease both;
+	}
+	.hero h1 {
+		animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: 0.05s;
+	}
+	.hero-description {
+		animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: 0.15s;
 	}
 	.cta-button {
 		display: inline-flex;
@@ -86,10 +112,16 @@ const recentPosts = (await getCollection('blog'))
 		color: #fff;
 		transform: translateX(2px);
 	}
+	.cta-button {
+		animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: 0.25s;
+	}
 
 	.recent-posts {
 		padding-top: var(--sp-16);
 		border-top: 1px solid var(--color-border);
+		animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: 0.4s;
 	}
 	.section-header {
 		display: flex;
@@ -163,9 +195,39 @@ const recentPosts = (await getCollection('blog'))
 		transform: translateX(4px);
 	}
 
+	@keyframes slideUp {
+		from {
+			opacity: 0;
+			transform: translateY(28px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes chipIn {
+		from { opacity: 0; }
+		to   { opacity: 0.12; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero h1,
+		.hero-description,
+		.cta-button,
+		.hero-icon,
+		.recent-posts {
+			animation: none;
+		}
+	}
+
 	@media (max-width: 768px) {
 		.hero {
+			grid-template-columns: 1fr;
 			padding: var(--sp-12) 0 var(--sp-10);
+		}
+		.hero-icon {
+			display: none;
 		}
 		.hero-description {
 			font-size: var(--fs-md);
