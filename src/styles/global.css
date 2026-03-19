@@ -277,6 +277,9 @@ input {
     --fs-3xl: 1.875rem;
     --fs-2xl: 1.5rem;
   }
+  .prose > p:first-of-type::first-letter {
+    margin-bottom: -0.2em;
+  }
   main {
     padding: var(--sp-8) var(--sp-4);
   }
