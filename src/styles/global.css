@@ -167,7 +167,7 @@ strong, b {
 /* ─── Prose (blog post body) ──────────────────────────────────────────────── */
 .prose {
   font-size: var(--fs-md);
-  line-height: 1.6;
+  line-height: 1.75;
 }
 .prose p {
   margin-bottom: var(--sp-6);
@@ -233,10 +233,21 @@ code {
 }
 
 pre {
-  padding: var(--sp-6);
+  padding: var(--sp-4) var(--sp-6) var(--sp-6);
   border-radius: var(--radius-md);
   overflow-x: auto;
   background-color: var(--color-pre-bg) !important;
+}
+pre::before {
+  content: '● ● ●';
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.4rem;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.2);
+  padding-bottom: var(--sp-4);
+  margin-bottom: var(--sp-2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 pre > code {
