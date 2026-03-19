@@ -32,7 +32,7 @@ const posts = (await getCollection('blog'))
 		<main>
 			<header class="page-header">
 				<p class="page-eyebrow">Tag</p>
-				<h1>#{tag}</h1>
+				<h1>{tag}</h1>
 				<p class="page-subtitle">
 					{posts.length} post{posts.length !== 1 ? 's' : ''}
 				</p>
