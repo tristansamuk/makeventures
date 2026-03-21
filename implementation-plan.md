@@ -22,8 +22,8 @@
 
 ```css
 --font-display: 'Inter', sans-serif;
---font-body:    'Inter', sans-serif;
---font-mono:    'JetBrains Mono', monospace;
+--font-body: 'Inter', sans-serif;
+--font-mono: 'JetBrains Mono', monospace;
 ```
 
 **Verify:** Run `pnpm dev` and check that the new fonts render correctly across headings, body, nav, and code elements.
@@ -42,32 +42,32 @@ Replace the entire `:root` and `[data-theme="dark"]` color token blocks with the
 ```css
 /* Light mode */
 :root {
-  --color-bg:            #FFFFFF;
-  --color-surface:       #F4F4F5;
-  --color-border:        rgba(0, 0, 0, 0.08);
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f5;
+  --color-border: rgba(0, 0, 0, 0.08);
   --color-border-subtle: rgba(0, 0, 0, 0.05);
-  --color-ink:           #09090B;
-  --color-ink-muted:     #71717A;
-  --color-accent:        #09090B;
-  --color-accent-hover:  #3F3F46;
-  --color-accent-subtle: #F4F4F5;
-  --color-code-bg:       #F4F4F5;
-  --color-pre-bg:        #09090B;
+  --color-ink: #09090b;
+  --color-ink-muted: #71717a;
+  --color-accent: #09090b;
+  --color-accent-hover: #3f3f46;
+  --color-accent-subtle: #f4f4f5;
+  --color-code-bg: #f4f4f5;
+  --color-pre-bg: #09090b;
 }
 
 /* Dark mode */
-[data-theme="dark"] {
-  --color-bg:            #09090B;
-  --color-surface:       #18181B;
-  --color-border:        rgba(255, 255, 255, 0.08);
+[data-theme='dark'] {
+  --color-bg: #09090b;
+  --color-surface: #18181b;
+  --color-border: rgba(255, 255, 255, 0.08);
   --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-ink:           #FAFAFA;
-  --color-ink-muted:     #A1A1AA;
-  --color-accent:        #FAFAFA;
-  --color-accent-hover:  #D4D4D8;
-  --color-accent-subtle: #27272A;
-  --color-code-bg:       #18181B;
-  --color-pre-bg:        #000000;
+  --color-ink: #fafafa;
+  --color-ink-muted: #a1a1aa;
+  --color-accent: #fafafa;
+  --color-accent-hover: #d4d4d8;
+  --color-accent-subtle: #27272a;
+  --color-code-bg: #18181b;
+  --color-pre-bg: #000000;
 }
 ```
 
@@ -86,7 +86,8 @@ Remove any remaining teal (`#0E7490`), cyan (`#22D3EE`), amber, or warm-cream (`
 
 **File:** `src/styles/global.css`
 
-Find the `body::before` rule that applies the SVG `feTurbulence` grain texture. Either:
+Find the `body::before` rule that applies the SVG `feTurbulence` grain texture.
+
 - **Remove it entirely** (cleanest; matches Apple/Linear/Vercel), or
 - Reduce `opacity` from `0.035` to `0.015` (nearly imperceptible, just kills the flat-screen look)
 
@@ -106,20 +107,24 @@ The research recommends full removal for the target aesthetic. Confirm your pref
 Apply the following changes throughout the stylesheet:
 
 **Headings:**
+
 - `font-weight: 500` or `600` max (remove any `800` weights)
 - `letter-spacing: -0.02em` to `-0.04em` (tight tracking = precision)
 - `line-height: 1.1` at display sizes
 
 **Body:**
+
 - `line-height: 1.6` (down from current 1.75–1.8)
 - `font-weight: 400`
 
 **Mono labels (dates, tags, nav):**
+
 - Remove `text-transform: uppercase` or limit to 2–3 char abbreviations
 - `letter-spacing: 0.02em` max (down from current `0.1em`)
 - `font-size: 0.75rem` for micro-labels
 
 **Drop cap (`.prose > p:first-of-type::first-letter`):**
+
 - Change `color` to `var(--color-ink)` — remove the accent color from the drop cap
 - Alternatively, remove the drop cap rule entirely if it reads as too decorative
 
@@ -135,14 +140,16 @@ Apply the following changes throughout the stylesheet:
 **File:** `src/styles/global.css`
 
 **Replace radius tokens:**
+
 ```css
---radius-pill: 9999px;   /* new — for buttons and tag pills */
---radius-sm:   2px;
---radius-md:   4px;
---radius-lg:   8px;
+--radius-pill: 9999px; /* new — for buttons and tag pills */
+--radius-sm: 2px;
+--radius-md: 4px;
+--radius-lg: 8px;
 ```
 
 **Replace shadow tokens:**
+
 ```css
 --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
 --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -165,6 +172,7 @@ Image `border-radius` should be set to `0` (sharp corners, editorial feel).
 **File:** `src/components/Header.astro`
 
 - **Frosted glass nav:** Update the sticky header's `background-color` to semi-transparent and add `backdrop-filter`:
+
   ```css
   /* light mode */
   background-color: rgba(255, 255, 255, 0.8);
@@ -174,6 +182,7 @@ Image `border-radius` should be set to `0` (sharp corners, editorial feel).
   /* dark mode */
   background-color: rgba(9, 9, 11, 0.8);
   ```
+
 - **Site title:** Reduce to `font-weight: 500`. Remove or tone down the hover color change.
 - **Nav links:** Change `font-family` from `var(--font-mono)` to `var(--font-body)` — cleaner, Apple-style.
 - **Theme toggle:** Remove the border. Set base `opacity: 0.4`, hover `opacity: 1`. No color change on hover.
