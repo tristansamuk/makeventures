@@ -41,7 +41,7 @@ This is an **Astro 6** static site (SSG) — all routes are pre-built at build t
 
 | Route | File | Notes |
 |-------|------|-------|
-| `/` | `src/pages/index.astro` | Hero with full-width fitting title, typewriter eyebrow, stat bar, recent posts |
+| `/` | `src/pages/index.astro` | Hero with full-width fitting title, typewriter eyebrow, stat bar, topic strip, recent posts |
 | `/blog` | `src/pages/blog/index.astro` | Featured post card + 2-column post grid |
 | `/blog/[slug]` | `src/pages/blog/[...slug].astro` | Individual post via `BlogPost.astro` layout |
 | `/blog/tags/[tag]` | `src/pages/blog/tags/[tag].astro` | Posts filtered by tag |
@@ -50,40 +50,52 @@ This is an **Astro 6** static site (SSG) — all routes are pre-built at build t
 
 ## Components
 
-| Component | Purpose |
-|-----------|---------|
-| `BaseHead.astro` | `<head>` meta tags + Google Fonts (`Bricolage Grotesque`, `Figtree`, `JetBrains Mono`) |
-| `Header.astro` | Sticky nav with site title, nav links, dark/light theme toggle |
-| `HeaderLink.astro` | Nav link with underline active state |
-| `Footer.astro` | Minimal footer with lowercase mono social links (github, vimeo, linkedin) |
-| `TagList.astro` | Renders clickable `#tag` pill links to `/blog/tags/[tag]/` |
-| `PostCard.astro` | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages |
-| `FormattedDate.astro` | Formats a `Date` object for display |
+| Component | Props | Purpose |
+|-----------|-------|---------|
+| `BaseHead.astro` | `title`, `description`, `image?` | `<head>` meta/OG tags, theme detection script, Google Fonts |
+| `Header.astro` | — | Sticky nav with blur backdrop, site title, nav links, dark/light theme toggle |
+| `HeaderLink.astro` | `href`, HTML anchor attrs | Nav link with underline active state |
+| `Footer.astro` | — | Copyright year (auto), lowercase mono social links (github, vimeo, linkedin) |
+| `TagList.astro` | `tags: string[]` | Renders clickable `#tag` pill links to `/blog/tags/[tag]/` |
+| `PostCard.astro` | `post: CollectionEntry<'blog'>` | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages |
+| `FormattedDate.astro` | `date: Date` | Formats a `Date` as "MMM d, yyyy" |
+| `YouTube.astro` | `id: string`, `title?` | Responsive 16:9 iframe embed via `youtube-nocookie.com`, lazy loaded |
 
 ## Design System
 
 **Fonts (loaded via Google Fonts in `BaseHead.astro`):**
-- `--font-display`: Bricolage Grotesque — headings, hero title, site name
-- `--font-body`: Figtree — body text
+- `--font-display`: Inter — headings, hero title, site name
+- `--font-body`: Inter — body text
 - `--font-mono`: JetBrains Mono — labels, dates, tags, nav links, code
 
 **Color palette (CSS custom properties in `src/styles/global.css`):**
-- Light mode: warm cream background (`#FAF8F4`), teal accent (`#0E7490`)
-- Dark mode: near-black background (`#100E0B`), cyan accent (`#22D3EE`)
+- Light mode: white background (`#FFFFFF`), zinc surface (`#F4F4F5`), black accent (`#09090B`)
+- Dark mode: near-black background (`#09090B`), dark zinc surface (`#18181B`), white accent (`#FAFAFA`)
 - Dark mode activates via `[data-theme="dark"]` on `<html>`, persisted in `localStorage`
 - `@media (prefers-color-scheme: dark)` respected for users with no stored preference
+- Shadows are defined for light mode only; they are not shown in dark mode
+
+**Design tokens:**
+- Spacing: `--sp-1` (0.25rem) through `--sp-24` (6rem)
+- Font sizes: `--fs-xs` (0.6875rem) through `--fs-5xl` (4rem)
+- Layout: `--container` (72rem), `--prose` (46rem), `--nav-height` (3.5rem)
+- Radii: `--radius-sm` (2px), `--radius-md` (4px), `--radius-lg` (8px), `--radius-pill` (9999px)
+- Transitions: `--ease` (200ms ease), `--ease-slow` (380ms ease)
 
 **Key design decisions:**
-- Noise texture overlay on `body::before` (SVG `feTurbulence`, `position: absolute`, `opacity: 0.035`)
 - Theme transitions handled by temporarily adding `.theme-transitioning` class to `<html>` on toggle, removed after 400ms
-- Drop cap on first paragraph of prose via `.prose > p:first-of-type::first-letter`
+- Drop cap on first paragraph of prose via `.prose > p:first-of-type::first-letter` (4.5em, font-display, float left)
+- `pre` code blocks have a decorative "● ● ●" header via `::before`
 - All spacing via `--sp-*` tokens, font sizes via `--fs-*` tokens (defined in `global.css`)
-- 720px breakpoint for mobile, 768px in global styles
+- Responsive breakpoints: 720px (blog layout) and 768px (global typography scale-down)
+- Animations: `fadeUp` (0.6s, cubic-bezier) used for staggered post entry on homepage; respects `prefers-reduced-motion`
 
 **Hero (`src/pages/index.astro`):**
-- Title "Make-/ventures" fills the full container width via a JS binary search (`fitTitle()`) that runs on load and resize
+- Title "Make-ventures" fills the full container width via a JS binary search (`fitTitle()`) that runs on load and resize
 - Eyebrow label has a typewriter effect (starts 800ms after page load, 45ms/char)
 - Blinking cursor via `.hero-label.typing::after { content: '▍' }`
+- Stat bar shows post count, topic count, and founding year
+- Topics strip renders all unique tags as pill links below the CTA
 
 ## Tags
 
@@ -100,3 +112,4 @@ When implementing:
 - Keystatic admin lives at `/keystatic`, protected by GitHub OAuth in production
 - Local dev skips auth entirely
 - Required env vars: `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`
+- Note: `astro.config.mjs` currently has `site: 'https://example.com'` — update to the real URL before going live
