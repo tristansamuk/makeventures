@@ -7,9 +7,9 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import TagList from '../components/TagList.astro';
 
-type Props = CollectionEntry<'blog'>['data'] & { mokotoHeading?: boolean };
+type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, tags, author, mokotoHeading = false } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, author } = Astro.props;
 ---
 
 <html lang="en">
@@ -39,7 +39,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author, mokot
 								</span>
 							)}
 						</div>
-						<h1 style={mokotoHeading ? 'font-family: var(--font-display)' : undefined}>{title}</h1>
+						<h1>{title}</h1>
 						{description && <p class="post-description">{description}</p>}
 						{tags && tags.length > 0 && (
 							<div class="post-tags">
