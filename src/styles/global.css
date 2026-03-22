@@ -1,3 +1,13 @@
+/* ─── Fonts ────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Mokoto';
+  src: url('/fonts/mokoto.regular.woff2') format('woff2'),
+       url('/fonts/mokoto.regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 :root {
   /* Colors — light mode */
@@ -19,7 +29,7 @@
   --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   /* Typography */
-  --font-display: 'Inter', system-ui, sans-serif;
+  --font-display: 'Mokoto', system-ui, sans-serif;
   --font-body:    'Inter', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 
@@ -173,7 +183,7 @@ strong, b {
   margin-bottom: var(--sp-6);
 }
 .prose > p:first-of-type::first-letter {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 4.5em;
   font-weight: 600;
   line-height: 0.85;
@@ -185,10 +195,12 @@ strong, b {
 .prose h2 {
   margin-top: var(--sp-12);
   font-size: var(--fs-2xl);
+  font-family: var(--font-body);
 }
 .prose h3 {
   margin-top: var(--sp-8);
   font-size: var(--fs-xl);
+  font-family: var(--font-body);
 }
 .prose ul,
 .prose ol {
