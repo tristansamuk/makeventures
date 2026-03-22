@@ -142,10 +142,9 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 	}
 	.hero-label {
 		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
+		font-size: var(--fs-sm);
 		color: var(--color-ink-muted);
-		letter-spacing: 0.02em;
-		margin: 0 0 var(--sp-5);
+		margin: 0 0 var(--sp-8);
 		min-height: 1em;
 	}
 	.hero-label.typing::after {
@@ -162,7 +161,7 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		font-weight: 600;
 		font-variation-settings: 'opsz' 72;
 		line-height: 0.75;
-		letter-spacing: -0.03em;
+		letter-spacing: -0.06em;
 		margin: 0 0 var(--sp-6);
 		display: flex;
 		flex-direction: column;
@@ -220,7 +219,7 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		font-size: var(--fs-lg);
 		color: var(--color-ink-muted);
 		line-height: 1.7;
-		max-width: 36rem;
+		max-width: 576px;
 		margin: 0;
 	}
 	.cta-button {
@@ -296,7 +295,7 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 	}
 	.post-link {
 		display: grid;
-		grid-template-columns: 7rem 1fr auto;
+		grid-template-columns: 112px 1fr auto;
 		align-items: baseline;
 		gap: var(--sp-6);
 		padding: var(--sp-5) 0 var(--sp-3);
@@ -307,7 +306,6 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		font-family: var(--font-mono);
 		font-size: var(--fs-xs);
 		font-weight: 500;
-		letter-spacing: 0.02em;
 		color: var(--color-ink-muted);
 		white-space: nowrap;
 	}
@@ -315,7 +313,7 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		min-width: 0;
 	}
 	.post-title {
-		font-family: var(--font-display);
+		font-family: var(--font-body);
 		font-size: var(--fs-xl);
 		font-weight: 600;
 		margin: 0 0 var(--sp-1);
@@ -342,7 +340,7 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		transform: translateX(4px);
 	}
 	.post-tags {
-		padding-left: calc(7rem + var(--sp-6));
+		padding-left: calc(112px + var(--sp-6));
 		padding-bottom: var(--sp-5);
 	}
 	@media (max-width: 768px) {
