@@ -55,6 +55,7 @@ import HeaderLink from './HeaderLink.astro';
 		</nav>
 	</div>
 </header>
+<div class="menu-overlay" id="menu-overlay"></div>
 
 <script>
 	// Theme toggle
@@ -72,18 +73,23 @@ import HeaderLink from './HeaderLink.astro';
 	// Hamburger menu
 	const hamburger = document.getElementById('hamburger');
 	const mobileMenu = document.getElementById('mobile-menu');
+	const overlay = document.getElementById('menu-overlay');
 
 	function openMenu() {
 		mobileMenu?.classList.add('open');
+		overlay?.classList.add('open');
 		hamburger?.setAttribute('aria-expanded', 'true');
 		mobileMenu?.setAttribute('aria-hidden', 'false');
 	}
 
 	function closeMenu() {
 		mobileMenu?.classList.remove('open');
+		overlay?.classList.remove('open');
 		hamburger?.setAttribute('aria-expanded', 'false');
 		mobileMenu?.setAttribute('aria-hidden', 'true');
 	}
+
+	overlay?.addEventListener('click', closeMenu);
 
 	hamburger?.addEventListener('click', () => {
 		const isOpen = mobileMenu?.classList.contains('open');
@@ -322,6 +328,26 @@ import HeaderLink from './HeaderLink.astro';
 	.mobile-menu.open nav :global(a:nth-child(2)) { transition-delay: 105ms; }
 	.mobile-menu.open nav :global(a:nth-child(3)) { transition-delay: 155ms; }
 	.mobile-menu.open nav :global(a:nth-child(4)) { transition-delay: 205ms; }
+
+	/* ── Overlay ─────────────────────────────────────── */
+	.menu-overlay {
+		display: none;
+		position: fixed;
+		inset: 0;
+		top: var(--nav-height);
+		z-index: 99;
+		background-color: rgba(0, 0, 0, 0.5);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.3s ease;
+	}
+	.menu-overlay.open {
+		opacity: 1;
+		pointer-events: auto;
+	}
+	@media (max-width: 640px) {
+		.menu-overlay { display: block; }
+	}
 
 	/* Respect reduced motion */
 	@media (prefers-reduced-motion: reduce) {
