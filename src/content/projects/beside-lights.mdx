@@ -1,0 +1,40 @@
+---
+title: 'Project: Beside Lights'
+navTitle: 'Beside Lights'
+description: 'Designing and building custom PCB bedside lamps with warm ambient lighting, capacitive touch dimming, and Home Assistant integration — no off-the-shelf parts allowed.'
+heroImage: '../../assets/blog-placeholder-about.jpg'
+status: 'completed'
+completedDate: 'Nov 12 2024'
+featuredStat: '2 custom PCBs'
+---
+
+Sometimes a project starts because you can't find what you want to buy. The bedside lamps I wanted — warm, dimmable, touch-sensitive, smart-home integrated, and actually good-looking — either didn't exist or cost more than I wanted to spend. So I built them.
+
+## The design brief
+
+The requirements were specific:
+
+- Warm white light only (no RGB nonsense for a bedside lamp)
+- Touch dimming — tap to toggle, hold to dim
+- Home Assistant integration for automations
+- Physical size: small, vertical, something that doesn't dominate the nightstand
+- Build quality good enough that I wouldn't be embarrassed to have it in my home
+
+I spent two weeks sketching form factors before landing on a slim rectangular column, about 180mm tall, with a frosted polycarbonate diffuser.
+
+## The electronics
+
+The core is an ESP8266 (specifically a Wemos D1 Mini) driving a constant-current LED driver circuit. The LEDs are 2700K high-CRI strips — color accuracy matters more than brightness for bedside lighting.
+
+Capacitive touch is handled by a TTP223 IC. Simple, reliable, and only requires a copper pad on the PCB as the touch surface.
+
+The PCB was designed in KiCad over about three evenings. Getting the component footprints right for the first spin was a genuine achievement — both boards came back from JLCPCB working on the first try.
+
+## ESPHome firmware
+
+The firmware handles three behaviors:
+1. Single tap: toggle on/off at last brightness
+2. Hold: dim up or down (alternating direction each hold)
+3. Home Assistant: full control via MQTT for automations (fade on alarm, dim at sunset, etc.)
+
+Both lamps have been running daily for four months with zero issues. This project is done, and I'm genuinely proud of how it turned out.

@@ -1,0 +1,34 @@
+---
+title: 'Project: Find My Shit'
+navTitle: 'Find My Shit'
+description: 'Building a self-hosted asset tracking system using Bluetooth tags, ESPHome scanners, and Home Assistant — because losing your keys should be a solvable problem.'
+heroImage: '../../assets/blog-placeholder-2.jpg'
+status: 'in-progress'
+featuredStat: '4 trackers'
+---
+
+Losing things is a tax on attention. Losing things and not knowing where to start looking is a different kind of frustrating. This project is an attempt to make that second problem go away entirely.
+
+## The concept
+
+The idea is simple: attach Bluetooth Low Energy (BLE) beacons to things I frequently misplace. Deploy ESPHome-based BLE scanners around the apartment. Home Assistant aggregates the signal strength readings and gives me a room-level location for each tagged item.
+
+This is not GPS. This is not precise. But "the keys are in the bedroom" is all I need.
+
+## The tags
+
+I'm using a combination of:
+
+**AirTags (2x):** Excellent build quality, good battery life, acceptable range. Can't customize the beacon interval, which limits how fast position updates.
+
+**Custom NRF51822 tags (2x):** Smaller, cheaper, fully configurable firmware. Battery life is shorter but I can tune the broadcast interval to whatever I want.
+
+## The scanner network
+
+Three ESP32 boards flashed with ESPHome act as BLE scanners. Each one broadcasts signal strength readings for detected BLE devices to Home Assistant via MQTT. The room with the strongest signal wins.
+
+Position updates are fast enough for practical use — under 10 seconds from moving an item to the dashboard updating.
+
+## What's next
+
+The remaining work is improving the precision by adding a fourth scanner and implementing a basic trilateration algorithm instead of simple strongest-signal logic. Also: adding an NFC tag to the front door to trigger a "where's my stuff" dashboard on the way out.

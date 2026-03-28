@@ -1,0 +1,37 @@
+---
+interface Props {
+	status: 'completed' | 'in-progress' | 'paused';
+	class?: string;
+}
+
+const { status, class: className } = Astro.props;
+---
+
+<span class:list={['status-badge', `status-${status}`, className]}>{status}</span>
+
+<style>
+	.status-badge {
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		font-weight: 500;
+		padding: 2px var(--sp-3);
+		border-radius: var(--radius-pill);
+		border: 1px solid transparent;
+		text-transform: lowercase;
+	}
+	.status-completed {
+		background: var(--color-accent);
+		color: var(--color-bg);
+		border-color: var(--color-accent);
+	}
+	.status-in-progress {
+		background: transparent;
+		color: var(--color-ink);
+		border-color: var(--color-border);
+	}
+	.status-paused {
+		background: var(--color-surface);
+		color: var(--color-ink-muted);
+		border-color: var(--color-border);
+	}
+</style>

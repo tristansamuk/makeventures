@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import StatusBadge from './StatusBadge.astro';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const status = project.data.status ?? 'in-progress';
+---
+
+<li class="project-card">
+	{project.data.heroImage && (
+		<div class="card-image">
+			<Image width={560} height={315} src={project.data.heroImage} alt="" />
+		</div>
+	)}
+	<div class="card-body">
+		<StatusBadge {status} />
+		<h2 class="card-title">
+			<a href={`/projects/${project.id}/`} class="card-link">
+				{project.data.title}
+			</a>
+		</h2>
+		<p class="card-description">{project.data.description}</p>
+		{project.data.featuredStat && (
+			<p class="card-stat">{project.data.featuredStat}</p>
+		)}
+	</div>
+</li>
+
+<style>
+	.project-card {
+		position: relative;
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		transition: box-shadow var(--ease), border-color var(--ease);
+	}
+	.project-card:hover {
+		box-shadow: var(--shadow-md);
+	}
+	.card-image {
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+	}
+	.card-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 0;
+		transition: transform var(--ease-slow);
+	}
+	.project-card:hover .card-image img {
+		transform: scale(1.04);
+	}
+	.card-body {
+		padding: var(--sp-6);
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-3);
+	}
+	.card-title {
+		margin: 0;
+		font-family: var(--font-body);
+		font-size: var(--fs-xl);
+		line-height: 1.25;
+	}
+	.card-link {
+		text-decoration: none;
+		color: inherit;
+		transition: color var(--ease);
+	}
+	.card-link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+	.project-card:hover .card-link {
+		color: var(--color-ink-muted);
+	}
+	.card-description {
+		margin: 0;
+		font-size: var(--fs-sm);
+		color: var(--color-ink-muted);
+		line-height: 1.65;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.card-stat {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--fs-xs);
+		color: var(--color-ink-muted);
+		font-weight: 500;
+	}
+</style>

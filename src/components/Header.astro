@@ -9,6 +9,7 @@ import HeaderLink from './HeaderLink.astro';
 		<nav class="nav-links" aria-label="Main navigation">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
+			<HeaderLink href="/projects">Projects</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
 			<button id="theme-toggle" aria-label="Toggle color theme">
 				<!-- Moon: shown in light mode -->
@@ -43,6 +44,7 @@ import HeaderLink from './HeaderLink.astro';
 		});
 		setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 400);
 	});
+
 </script>
 
 <style>
