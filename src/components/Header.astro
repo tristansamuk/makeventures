@@ -1,6 +1,13 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+
+const navLinks = [
+	{ href: '/', label: 'Home' },
+	{ href: '/blog', label: 'Blog' },
+	{ href: '/projects', label: 'Projects' },
+	{ href: '/about', label: 'About' },
+];
 ---
 
 <header>
@@ -8,10 +15,9 @@ import HeaderLink from './HeaderLink.astro';
 		<a href="/" class="site-title">{SITE_TITLE}</a>
 		<div class="nav-right">
 			<nav class="nav-links" aria-label="Main navigation">
-				<HeaderLink href="/">Home</HeaderLink>
-				<HeaderLink href="/blog">Blog</HeaderLink>
-				<HeaderLink href="/projects">Projects</HeaderLink>
-				<HeaderLink href="/about">About</HeaderLink>
+				{navLinks.map(({ href, label }) => (
+					<HeaderLink href={href}>{label}</HeaderLink>
+				))}
 			</nav>
 			<div class="nav-end">
 				<button id="theme-toggle" aria-label="Toggle color theme">
@@ -48,17 +54,15 @@ import HeaderLink from './HeaderLink.astro';
 	</div>
 	<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
 		<nav aria-label="Mobile navigation">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/projects">Projects</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			{navLinks.map(({ href, label }) => (
+				<HeaderLink href={href}>{label}</HeaderLink>
+			))}
 		</nav>
 	</div>
 </header>
 <div class="menu-overlay" id="menu-overlay"></div>
 
 <script>
-	// Theme toggle
 	const toggle = document.getElementById('theme-toggle');
 	toggle?.addEventListener('click', () => {
 		const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -70,7 +74,6 @@ import HeaderLink from './HeaderLink.astro';
 		setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 400);
 	});
 
-	// Hamburger menu
 	const hamburger = document.getElementById('hamburger');
 	const mobileMenu = document.getElementById('mobile-menu');
 	const overlay = document.getElementById('menu-overlay');
@@ -96,13 +99,6 @@ import HeaderLink from './HeaderLink.astro';
 		isOpen ? closeMenu() : openMenu();
 	});
 
-	// Close on outside click
-	document.addEventListener('click', (e) => {
-		const target = e.target as Element;
-		if (!target?.closest('header')) closeMenu();
-	});
-
-	// Close on Escape
 	document.addEventListener('keydown', (e) => {
 		if (e.key === 'Escape' && mobileMenu?.classList.contains('open')) {
 			closeMenu();
@@ -110,7 +106,6 @@ import HeaderLink from './HeaderLink.astro';
 		}
 	});
 
-	// Close when a nav link is clicked (page navigation)
 	mobileMenu?.querySelectorAll('a').forEach((a) => {
 		a.addEventListener('click', closeMenu);
 	});
@@ -323,11 +318,11 @@ import HeaderLink from './HeaderLink.astro';
 		transform: translateX(0);
 	}
 
-	/* Staggered delays */
-	.mobile-menu.open nav :global(a:nth-child(1)) { transition-delay: 55ms; }
-	.mobile-menu.open nav :global(a:nth-child(2)) { transition-delay: 105ms; }
-	.mobile-menu.open nav :global(a:nth-child(3)) { transition-delay: 155ms; }
-	.mobile-menu.open nav :global(a:nth-child(4)) { transition-delay: 205ms; }
+	/* Staggered delays — applied to both entry and exit */
+	.mobile-menu nav :global(a:nth-child(1)) { transition-delay: 55ms; }
+	.mobile-menu nav :global(a:nth-child(2)) { transition-delay: 105ms; }
+	.mobile-menu nav :global(a:nth-child(3)) { transition-delay: 155ms; }
+	.mobile-menu nav :global(a:nth-child(4)) { transition-delay: 205ms; }
 
 	/* ── Overlay ─────────────────────────────────────── */
 	.menu-overlay {
