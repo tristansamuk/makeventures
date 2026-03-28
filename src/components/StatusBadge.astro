@@ -11,10 +11,12 @@ const { status, class: className } = Astro.props;
 
 <style>
 	.status-badge {
+		display: inline-block;
+		align-self: flex-start;
 		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
+		font-size: 10px;
 		font-weight: 500;
-		padding: 2px var(--sp-3);
+		padding: 1px var(--sp-2);
 		border-radius: var(--radius-pill);
 		border: 1px solid transparent;
 		text-transform: lowercase;

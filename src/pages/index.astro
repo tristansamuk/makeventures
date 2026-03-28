@@ -4,8 +4,21 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import TagList from '../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+// ── Featured projects ── edit this array to change which projects are shown
+const FEATURED_PROJECT_IDS = [
+	'beside-lights',
+	'lab-desk',
+	'outdoor-stair-decay',
+];
+
+const allProjects = await getCollection('projects');
+const featuredProjects = FEATURED_PROJECT_IDS
+	.map(id => allProjects.find(p => p.id === id))
+	.filter(p => p !== undefined);
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -54,6 +67,21 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 				<div class="hero-topics" aria-label="Topics covered">
 					<TagList tags={allTags} />
 				</div>
+			</section>
+
+			<section class="featured-projects">
+				<div class="section-header">
+					<h2>Featured Projects</h2>
+					<a href="/projects" class="view-all">All projects →</a>
+				</div>
+				<ul class="projects-grid" role="list">
+					{featuredProjects.map((project, i) => (
+						<ProjectCard
+							project={project}
+							style={`animation-delay:${0.1 + i * 0.07}s`}
+						/>
+					))}
+				</ul>
 			</section>
 
 			<section class="recent-posts">
@@ -258,6 +286,29 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		animation-delay: 0.3s;
 	}
 
+	/* ── Featured Projects ── */
+	.featured-projects {
+		padding-top: var(--sp-16);
+		border-top: 1px solid var(--color-border);
+		margin-bottom: var(--sp-2);
+		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: 0.32s;
+	}
+	.projects-grid {
+		list-style: none;
+		margin: 0 0 var(--sp-16);
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--sp-6);
+	}
+	@media (max-width: 900px) {
+		.projects-grid { grid-template-columns: repeat(2, 1fr); }
+	}
+	@media (max-width: 600px) {
+		.projects-grid { grid-template-columns: 1fr; gap: var(--sp-4); }
+	}
+
 	/* ── Recent Posts ── */
 	.recent-posts {
 		padding-top: var(--sp-16);
@@ -373,7 +424,7 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 
 	@media (prefers-reduced-motion: reduce) {
 		.hero-label, .hero-title, .hero-divider, .hero-bottom,
-		.hero-topics, .recent-posts, .post-item {
+		.hero-topics, .featured-projects, .recent-posts, .post-item {
 			animation: none;
 		}
 	}
