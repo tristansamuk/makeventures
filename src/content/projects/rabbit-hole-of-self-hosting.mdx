@@ -1,0 +1,39 @@
+---
+title: 'The Rabbit Hole of Self Hosting'
+navTitle: 'Self Hosting'
+description: 'A journey into running your own services — from a single Raspberry Pi to a proper homelab with Proxmox, VMs, containers, and a healthy obsession with uptime.'
+heroImage: '../../assets/blog-placeholder-4.jpg'
+status: 'in-progress'
+featuredStat: '6 services running'
+---
+
+Self-hosting is the practice of running software on hardware you control rather than paying someone else to run it for you. It starts innocently. You want to run your own Nextcloud instead of paying for iCloud. Six months later you're configuring VLAN segmentation and debating the merits of ZFS vs Btrfs at 11 PM.
+
+This is that story.
+
+## Why self-host?
+
+The reasons are different for everyone. For me it was a mix of:
+
+**Privacy:** I wanted my files, photos, and notes on hardware I control.
+
+**Learning:** Setting up a server teaches you more about how software actually works than any tutorial.
+
+**Cost:** Some services are genuinely cheaper to self-host at scale. Others are not. You'll learn which is which.
+
+**The joy of it:** There's something deeply satisfying about infrastructure you built yourself.
+
+## The current stack
+
+Running on a used Intel NUC with Proxmox as the hypervisor:
+
+- **Home Assistant OS** — smart home controller, VM with USB passthrough
+- **Nextcloud** — file sync and photo backup
+- **Vaultwarden** — self-hosted Bitwarden-compatible password manager
+- **Jellyfin** — media server
+- **Uptime Kuma** — monitoring dashboard
+- **Nginx Proxy Manager** — reverse proxy with SSL
+
+Six services sounds modest. Six services that require backups, updates, and occasional debugging at inconvenient times is a different story.
+
+This is placeholder content — more detail coming as the project evolves.

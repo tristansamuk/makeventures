@@ -1,0 +1,42 @@
+---
+title: 'The Home Assistance Journey'
+navTitle: 'Home Assist'
+description: 'How a Raspberry Pi in a drawer became the backbone of a fully automated apartment — dashboards, voice control, and automations that actually work.'
+heroImage: '../../assets/blog-placeholder-2.jpg'
+status: 'in-progress'
+featuredStat: '47 automations'
+---
+
+Every smart home starts somewhere dumb. Mine started with a Raspberry Pi I had no plan for, a bag of cheap Zigbee bulbs, and the naive confidence that this would all "just work."
+
+It did not just work. But it eventually worked, and now I can't imagine living without it. This is the story of that journey — the dead ends, the rabbit holes, and the automations I'm genuinely proud of.
+
+## Where it started
+
+The first thing I did was install Home Assistant on a Pi 3B+. At the time, I didn't know what I was doing, and the documentation — while excellent — assumes you already know what kind of smart home person you are. I was not yet that person.
+
+The second thing I did was buy a Zigbee USB dongle. This is, in hindsight, the single best purchase of the entire project.
+
+## The core setup
+
+After many iterations, the current setup runs on a dedicated mini PC rather than a Pi. The Pi was fine until it wasn't — SD card corruption at 2 AM is not a fun problem to debug.
+
+Current hardware:
+- Intel NUC running Proxmox
+- Home Assistant OS in a VM with passed-through USB (Zigbee dongle)
+- Zigbee2MQTT for device management
+- MQTT broker (Mosquitto) for messaging
+
+This stack is overkill for a one-bedroom apartment. I have no regrets.
+
+## The automations I actually use
+
+Not all automations survive contact with daily life. Here's what stuck:
+
+**Morning routine:** Lights gradually brighten 30 minutes before my alarm. The coffee maker turns on. The bathroom fan kicks in if humidity is above threshold (it almost always is).
+
+**Presence detection:** A combination of phone WiFi detection and Bluetooth tags means the house knows when I'm home, away, or asleep. Lights adjust. The thermostat adjusts. The security system arms.
+
+**Away mode:** One button (or leaving the geofence) turns off all lights, locks the door, lowers the thermostat, and sends a notification confirming it happened.
+
+This is placeholder content — the full write-up is coming.

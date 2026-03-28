@@ -4,17 +4,34 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import TagList from '../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-const posts = (await getCollection('blog')).sort(
+// ── Featured projects ── edit this array to change which projects are shown
+const FEATURED_PROJECT_IDS = [
+	'beside-lights',
+	'lab-desk',
+	'outdoor-stair-decay',
+];
+
+const [allProjects, allPosts] = await Promise.all([
+	getCollection('projects'),
+	getCollection('blog'),
+]);
+
+const featuredProjects = FEATURED_PROJECT_IDS
+	.map(id => allProjects.find(p => p.id === id))
+	.filter(p => p !== undefined);
+
+const posts = allPosts.sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const recentPosts = posts.slice(0, 3);
 
 const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
 const postCount = posts.length;
-const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullYear()), Infinity);
+const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 ---
 
 <!doctype html>
@@ -37,6 +54,8 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 					<div class="hero-stats">
 						<span><span class="stat-num">{postCount}</span> posts</span>
 						<span class="stat-sep">·</span>
+						<span><span class="stat-num">{allProjects.length}</span> projects</span>
+						<span class="stat-sep">·</span>
 						<span><span class="stat-num">{allTags.length}</span> topics</span>
 						<span class="stat-sep">·</span>
 						<span>since <span class="stat-num">{firstYear}</span></span>
@@ -46,14 +65,22 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 
 				<div class="hero-bottom">
 					<p class="hero-description">{SITE_DESCRIPTION}</p>
-					<a href="/blog" class="cta-button">
-						Read the blog <span class="arrow" aria-hidden="true">→</span>
-					</a>
 				</div>
+			</section>
 
-				<div class="hero-topics" aria-label="Topics covered">
-					<TagList tags={allTags} />
+			<section class="featured-projects">
+				<div class="section-header">
+					<h2>Featured Projects</h2>
+					<a href="/projects" class="view-all">All projects →</a>
 				</div>
+				<ul class="projects-grid" role="list">
+					{featuredProjects.map((project, i) => (
+						<ProjectCard
+							project={project}
+							style={`animation-delay:${0.1 + i * 0.07}s`}
+						/>
+					))}
+				</ul>
 			</section>
 
 			<section class="recent-posts">
@@ -138,7 +165,7 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 <style>
 	/* ── Hero ── */
 	.hero {
-		padding: var(--sp-16) 0 var(--sp-16);
+		padding: var(--sp-16) 0;
 	}
 	.hero-label {
 		font-family: var(--font-mono);
@@ -207,11 +234,6 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 
 	/* ── Bottom row ── */
 	.hero-bottom {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: var(--sp-8);
-		margin-bottom: var(--sp-8);
 		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 		animation-delay: 0.22s;
 	}
@@ -222,46 +244,30 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 		max-width: 576px;
 		margin: 0;
 	}
-	.cta-button {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--sp-2);
-		padding: var(--sp-3) var(--sp-6);
-		background: transparent;
-		color: var(--color-ink);
-		text-decoration: none;
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-pill);
-		font-family: var(--font-body);
-		font-size: var(--fs-sm);
-		font-weight: 500;
-		white-space: nowrap;
-		flex-shrink: 0;
-		transition: background-color var(--ease), color var(--ease), border-color var(--ease);
-	}
-	.cta-button:hover {
-		background: var(--color-ink);
-		color: var(--color-bg);
-		border-color: var(--color-ink);
-	}
-	.cta-button:hover .arrow {
-		transform: translateX(3px);
-	}
-	.arrow {
-		display: inline-block;
-		transition: transform var(--ease);
-	}
-
-	/* ── Topics strip ── */
-	.hero-topics {
+	/* ── Featured Projects ── */
+	.featured-projects {
+		padding: var(--sp-4) 0;
 		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-		animation-delay: 0.3s;
+		animation-delay: 0.32s;
+	}
+	.projects-grid {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--sp-6);
+	}
+	@media (max-width: 900px) {
+		.projects-grid { grid-template-columns: repeat(2, 1fr); }
+	}
+	@media (max-width: 600px) {
+		.projects-grid { grid-template-columns: 1fr; gap: var(--sp-4); }
 	}
 
 	/* ── Recent Posts ── */
 	.recent-posts {
-		padding-top: var(--sp-16);
-		border-top: 1px solid var(--color-border);
+		padding: var(--sp-8) 0 var(--sp-4);
 		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 		animation-delay: 0.35s;
 	}
@@ -373,17 +379,13 @@ const firstYear = posts.reduce((min, p) => Math.min(min, p.data.pubDate.getFullY
 
 	@media (prefers-reduced-motion: reduce) {
 		.hero-label, .hero-title, .hero-divider, .hero-bottom,
-		.hero-topics, .recent-posts, .post-item {
+		.featured-projects, .recent-posts, .post-item {
 			animation: none;
 		}
 	}
 
 	@media (max-width: 768px) {
 		.hero { padding: var(--sp-10) 0 var(--sp-12); }
-		.hero-bottom {
-			flex-direction: column;
-			gap: var(--sp-5);
-		}
 		.hero-description { font-size: var(--fs-md); }
 		.hero-stats { font-size: var(--fs-xs); gap: var(--sp-2); }
 	}
