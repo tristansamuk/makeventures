@@ -5,13 +5,14 @@ import StatusBadge from './StatusBadge.astro';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
+	style?: string;
 }
 
-const { project } = Astro.props;
+const { project, style } = Astro.props;
 const status = project.data.status ?? 'in-progress';
 ---
 
-<li class="project-card">
+<li class="project-card" {style}>
 	{project.data.heroImage && (
 		<div class="card-image">
 			<Image width={560} height={315} src={project.data.heroImage} alt="" />
