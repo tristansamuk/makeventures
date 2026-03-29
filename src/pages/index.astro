@@ -43,12 +43,7 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 	<body>
 		<Header />
 		<main>
-			<Hero
-				postCount={postCount}
-				projectCount={allProjects.length}
-				topicCount={allTags.length}
-				firstYear={firstYear}
-			/>
+			<Hero />
 
 			<section class="featured-projects">
 				<div class="section-header">
