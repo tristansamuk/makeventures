@@ -1,11 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
-import logo1 from '../assets/logo1.svg';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import TagList from '../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
@@ -44,35 +43,12 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 	<body>
 		<Header />
 		<main>
-			<section class="hero">
-				<p class="hero-label">Field notes from a maker</p>
-
-				<div class="hero-title-row">
-					<Image src={logo1} width={96} height={96} alt="" class="hero-logo" />
-					<h1 class="hero-title" id="hero-title">
-						<span class="title-line">
-							<p class="logo-green">Make</p><p class="logo-blue">Ventures</p>
-						</span>
-					</h1>
-				</div>
-
-				<div class="hero-divider">
-					<div class="hero-stats">
-						<span><span class="stat-num">{postCount}</span> posts</span>
-						<span class="stat-sep">·</span>
-						<span><span class="stat-num">{allProjects.length}</span> projects</span>
-						<span class="stat-sep">·</span>
-						<span><span class="stat-num">{allTags.length}</span> topics</span>
-						<span class="stat-sep">·</span>
-						<span>since <span class="stat-num">{firstYear}</span></span>
-					</div>
-					<div class="divider-line"></div>
-				</div>
-
-				<div class="hero-bottom">
-					<p class="hero-description">{SITE_DESCRIPTION}</p>
-				</div>
-			</section>
+			<Hero
+				postCount={postCount}
+				projectCount={allProjects.length}
+				topicCount={allTags.length}
+				firstYear={firstYear}
+			/>
 
 			<section class="featured-projects">
 				<div class="section-header">
@@ -121,158 +97,7 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 	</body>
 </html>
 
-<script>
-	// Typewriter on the eyebrow label — starts after the title has faded in
-	const label = document.querySelector('.hero-label') as HTMLElement;
-	if (label) {
-		const text = label.textContent ?? '';
-		label.textContent = '';
-		label.setAttribute('aria-label', text);
-		label.classList.add('typing');
-
-		let i = 0;
-		const speed = 45;
-		const startDelay = 800; // let the title land first
-
-		function type() {
-			if (i < text.length) {
-				label.textContent = text.slice(0, ++i);
-				setTimeout(type, speed);
-			} else {
-				label.classList.remove('typing');
-			}
-		}
-		setTimeout(type, startDelay);
-	}
-
-	// Scale hero title so the widest line fills the container width
-	function fitTitle() {
-		const title = document.getElementById('hero-title') as HTMLElement;
-		if (!title) return;
-		const containerWidth = title.offsetWidth;
-		const lines = title.querySelectorAll<HTMLElement>('.title-line');
-		let lo = 10, hi = 400;
-		title.style.fontSize = hi + 'px';
-		while (hi - lo > 0.5) {
-			const mid = (lo + hi) / 2;
-			title.style.fontSize = mid + 'px';
-			const maxWidth = Math.max(...Array.from(lines).map((l) => l.scrollWidth));
-			if (maxWidth <= containerWidth) lo = mid;
-			else hi = mid;
-		}
-		title.style.fontSize = lo + 'px';
-		const logo = document.querySelector<HTMLElement>('.hero-logo');
-		if (logo) { const s = Math.round(lo * 0.85) + 'px'; logo.style.height = s; logo.style.width = s; }
-	}
-
-	requestAnimationFrame(fitTitle);
-	window.addEventListener('resize', fitTitle);
-	window.visualViewport?.addEventListener('resize', fitTitle);
-</script>
-
 <style>
-	/* ── Hero ── */
-	.hero {
-		padding: var(--sp-16) 0;
-	}
-	.hero-label {
-		font-family: var(--font-mono);
-		font-size: var(--fs-sm);
-		color: var(--color-ink-muted);
-		margin: 0 0 var(--sp-8);
-		min-height: 1em;
-	}
-	.hero-label.typing::after {
-		content: '▍';
-		animation: blink 0.7s step-end infinite;
-		margin-left: 1px;
-	}
-	@keyframes blink {
-		0%, 100% { opacity: 1; }
-		50%       { opacity: 0; }
-	}
-	.hero-title-row {
-		display: flex;
-		align-items: center;
-		gap: var(--sp-6);
-		margin: 0 0 var(--sp-6);
-		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-		animation-delay: 0.05s;
-	}
-	.hero-logo {
-		height: 80px;
-		width: auto;
-		flex-shrink: 0;
-	}
-	.hero-title {
-		flex: 1;
-		min-width: 0;
-		font-family: var(--font-display);
-		font-weight: 400;
-		line-height: 0.75;
-		letter-spacing: -0.06em;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-	}
-	.title-line {
-		display: block;
-		white-space: nowrap;
-	}
-
-	.logo-green {
-		display: inline;
-		color: var(--color-brand-green);
-	}
-	.logo-blue {
-		display: inline;
-		color: var(--color-brand-blue);
-	}
-
-	/* ── Divider + stats ── */
-	.hero-divider {
-		display: flex;
-		align-items: center;
-		gap: var(--sp-6);
-		margin-bottom: var(--sp-8);
-		animation: fadeUp 0.5s ease both;
-		animation-delay: 0.15s;
-	}
-	.hero-stats {
-		display: flex;
-		align-items: center;
-		gap: var(--sp-3);
-		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
-		color: var(--color-ink-muted);
-		white-space: nowrap;
-		flex-shrink: 0;
-	}
-	.stat-num {
-		color: var(--color-ink);
-		font-weight: 600;
-	}
-	.stat-sep {
-		opacity: 0.4;
-	}
-	.divider-line {
-		flex: 1;
-		height: 1px;
-		background-color: var(--color-border);
-	}
-
-	/* ── Bottom row ── */
-	.hero-bottom {
-		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-		animation-delay: 0.22s;
-	}
-	.hero-description {
-		font-size: var(--fs-lg);
-		color: var(--color-ink-muted);
-		line-height: 1.7;
-		max-width: 576px;
-		margin: 0;
-	}
 	/* ── Featured Projects ── */
 	.featured-projects {
 		padding: var(--sp-4) 0;
@@ -407,15 +232,8 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.hero-label, .hero-title, .hero-divider, .hero-bottom,
 		.featured-projects, .recent-posts, .post-item {
 			animation: none;
 		}
-	}
-
-	@media (max-width: 768px) {
-		.hero { padding: var(--sp-10) 0 var(--sp-12); }
-		.hero-description { font-size: var(--fs-md); }
-		.hero-stats { font-size: var(--fs-xs); gap: var(--sp-2); }
 	}
 </style>
