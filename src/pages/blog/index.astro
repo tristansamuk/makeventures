@@ -1,8 +1,5 @@
 ---
-export const prerender = true;
-
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
+import { runSDK, SDKCoreJs } from 'studiocms:sdk';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -11,9 +8,14 @@ import PostCard from '../../components/PostCard.astro';
 import TagList from '../../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const allPages = await runSDK(SDKCoreJs.GET.pages());
+const posts = allPages
+	.filter((p) => p.package === '@studiocms/blog')
+	.sort((a, b) => {
+		const aDate = a.publishedAt?.valueOf() ?? 0;
+		const bDate = b.publishedAt?.valueOf() ?? 0;
+		return bDate - aDate;
+	});
 
 const [featured, ...rest] = posts;
 ---
@@ -32,28 +34,32 @@ const [featured, ...rest] = posts;
 			</header>
 
 			<!-- Featured post -->
+			{featured && (
 			<div class="featured-card">
-				{featured.data.heroImage && (
+				{featured.heroImage && (
 					<div class="featured-image">
-						<Image width={1200} height={630} src={featured.data.heroImage} alt="" />
+						<img width="1200" height="630" src={featured.heroImage} alt="" />
 					</div>
 				)}
 				<div class="featured-body">
 					<div class="featured-meta">
 						<span class="featured-label">Latest</span>
-						<time class="card-date"><FormattedDate date={featured.data.pubDate} /></time>
+						{featured.publishedAt && (
+							<time class="card-date"><FormattedDate date={featured.publishedAt} /></time>
+						)}
 					</div>
 					<h2 class="featured-title">
-						<a href={`/blog/${featured.id}/`} class="card-link">
-							{featured.data.title}
+						<a href={`/blog/${featured.slug}/`} class="card-link">
+							{featured.title}
 						</a>
 					</h2>
-					<p class="featured-description">{featured.data.description}</p>
-					{featured.data.tags && featured.data.tags.length > 0 && (
-						<TagList tags={featured.data.tags} />
+					<p class="featured-description">{featured.description}</p>
+					{featured.tags && featured.tags.length > 0 && (
+						<TagList tags={featured.tags} />
 					)}
 				</div>
 			</div>
+			)}
 
 			<!-- Remaining posts -->
 			<ul class="post-grid" role="list">

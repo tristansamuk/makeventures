@@ -1,22 +1,28 @@
 ---
-export const prerender = true;
-
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { StudioCMSRenderer } from 'studiocms:renderer';
+import { runSDK, SDKCoreJs } from 'studiocms:sdk';
 import BlogPost from '../../layouts/BlogPost.astro';
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'blog'>;
+const { slug } = Astro.params;
 
-const post = Astro.props;
-const { Content } = await render(post);
+if (!slug) {
+	return new Response(null, { status: 404 });
+}
+
+const post = await runSDK(SDKCoreJs.GET.page.bySlug(slug));
+
+if (!post || post.package !== '@studiocms/blog') {
+	return new Response(null, { status: 404 });
+}
 ---
 
-<BlogPost {...post.data}>
-	<Content />
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.publishedAt}
+	updatedDate={post.updatedAt}
+	heroImage={post.heroImage}
+	tags={post.tags}
+>
+	<StudioCMSRenderer data={post} />
 </BlogPost>

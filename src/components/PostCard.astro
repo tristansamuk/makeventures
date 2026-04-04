@@ -1,34 +1,41 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
 import TagList from './TagList.astro';
 
 interface Props {
-	post: CollectionEntry<'blog'>;
+	post: {
+		title: string;
+		description: string;
+		slug: string;
+		publishedAt: Date | null;
+		heroImage?: string | null;
+		tags?: { name: string; slug: string }[];
+	};
 }
 
 const { post } = Astro.props;
 ---
 
 <li class="post-card">
-	{post.data.heroImage && (
+	{post.heroImage && (
 		<div class="card-image">
-			<Image width={720} height={400} src={post.data.heroImage} alt="" />
+			<img width="720" height="400" src={post.heroImage} alt="" loading="lazy" />
 		</div>
 	)}
 	<div class="card-body">
-		<time class="card-date">
-			<FormattedDate date={post.data.pubDate} />
-		</time>
+		{post.publishedAt && (
+			<time class="card-date">
+				<FormattedDate date={post.publishedAt} />
+			</time>
+		)}
 		<h2 class="card-title">
-			<a href={`/blog/${post.id}/`} class="card-link">
-				{post.data.title}
+			<a href={`/blog/${post.slug}/`} class="card-link">
+				{post.title}
 			</a>
 		</h2>
-		<p class="card-description">{post.data.description}</p>
-		{post.data.tags && post.data.tags.length > 0 && (
-			<TagList tags={post.data.tags} />
+		<p class="card-description">{post.description}</p>
+		{post.tags && post.tags.length > 0 && (
+			<TagList tags={post.tags} />
 		)}
 	</div>
 </li>

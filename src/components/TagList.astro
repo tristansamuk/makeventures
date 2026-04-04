@@ -1,9 +1,22 @@
 ---
+interface TagObject {
+	name: string;
+	slug: string;
+}
+
 interface Props {
-	tags: string[];
+	tags: (string | TagObject)[];
 }
 
 const { tags } = Astro.props;
+
+function getTagName(tag: string | TagObject): string {
+	return typeof tag === 'string' ? tag : tag.name;
+}
+
+function getTagSlug(tag: string | TagObject): string {
+	return typeof tag === 'string' ? tag : tag.slug;
+}
 ---
 
 {
@@ -11,8 +24,8 @@ const { tags } = Astro.props;
 		<ul class="tag-list" role="list">
 			{tags.map((tag) => (
 				<li>
-					<a href={`/blog/tags/${tag}/`} class="tag">
-						{tag}
+					<a href={`/blog/tags/${getTagSlug(tag)}/`} class="tag">
+						{getTagName(tag)}
 					</a>
 				</li>
 			))}

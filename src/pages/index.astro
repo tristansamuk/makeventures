@@ -1,7 +1,5 @@
 ---
-export const prerender = true;
-
-import { getCollection } from 'astro:content';
+import { runSDK, SDKCoreJs } from 'studiocms:sdk';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
@@ -12,29 +10,33 @@ import TagList from '../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 // ── Featured projects ── edit this array to change which projects are shown
-const FEATURED_PROJECT_IDS = [
+const FEATURED_PROJECT_SLUGS = [
 	'beside-lights',
 	'lab-desk',
 	'outdoor-stair-decay',
 ];
 
 const [allProjects, allPosts] = await Promise.all([
-	getCollection('projects'),
-	getCollection('blog'),
+	runSDK(SDKCoreJs.GET.folderPages('projects')),
+	runSDK(SDKCoreJs.GET.pages()).then((pages) =>
+		pages.filter((p) => p.package === '@studiocms/blog')
+	),
 ]);
 
-const featuredProjects = FEATURED_PROJECT_IDS
-	.map(id => allProjects.find(p => p.id === id))
+const featuredProjects = FEATURED_PROJECT_SLUGS
+	.map(slug => allProjects.find(p => p.slug === slug))
 	.filter(p => p !== undefined);
 
-const posts = allPosts.sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = allPosts.sort((a, b) => {
+	const aDate = a.publishedAt?.valueOf() ?? 0;
+	const bDate = b.publishedAt?.valueOf() ?? 0;
+	return bDate - aDate;
+});
 const recentPosts = posts.slice(0, 3);
 
-const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
+const allTags = [...new Set(posts.flatMap((p) => p.tags?.map(t => t.name) ?? []))];
 const postCount = posts.length;
-const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
+const firstYear = posts[posts.length - 1]?.publishedAt?.getFullYear();
 ---
 
 <!doctype html>
@@ -70,19 +72,21 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 				<ul class="post-list" role="list">
 					{recentPosts.map((post, i) => (
 						<li class="post-item" style={`animation-delay: ${0.1 + i * 0.08}s`}>
-							<a href={`/blog/${post.id}/`} class="post-link">
-								<time class="post-date">
-									<FormattedDate date={post.data.pubDate} />
-								</time>
+							<a href={`/blog/${post.slug}/`} class="post-link">
+								{post.publishedAt && (
+									<time class="post-date">
+										<FormattedDate date={post.publishedAt} />
+									</time>
+								)}
 								<div class="post-info">
-									<h3 class="post-title">{post.data.title}</h3>
-									<p class="post-description">{post.data.description}</p>
+									<h3 class="post-title">{post.title}</h3>
+									<p class="post-description">{post.description}</p>
 								</div>
 								<span class="post-arrow" aria-hidden="true">→</span>
 							</a>
-							{post.data.tags && post.data.tags.length > 0 && (
+							{post.tags && post.tags.length > 0 && (
 								<div class="post-tags">
-									<TagList tags={post.data.tags} />
+									<TagList tags={post.tags} />
 								</div>
 							)}
 						</li>

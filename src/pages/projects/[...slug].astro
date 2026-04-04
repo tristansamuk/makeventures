@@ -1,23 +1,25 @@
 ---
-export const prerender = true;
-
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { StudioCMSRenderer } from 'studiocms:renderer';
+import { runSDK, SDKCoreJs } from 'studiocms:sdk';
 import ProjectPost from '../../layouts/ProjectPost.astro';
 
-export async function getStaticPaths() {
-	const projects = await getCollection('projects');
-	return projects.map((project) => ({
-		params: { slug: project.id },
-		props: project,
-	}));
+const { slug } = Astro.params;
+
+if (!slug) {
+	return new Response(null, { status: 404 });
 }
 
-type Props = CollectionEntry<'projects'>;
+const project = await runSDK(SDKCoreJs.GET.page.bySlug(slug));
 
-const project = Astro.props;
-const { Content } = await render(project);
+if (!project) {
+	return new Response(null, { status: 404 });
+}
 ---
 
-<ProjectPost {...project.data}>
-	<Content />
+<ProjectPost
+	title={project.title}
+	description={project.description}
+	heroImage={project.heroImage}
+>
+	<StudioCMSRenderer data={project} />
 </ProjectPost>

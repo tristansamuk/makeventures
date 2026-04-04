@@ -1,33 +1,38 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import StatusBadge from './StatusBadge.astro';
 
 interface Props {
-	project: CollectionEntry<'projects'>;
+	project: {
+		title: string;
+		description: string;
+		slug: string;
+		heroImage?: string | null;
+		status?: 'completed' | 'in-progress' | 'paused';
+		featuredStat?: string;
+	};
 	style?: string;
 }
 
 const { project, style } = Astro.props;
-const status = project.data.status ?? 'in-progress';
+const status = project.status ?? 'in-progress';
 ---
 
 <li class="project-card" {style}>
-	{project.data.heroImage && (
+	{project.heroImage && (
 		<div class="card-image">
-			<Image width={560} height={315} src={project.data.heroImage} alt="" />
+			<img width="560" height="315" src={project.heroImage} alt="" loading="lazy" />
 		</div>
 	)}
 	<div class="card-body">
 		<StatusBadge {status} />
 		<h2 class="card-title">
-			<a href={`/projects/${project.id}/`} class="card-link">
-				{project.data.title}
+			<a href={`/projects/${project.slug}/`} class="card-link">
+				{project.title}
 			</a>
 		</h2>
-		<p class="card-description">{project.data.description}</p>
-		{project.data.featuredStat && (
-			<p class="card-stat">{project.data.featuredStat}</p>
+		<p class="card-description">{project.description}</p>
+		{project.featuredStat && (
+			<p class="card-stat">{project.featuredStat}</p>
 		)}
 	</div>
 </li>

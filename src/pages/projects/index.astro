@@ -1,8 +1,5 @@
 ---
-export const prerender = true;
-
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
+import { runSDK, SDKCoreJs } from 'studiocms:sdk';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
@@ -10,19 +7,9 @@ import ProjectCard from '../../components/ProjectCard.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
-const statusOrder = { completed: 0, 'in-progress': 1, paused: 2 } as const;
-
-const projects = (await getCollection('projects')).sort((a, b) => {
-	const aOrder = statusOrder[a.data.status ?? 'in-progress'];
-	const bOrder = statusOrder[b.data.status ?? 'in-progress'];
-	return aOrder - bOrder;
-});
+const projects = await runSDK(SDKCoreJs.GET.folderPages('projects'));
 
 const [featured, ...rest] = projects;
-
-const completedCount  = projects.filter(p => p.data.status === 'completed').length;
-const inProgressCount = projects.filter(p => (p.data.status ?? 'in-progress') === 'in-progress').length;
-const pausedCount     = projects.filter(p => p.data.status === 'paused').length;
 ---
 
 <!doctype html>
@@ -38,41 +25,26 @@ const pausedCount     = projects.filter(p => p.data.status === 'paused').length;
 				<p class="page-subtitle">Things built, automated, and occasionally finished.</p>
 				<div class="projects-stats">
 					<span><span class="stat-num">{projects.length}</span> total</span>
-					<span class="stat-sep">·</span>
-					<span><span class="stat-num">{completedCount}</span> completed</span>
-					<span class="stat-sep">·</span>
-					<span><span class="stat-num">{inProgressCount}</span> in progress</span>
-					{pausedCount > 0 && (
-						<>
-							<span class="stat-sep">·</span>
-							<span><span class="stat-num">{pausedCount}</span> paused</span>
-						</>
-					)}
 				</div>
 			</header>
 
+			{featured && (
 			<div class="featured-project">
-				{featured.data.heroImage && (
+				{featured.heroImage && (
 					<div class="featured-image">
-						<Image width={720} height={405} src={featured.data.heroImage} alt="" />
+						<img width="720" height="405" src={featured.heroImage} alt="" loading="lazy" />
 					</div>
 				)}
 				<div class="featured-body">
-					<StatusBadge status={featured.data.status ?? 'in-progress'} />
 					<h2 class="featured-title">
-						<a href={`/projects/${featured.id}/`} class="card-link">
-							{featured.data.title}
+						<a href={`/projects/${featured.slug}/`} class="card-link">
+							{featured.title}
 						</a>
 					</h2>
-					<p class="featured-description">{featured.data.description}</p>
-					{featured.data.featuredStat && (
-						<div class="featured-stat">
-							<span class="stat-label">highlight</span>
-							<span class="stat-value">{featured.data.featuredStat}</span>
-						</div>
-					)}
+					<p class="featured-description">{featured.description}</p>
 				</div>
 			</div>
+			)}
 
 			<div class="grid-header">
 				<span class="grid-label">All projects</span>

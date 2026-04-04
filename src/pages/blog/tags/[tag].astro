@@ -1,24 +1,26 @@
 ---
-export const prerender = true;
-
-import { getCollection } from 'astro:content';
+import { runSDK, SDKCoreJs } from 'studiocms:sdk';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import PostCard from '../../../components/PostCard.astro';
 import { SITE_TITLE } from '../../../consts';
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	const tags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
-	return tags.map((tag) => ({ params: { tag } }));
-}
-
 const { tag } = Astro.params;
 
-const posts = (await getCollection('blog'))
-	.filter((p) => p.data.tags?.includes(tag!))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+if (!tag) {
+	return new Response(null, { status: 404 });
+}
+
+const allPages = await runSDK(SDKCoreJs.GET.pages());
+const posts = allPages
+	.filter((p) => p.package === '@studiocms/blog')
+	.filter((p) => p.tags?.some((t) => t.slug === tag || t.name === tag))
+	.sort((a, b) => {
+		const aDate = a.publishedAt?.valueOf() ?? 0;
+		const bDate = b.publishedAt?.valueOf() ?? 0;
+		return bDate - aDate;
+	});
 ---
 
 <!doctype html>

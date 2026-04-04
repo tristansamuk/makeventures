@@ -1,18 +1,20 @@
-export const prerender = true;
-
-import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
+import { runSDK, SDKCoreJs } from 'studiocms:sdk';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export async function GET(context) {
-	const posts = await getCollection('blog');
+	const allPages = await runSDK(SDKCoreJs.GET.pages());
+	const posts = allPages.filter((p) => p.package === '@studiocms/blog');
+
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		site: context.site,
 		items: posts.map((post) => ({
-			...post.data,
-			link: `/blog/${post.id}/`,
+			title: post.title,
+			description: post.description,
+			pubDate: post.publishedAt,
+			link: `/blog/${post.slug}/`,
 		})),
 	});
 }

@@ -1,13 +1,18 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 
-type Props = CollectionEntry<'projects'>['data'];
+interface Props {
+	title: string;
+	description: string;
+	heroImage?: string | null;
+	status?: 'completed' | 'in-progress' | 'paused';
+	completedDate?: Date | null;
+	featuredStat?: string | null;
+}
 
 const { title, description, heroImage, status, completedDate, featuredStat } = Astro.props;
 ---
@@ -23,9 +28,9 @@ const { title, description, heroImage, status, completedDate, featuredStat } = A
 			<article>
 				{heroImage ? (
 					<div class="project-hero">
-						<Image
-							width={1920}
-							height={823}
+						<img
+							width="1920"
+							height="823"
 							src={heroImage}
 							alt=""
 							class="hero-img"
