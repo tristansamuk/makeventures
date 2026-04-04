@@ -12,7 +12,7 @@ const navLinks = [
 
 <header>
 	<div class="nav-inner">
-		<a href="/" class="site-title">{SITE_TITLE}</a>
+		<a href="/" class="site-title"><span class="logo-green">Make</span><span class="logo-blue">Ventures</span></a>
 		<div class="nav-right">
 			<nav class="nav-links" aria-label="Main navigation">
 				{navLinks.map(({ href, label }) => (
@@ -150,13 +150,19 @@ const navLinks = [
 	.site-title {
 		font-family: var(--font-display);
 		font-size: var(--fs-lg);
-		font-weight: 500;
+		font-weight: 400;
 		color: var(--color-ink);
 		text-decoration: none;
 		transition: color var(--ease);
 	}
 	.site-title:hover {
 		color: var(--color-ink-muted);
+	}
+	.site-title .logo-green {
+		color: var(--color-brand-green);
+	}
+	.site-title .logo-blue {
+		color: var(--color-brand-blue);
 	}
 
 	.nav-links {
