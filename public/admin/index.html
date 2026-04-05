@@ -10,7 +10,7 @@
   </head>
   <body>
     <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
     <script>
       function videoEmbedUrl(url) {
         var yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
@@ -22,6 +22,11 @@
 
       CMS.registerPreviewStyle('/admin/preview.css');
 
+      function formatDate(date) {
+        if (!date) return '';
+        return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
       // Blog preview template
       var BlogPreview = createClass({
         render: function () {
@@ -29,10 +34,8 @@
           var title = entry.getIn(['data', 'title']) || '';
           var description = entry.getIn(['data', 'description']) || '';
           var author = entry.getIn(['data', 'author']) || '';
-          var pubDate = entry.getIn(['data', 'pubDate']);
+          var dateStr = formatDate(entry.getIn(['data', 'pubDate']));
           var tags = entry.getIn(['data', 'tags']);
-          var dateStr = pubDate ? new Date(pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-
           var heroImage = this.props.widgetFor('heroImage');
 
           return h('article', {},
@@ -61,9 +64,7 @@
           var entry = this.props.entry;
           var title = entry.getIn(['data', 'title']) || '';
           var status = entry.getIn(['data', 'status']) || '';
-          var completedDate = entry.getIn(['data', 'completedDate']);
-          var dateStr = completedDate ? new Date(completedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-
+          var dateStr = formatDate(entry.getIn(['data', 'completedDate']));
           var heroImage = this.props.widgetFor('heroImage');
 
           return h('article', {},

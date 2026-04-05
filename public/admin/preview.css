@@ -15,9 +15,12 @@
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 
   --sp-2: 8px;
+  --sp-3: 12px;
   --sp-4: 16px;
+  --sp-5: 20px;
   --sp-6: 24px;
   --sp-8: 32px;
+  --sp-10: 40px;
   --sp-12: 48px;
 
   --fs-xs: 12px;
@@ -27,7 +30,6 @@
   --fs-lg: 20px;
   --fs-xl: 24px;
   --fs-2xl: 30px;
-
   --fs-3xl: 38px;
   --fs-4xl: 50px;
 
@@ -35,10 +37,6 @@
   --radius-md: 4px;
   --radius-pill: 9999px;
   --prose: 736px;
-
-  --sp-3: 12px;
-  --sp-5: 20px;
-  --sp-10: 40px;
 }
 
 body {

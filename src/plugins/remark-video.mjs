@@ -1,6 +1,10 @@
 import { visit } from 'unist-util-visit';
 
-const VIDEO_PATTERN = /{{< video "([^"]+)"(?:\s+"([^"]*)")? >}}/g;
+const VIDEO_PATTERN = /{{< video "([^"]+)"(?:\s+"([^"]*)")? >}}/;
+
+function escapeAttr(str) {
+	return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+}
 
 function embedUrl(url) {
 	const yt = url.match(
@@ -11,7 +15,7 @@ function embedUrl(url) {
 	const vm = url.match(/vimeo\.com\/(\d+)/);
 	if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
 
-	return url;
+	return null;
 }
 
 export function remarkVideo() {
@@ -23,12 +27,12 @@ export function remarkVideo() {
 				.join('');
 
 			const match = VIDEO_PATTERN.exec(text.trim());
-			VIDEO_PATTERN.lastIndex = 0;
-
 			if (!match) return;
 
 			const src = embedUrl(match[1]);
-			const title = match[2] || 'Embedded video';
+			if (!src) return;
+
+			const title = escapeAttr(match[2] || 'Embedded video');
 
 			parent.children[index] = {
 				type: 'html',
