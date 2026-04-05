@@ -39,7 +39,6 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 	</head>
 	<body>
 		<Header />
@@ -90,17 +89,6 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 			</section>
 		</main>
 		<Footer />
-		<script>
-			if (window.netlifyIdentity) {
-				window.netlifyIdentity.on("init", (user) => {
-					if (!user) {
-						window.netlifyIdentity.on("login", () => {
-							document.location.href = "/admin/index.html";
-						});
-					}
-				});
-  }
-</script>
 	</body>
 </html>
 
