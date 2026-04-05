@@ -1,6 +1,9 @@
+# backend:
+#   name: git-gateway
+#   branch: main
+
 backend:
-  name: git-gateway
-  branch: main
+  name: test-repo
 
 site_url: https://makeventures.netlify.app
 
@@ -14,14 +17,30 @@ collections:
     folder: 'src/content/blog'
     create: true
     slug: '{{slug}}'
+    summary: '{{pubDate | date("YYYY-MM-DD")}} — {{title}}'
+    sortable_fields: ['pubDate', 'title']
+    media_folder: '../../assets'
+    public_folder: '../../assets'
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
-      - { label: 'Description', name: 'description', widget: 'string' }
+      - { label: 'Description', name: 'description', widget: 'text' }
       - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
-      - { label: 'Updated Date', name: 'updatedDate', widget: 'datetime', required: false }
-      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
-      - { label: 'Tags', name: 'tags', widget: 'list', required: false }
-      - { label: 'Author', name: 'author', widget: 'string', required: false }
+      - {
+          label: 'Hero Image',
+          name: 'heroImage',
+          widget: 'image',
+          required: false,
+          hint: 'Landscape JPG, at least 1920×1080. Compress with Squoosh (https://squoosh.app) before uploading.',
+        }
+      - {
+          label: 'Tags',
+          name: 'tags',
+          widget: 'list',
+          required: false,
+          field: { label: 'Tag', name: 'tag', widget: 'string' },
+          hint: 'Add tags one at a time',
+        }
+      - { label: 'Author', name: 'author', widget: 'string', required: false, default: 'Igor Samuk' }
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
   - name: 'projects'
@@ -29,12 +48,32 @@ collections:
     folder: 'src/content/projects'
     create: true
     slug: '{{slug}}'
+    summary: '{{status}} — {{title}}'
+    sortable_fields: ['title', 'status']
+    media_folder: '../../assets'
+    public_folder: '../../assets'
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
-      - { label: 'Description', name: 'description', widget: 'string' }
-      - { label: 'Navigation Title', name: 'navTitle', widget: 'string', required: false }
-      - { label: 'Status', name: 'status', widget: 'select', options: ['completed', 'in-progress', 'paused'], required: false }
-      - { label: 'Completed Date', name: 'completedDate', widget: 'datetime', required: false }
-      - { label: 'Featured Stat', name: 'featuredStat', widget: 'string', required: false }
-      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - { label: 'Description', name: 'description', widget: 'text' }
+      - {
+          label: 'Status',
+          name: 'status',
+          widget: 'select',
+          options: ['completed', 'in-progress', 'paused'],
+          default: 'in-progress',
+          required: false,
+        }
+      - {
+          label: 'Completed Date',
+          name: 'completedDate',
+          widget: 'datetime',
+          required: false,
+        }
+      - {
+          label: 'Hero Image',
+          name: 'heroImage',
+          widget: 'image',
+          required: false,
+          hint: 'Landscape JPG, at least 1920×1080. Compress with Squoosh (https://squoosh.app) before uploading.',
+        }
       - { label: 'Body', name: 'body', widget: 'markdown' }
