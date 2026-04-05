@@ -145,13 +145,6 @@ hr {
   font-weight: 700;
   line-height: 1.1;
   color: #fafafa;
-  margin: 0 0 var(--sp-3);
-}
-.hero-stat {
-  font-family: var(--font-mono);
-  font-size: var(--fs-2xl);
-  font-weight: 500;
-  color: rgba(250, 250, 250, 0.8);
   margin: 0;
 }
 
@@ -207,12 +200,6 @@ hr {
   font-size: var(--fs-4xl);
   margin: 0 0 var(--sp-3);
   line-height: 1.1;
-}
-.project-stat {
-  font-family: var(--font-mono);
-  font-size: var(--fs-xl);
-  color: var(--color-ink-muted);
-  margin: 0 0 var(--sp-6);
 }
 .project-meta-bar {
   display: flex;

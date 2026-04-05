@@ -62,7 +62,6 @@
           var title = entry.getIn(['data', 'title']) || '';
           var status = entry.getIn(['data', 'status']) || '';
           var completedDate = entry.getIn(['data', 'completedDate']);
-          var featuredStat = entry.getIn(['data', 'featuredStat']) || '';
           var dateStr = completedDate ? new Date(completedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
 
           var heroImage = this.props.widgetFor('heroImage');
@@ -72,13 +71,11 @@
               heroImage,
               h('div', { className: 'hero-overlay' },
                 h('div', { className: 'hero-inner' },
-                  h('h1', { className: 'hero-title' }, title),
-                  featuredStat && h('p', { className: 'hero-stat' }, featuredStat)
+                  h('h1', { className: 'hero-title' }, title)
                 )
               )
             ),
             !heroImage && h('h1', { className: 'project-title' }, title),
-            !heroImage && featuredStat && h('p', { className: 'project-stat' }, featuredStat),
             h('div', { className: 'project-meta-bar' },
               status && h('span', { className: 'status-badge status-' + status }, status),
               dateStr && h('time', { className: 'meta-date' }, dateStr)

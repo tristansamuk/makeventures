@@ -30,6 +30,7 @@ collections:
           name: 'heroImage',
           widget: 'image',
           required: false,
+          hint: 'Landscape JPG, at least 1920×1080. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - {
           label: 'Tags',
@@ -55,12 +56,6 @@ collections:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Description', name: 'description', widget: 'text' }
       - {
-          label: 'Navigation Title',
-          name: 'navTitle',
-          widget: 'string',
-          required: false,
-        }
-      - {
           label: 'Status',
           name: 'status',
           widget: 'select',
@@ -75,15 +70,10 @@ collections:
           required: false,
         }
       - {
-          label: 'Featured Stat',
-          name: 'featuredStat',
-          widget: 'string',
-          required: false,
-        }
-      - {
           label: 'Hero Image',
           name: 'heroImage',
           widget: 'image',
           required: false,
+          hint: 'Landscape JPG, at least 1920×1080. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }
