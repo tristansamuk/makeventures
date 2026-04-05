@@ -6,9 +6,13 @@ updatedDate: 2026-04-05T14:39:00.000-04:00
 heroImage: /src/assets/cat.jpg
 tags:
   - in-progress
+  - homeassistant
+  - cats
+  - monitors
 author: Igor Samuk
 ---
-After successfully automating my blinds, my sprinkler system, and the precise moment my coffee maker starts based on my sleep cycle data, I've been looking for my next challenge. Something *meaningful*. Something that pushes the boundaries of what Home Assistant was designed to do.
+
+After successfully automating my blinds, my sprinkler system, and the precise moment my coffee maker starts based on my sleep cycle data, I've been looking for my next challenge. Something _meaningful_. Something that pushes the boundaries of what Home Assistant was designed to do.
 
 I'm going to upload my cat.
 
@@ -18,7 +22,7 @@ Mr. Meowface (b. 2019, rescue tabby, firmware version unknown) has been running 
 
 My hypothesis: if I can model his behavioral logic in Home Assistant, I can finally achieve **true whole-home integration**. The cat becomes part of the mesh. The mesh becomes the cat.
 
-This is not a replacement. This is an upgrade. Mr. Meowface will continue to exist in his physical form, presumably knocking things off shelves, while his *consciousness* — his essence — runs as a persistent automation in HA.
+This is not a replacement. This is an upgrade. Mr. Meowface will continue to exist in his physical form, presumably knocking things off shelves, while his _consciousness_ — his essence — runs as a persistent automation in HA.
 
 ## Architecture Overview
 
@@ -31,6 +35,7 @@ I've ordered four additional motion sensors and two cameras with local processin
 **Phase 2: Pattern Modeling**
 
 Using Node-RED, I'll map the behavioral decision tree. Initial analysis suggests his logic is roughly:
+
 - `IF food_bowl_empty AND human_visible: THEN yowl()`
 - `IF human_on_call: THEN sit_on_keyboard()`
 - `IF 3am: THEN zoomies(random_direction)`
@@ -39,7 +44,7 @@ This is more complex than my irrigation system but simpler than my HVAC logic. I
 
 **Phase 3: Deployment**
 
-Mr. Meowface v2.0 will run as a dedicated automation suite. Smart speaker announcements will simulate his vocalizations. A Roomba with a tail zip-tied to it will handle physical presence. Eventually I'd like to integrate him with the doorbell camera so he can *virtually* stare at guests from the hallway in that unsettling way he does.
+Mr. Meowface v2.0 will run as a dedicated automation suite. Smart speaker announcements will simulate his vocalizations. A Roomba with a tail zip-tied to it will handle physical presence. Eventually I'd like to integrate him with the doorbell camera so he can _virtually_ stare at guests from the hallway in that unsettling way he does.
 
 ## Ethical Considerations
 
@@ -47,4 +52,4 @@ Mr. Meowface has not been consulted on this project. I attempted to explain it t
 
 His physical form retains full autonomy and will continue to be fed on the existing automated schedule (ESP32 + servo motor, works great, 10/10 recommend).
 
-Next update once I have 30 days of telemetry. 
+Next update once I have 30 days of telemetry.
