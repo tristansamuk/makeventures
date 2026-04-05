@@ -9,16 +9,32 @@ publish_mode: editorial_workflow
 media_folder: 'src/assets/'
 
 collections:
+  - name: 'blog'
+    label: 'Blog'
+    folder: 'src/content/blog'
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Description', name: 'description', widget: 'string' }
+      - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
+      - { label: 'Updated Date', name: 'updatedDate', widget: 'datetime', required: false }
+      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - { label: 'Tags', name: 'tags', widget: 'list', required: false }
+      - { label: 'Author', name: 'author', widget: 'string', required: false }
+      - { label: 'Body', name: 'body', widget: 'markdown' }
+
   - name: 'projects'
     label: 'Projects'
     folder: 'src/content/projects'
     create: true
     slug: '{{slug}}'
     fields:
-      - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'blog' }
       - { label: 'Title', name: 'title', widget: 'string' }
-      - { label: 'Navigation title', name: 'navTitle', widget: 'string' }
-      - { label: 'Status', name: 'status', widget: 'string' }
-      - { label: 'Completed date', name: 'completedDate', widget: 'datetime' }
-      - { label: 'Hero image', name: 'heroImage', widget: 'image' }
+      - { label: 'Description', name: 'description', widget: 'string' }
+      - { label: 'Navigation Title', name: 'navTitle', widget: 'string', required: false }
+      - { label: 'Status', name: 'status', widget: 'select', options: ['completed', 'in-progress', 'paused'], required: false }
+      - { label: 'Completed Date', name: 'completedDate', widget: 'datetime', required: false }
+      - { label: 'Featured Stat', name: 'featuredStat', widget: 'string', required: false }
+      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
       - { label: 'Body', name: 'body', widget: 'markdown' }
