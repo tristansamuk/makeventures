@@ -22,6 +22,73 @@
 
       CMS.registerPreviewStyle('/admin/preview.css');
 
+      // Blog preview template
+      var BlogPreview = createClass({
+        render: function () {
+          var entry = this.props.entry;
+          var title = entry.getIn(['data', 'title']) || '';
+          var description = entry.getIn(['data', 'description']) || '';
+          var author = entry.getIn(['data', 'author']) || '';
+          var pubDate = entry.getIn(['data', 'pubDate']);
+          var tags = entry.getIn(['data', 'tags']);
+          var dateStr = pubDate ? new Date(pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+
+          var heroImage = this.props.widgetFor('heroImage');
+
+          return h('article', {},
+            heroImage && h('div', { className: 'hero-image' }, heroImage),
+            h('div', { className: 'post-meta' },
+              dateStr && h('time', { className: 'post-date' }, dateStr),
+              author && h('span', { className: 'post-author' }, 'by ' + author)
+            ),
+            h('h1', { className: 'post-title' }, title),
+            description && h('p', { className: 'post-description' }, description),
+            tags && tags.size > 0 && h('div', { className: 'post-tags' },
+              tags.map(function (tag) {
+                return h('span', { key: tag, className: 'tag' }, '#' + tag);
+              }).toArray()
+            ),
+            h('hr'),
+            h('div', {}, this.props.widgetFor('body'))
+          );
+        },
+      });
+      CMS.registerPreviewTemplate('blog', BlogPreview);
+
+      // Project preview template
+      var ProjectPreview = createClass({
+        render: function () {
+          var entry = this.props.entry;
+          var title = entry.getIn(['data', 'title']) || '';
+          var status = entry.getIn(['data', 'status']) || '';
+          var completedDate = entry.getIn(['data', 'completedDate']);
+          var featuredStat = entry.getIn(['data', 'featuredStat']) || '';
+          var dateStr = completedDate ? new Date(completedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+
+          var heroImage = this.props.widgetFor('heroImage');
+
+          return h('article', {},
+            heroImage && h('div', { className: 'project-hero' },
+              heroImage,
+              h('div', { className: 'hero-overlay' },
+                h('div', { className: 'hero-inner' },
+                  h('h1', { className: 'hero-title' }, title),
+                  featuredStat && h('p', { className: 'hero-stat' }, featuredStat)
+                )
+              )
+            ),
+            !heroImage && h('h1', { className: 'project-title' }, title),
+            !heroImage && featuredStat && h('p', { className: 'project-stat' }, featuredStat),
+            h('div', { className: 'project-meta-bar' },
+              status && h('span', { className: 'status-badge status-' + status }, status),
+              dateStr && h('time', { className: 'meta-date' }, dateStr)
+            ),
+            h('div', {}, this.props.widgetFor('body'))
+          );
+        },
+      });
+      CMS.registerPreviewTemplate('projects', ProjectPreview);
+
       CMS.registerEditorComponent({
         id: 'video',
         label: 'Video',
