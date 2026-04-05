@@ -1,0 +1,2 @@
+patchedDependencies:
+  studiocms@0.4.4: patches/studiocms@0.4.4.patch

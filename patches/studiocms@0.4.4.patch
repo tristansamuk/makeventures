@@ -1,0 +1,13 @@
+diff --git a/frontend/components/dashboard/content-mgmt/EditPage.astro b/frontend/components/dashboard/content-mgmt/EditPage.astro
+index 6c233a7b9e79ab736678998be680f32cafca6058..b88ecc6e82adbe522d79fc03bbfee8d0b7d188b1 100644
+--- a/frontend/components/dashboard/content-mgmt/EditPage.astro
++++ b/frontend/components/dashboard/content-mgmt/EditPage.astro
+@@ -602,7 +602,7 @@ const t = useTranslations(lang, '@studiocms/dashboard:content-page');
+           pluginFields,
+         };
+       }),
+-      Schema.decodeUnknown(EditPageDataFromFormDataObjectSchema),
++      Effect.flatMap(Schema.decodeUnknown(EditPageDataFromFormDataObjectSchema)),
+       Effect.flatMap((payload) =>
+         dashboardClient.pipe(
+           Effect.flatMap((client) =>

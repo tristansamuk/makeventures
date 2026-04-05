@@ -47,31 +47,31 @@ This is an **Astro 6** static site (SSG) — all routes are pre-built at build t
 
 ## Pages
 
-| Route                  | File                                  | Notes                                                                                                      |
-| ---------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `/`                    | `src/pages/index.astro`               | Hero with full-width fitting title, typewriter eyebrow, stat bar, featured projects, topic strip, recent posts |
-| `/blog`                | `src/pages/blog/index.astro`          | Featured post card + 2-column post grid                                                                    |
-| `/blog/[slug]`         | `src/pages/blog/[...slug].astro`      | Individual post via `BlogPost.astro` layout                                                                |
-| `/blog/tags/[tag]`     | `src/pages/blog/tags/[tag].astro`     | Posts filtered by tag                                                                                      |
-| `/projects`            | `src/pages/projects/index.astro`      | Featured project card + 3-column project grid with status badges and stats                                 |
-| `/projects/[slug]`     | `src/pages/projects/[...slug].astro`  | Individual project via `ProjectPost.astro` layout                                                          |
-| `/about`               | `src/pages/about.astro`               | About page                                                                                                 |
-| `/404`                 | `src/pages/404.astro`                 | Custom 404 page                                                                                            |
+| Route              | File                                 | Notes                                                                                                          |
+| ------------------ | ------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `/`                | `src/pages/index.astro`              | Hero with full-width fitting title, typewriter eyebrow, stat bar, featured projects, topic strip, recent posts |
+| `/blog`            | `src/pages/blog/index.astro`         | Featured post card + 2-column post grid                                                                        |
+| `/blog/[slug]`     | `src/pages/blog/[...slug].astro`     | Individual post via `BlogPost.astro` layout                                                                    |
+| `/blog/tags/[tag]` | `src/pages/blog/tags/[tag].astro`    | Posts filtered by tag                                                                                          |
+| `/projects`        | `src/pages/projects/index.astro`     | Featured project card + 3-column project grid with status badges and stats                                     |
+| `/projects/[slug]` | `src/pages/projects/[...slug].astro` | Individual project via `ProjectPost.astro` layout                                                              |
+| `/about`           | `src/pages/about.astro`              | About page                                                                                                     |
+| `/404`             | `src/pages/404.astro`                | Custom 404 page                                                                                                |
 
 ## Components
 
-| Component             | Props                                                        | Purpose                                                                                        |
-| --------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| `BaseHead.astro`      | `title`, `description`, `image?`                             | `<head>` meta/OG tags, theme detection script, Google Fonts                                    |
+| Component             | Props                                                        | Purpose                                                                                                                |
+| --------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `BaseHead.astro`      | `title`, `description`, `image?`                             | `<head>` meta/OG tags, theme detection script, Google Fonts                                                            |
 | `Header.astro`        | —                                                            | Sticky nav with blur backdrop, site title, nav links (blog, projects, about), dark/light toggle, mobile hamburger menu |
-| `HeaderLink.astro`    | `href`, HTML anchor attrs                                    | Nav link with underline active state                                                           |
-| `Footer.astro`        | —                                                            | Copyright year (auto), lowercase mono social links (github, vimeo, linkedin)                   |
-| `TagList.astro`       | `tags: string[]`                                             | Renders clickable `#tag` pill links to `/blog/tags/[tag]/`                                     |
-| `PostCard.astro`      | `post: CollectionEntry<'blog'>`                              | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages                      |
-| `ProjectCard.astro`   | `project: CollectionEntry<'projects'>`, `style?: string`     | Project card (`<li>`) with image, status badge, title, description, optional featuredStat      |
-| `StatusBadge.astro`   | `status: 'completed' \| 'in-progress' \| 'paused'`, `class?` | Styled status badge with three visual variants                                                 |
-| `FormattedDate.astro` | `date: Date`                                                 | Formats a `Date` as "MMM d, yyyy"                                                              |
-| `YouTube.astro`       | `id: string`, `title?`                                       | Responsive 16:9 iframe embed via `youtube-nocookie.com`, lazy loaded                           |
+| `HeaderLink.astro`    | `href`, HTML anchor attrs                                    | Nav link with underline active state                                                                                   |
+| `Footer.astro`        | —                                                            | Copyright year (auto), lowercase mono social links (github, vimeo, linkedin)                                           |
+| `TagList.astro`       | `tags: string[]`                                             | Renders clickable `#tag` pill links to `/blog/tags/[tag]/`                                                             |
+| `PostCard.astro`      | `post: CollectionEntry<'blog'>`                              | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages                                              |
+| `ProjectCard.astro`   | `project: CollectionEntry<'projects'>`, `style?: string`     | Project card (`<li>`) with image, status badge, title, description, optional featuredStat                              |
+| `StatusBadge.astro`   | `status: 'completed' \| 'in-progress' \| 'paused'`, `class?` | Styled status badge with three visual variants                                                                         |
+| `FormattedDate.astro` | `date: Date`                                                 | Formats a `Date` as "MMM d, yyyy"                                                                                      |
+| `YouTube.astro`       | `id: string`, `title?`                                       | Responsive 16:9 iframe embed via `youtube-nocookie.com`, lazy loaded                                                   |
 
 ## Design System
 

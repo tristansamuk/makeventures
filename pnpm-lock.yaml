@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  studiocms@0.4.4:
+    hash: f5b539f9374e7ab17696fed45b9cb87e65233e8101759fe9a48414ab3bd08ceb
+    path: patches/studiocms@0.4.4.patch
+
 importers:
 
   .:
@@ -46,7 +51,7 @@ importers:
         version: 0.34.5
       studiocms:
         specifier: ^0.4.4
-        version: 0.4.4(c929032242f4ed8259db48de1fe9110d)
+        version: 0.4.4(patch_hash=f5b539f9374e7ab17696fed45b9cb87e65233e8101759fe9a48414ab3bd08ceb)(c929032242f4ed8259db48de1fe9110d)
 
 packages:
 
@@ -9881,7 +9886,7 @@ snapshots:
 
   strnum@2.2.2: {}
 
-  studiocms@0.4.4(c929032242f4ed8259db48de1fe9110d):
+  studiocms@0.4.4(patch_hash=f5b539f9374e7ab17696fed45b9cb87e65233e8101759fe9a48414ab3bd08ceb)(c929032242f4ed8259db48de1fe9110d):
     dependencies:
       '@effect/platform': 0.94.5(effect@3.21.0)
       '@effect/platform-node': 0.104.1(@effect/cluster@0.56.4(@effect/platform@0.94.5(effect@3.21.0))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(@effect/sql@0.49.0(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(@effect/workflow@0.16.0(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(@effect/platform@0.94.5(effect@3.21.0))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(effect@3.21.0))(effect@3.21.0))(@effect/platform@0.94.5(effect@3.21.0))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(@effect/sql@0.49.0(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(@effect/platform@0.94.5(effect@3.21.0))(effect@3.21.0))(effect@3.21.0)
