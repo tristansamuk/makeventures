@@ -1,10 +1,10 @@
 ---
-layout: blog
 title: Test
+description: Remote monitoring system for a rural cottage with sensors for temperature, humidity, and water level.
 navTitle: test
 status: completed
 completedDate: 2026-04-05T14:27:00.000-04:00
-heroImage: /src/assets/log-cabin.jpg
+heroImage: ../../assets/log-cabin.jpg
 ---
 
 The cottage is four hours from home, has no cellular coverage inside, and has a well-documented history of frozen pipes. The combination of remote location, unreliable power, and expensive failure modes makes it a perfect candidate for remote monitoring — if you can get reliable connectivity at all.
