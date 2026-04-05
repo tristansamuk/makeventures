@@ -3,7 +3,7 @@ title: Migrating Mr. Meowface to Home Assistant
 description: Achieving the final frontier in home automation
 pubDate: 2026-04-05T14:39:00.000-04:00
 updatedDate: ""
-heroImage: /src/assets/cat.jpg
+heroImage: src/assets/cat.jpg
 tags:
   - in-progress
   - homeassistant
