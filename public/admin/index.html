@@ -11,5 +11,36 @@
   <body>
     <!-- Include the script that builds the page and powers Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      function videoEmbedUrl(url) {
+        var yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+        if (yt) return 'https://www.youtube-nocookie.com/embed/' + yt[1];
+        var vm = url.match(/vimeo\.com\/(\d+)/);
+        if (vm) return 'https://player.vimeo.com/video/' + vm[1];
+        return url;
+      }
+
+      CMS.registerEditorComponent({
+        id: 'video',
+        label: 'Video',
+        fields: [
+          { name: 'url', label: 'YouTube or Vimeo URL', widget: 'string' },
+          { name: 'title', label: 'Title (optional)', widget: 'string', required: false },
+        ],
+        pattern: /{{< video "([^"]+)"(?:\s+"([^"]*)")? >}}/,
+        fromBlock: function (match) {
+          return { url: match[1], title: match[2] || '' };
+        },
+        toBlock: function (data) {
+          return data.title
+            ? '{{< video "' + data.url + '" "' + data.title + '" >}}'
+            : '{{< video "' + data.url + '" >}}';
+        },
+        toPreview: function (data) {
+          var src = videoEmbedUrl(data.url || '');
+          return '<div style="position:relative;aspect-ratio:16/9"><iframe src="' + src + '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe></div>';
+        },
+      });
+    </script>
   </body>
 </html>

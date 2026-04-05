@@ -1,6 +1,9 @@
+# backend:
+#   name: git-gateway
+#   branch: main
+
 backend:
-  name: git-gateway
-  branch: main
+  name: test-repo
 
 site_url: https://makeventures.netlify.app
 
@@ -18,8 +21,12 @@ collections:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Description', name: 'description', widget: 'string' }
       - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
-      - { label: 'Updated Date', name: 'updatedDate', widget: 'datetime', required: false }
-      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - {
+          label: 'Hero Image',
+          name: 'heroImage',
+          widget: 'image',
+          required: false,
+        }
       - { label: 'Tags', name: 'tags', widget: 'list', required: false }
       - { label: 'Author', name: 'author', widget: 'string', required: false }
       - { label: 'Body', name: 'body', widget: 'markdown' }
@@ -32,9 +39,35 @@ collections:
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Description', name: 'description', widget: 'string' }
-      - { label: 'Navigation Title', name: 'navTitle', widget: 'string', required: false }
-      - { label: 'Status', name: 'status', widget: 'select', options: ['completed', 'in-progress', 'paused'], required: false }
-      - { label: 'Completed Date', name: 'completedDate', widget: 'datetime', required: false }
-      - { label: 'Featured Stat', name: 'featuredStat', widget: 'string', required: false }
-      - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+      - {
+          label: 'Navigation Title',
+          name: 'navTitle',
+          widget: 'string',
+          required: false,
+        }
+      - {
+          label: 'Status',
+          name: 'status',
+          widget: 'select',
+          options: ['completed', 'in-progress', 'paused'],
+          required: false,
+        }
+      - {
+          label: 'Completed Date',
+          name: 'completedDate',
+          widget: 'datetime',
+          required: false,
+        }
+      - {
+          label: 'Featured Stat',
+          name: 'featuredStat',
+          widget: 'string',
+          required: false,
+        }
+      - {
+          label: 'Hero Image',
+          name: 'heroImage',
+          widget: 'image',
+          required: false,
+        }
       - { label: 'Body', name: 'body', widget: 'markdown' }
