@@ -1,9 +1,9 @@
-# backend:
-#   name: git-gateway
-#   branch: main
-
 backend:
-  name: test-repo
+  name: git-gateway
+  branch: main
+
+# backend:
+#   name: test-repo
 
 site_url: https://makeventures.netlify.app
 
@@ -40,7 +40,13 @@ collections:
           field: { label: 'Tag', name: 'tag', widget: 'string' },
           hint: 'Add tags one at a time',
         }
-      - { label: 'Author', name: 'author', widget: 'string', required: false, default: 'Igor Samuk' }
+      - {
+          label: 'Author',
+          name: 'author',
+          widget: 'string',
+          required: false,
+          default: 'Igor Samuk',
+        }
       - { label: 'Body', name: 'body', widget: 'markdown' }
 
   - name: 'projects'
