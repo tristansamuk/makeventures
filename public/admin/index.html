@@ -108,6 +108,67 @@
           return '<div style="position:relative;aspect-ratio:16/9"><iframe src="' + src + '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe></div>';
         },
       });
+
+      // Hero image validation — blocks Save if the heroImage fails our constraints.
+      // Runs on every save (including re-saves of existing entries).
+      async function resolveHeroImageUrl(entry) {
+        var heroPath = entry.getIn(['data', 'heroImage']);
+        if (!heroPath) return null;
+
+        // Pending upload: blob URL lives on entry.mediaFiles until commit.
+        var mediaFiles = entry.get('mediaFiles');
+        if (mediaFiles && mediaFiles.size) {
+          var pending = mediaFiles.find(function (f) {
+            return f.get('path') === heroPath;
+          });
+          if (pending && pending.get('url')) {
+            return { path: heroPath, url: pending.get('url') };
+          }
+        }
+
+        // Already-committed asset (re-save case): resolve via Decap's asset API.
+        var asset = await CMS.getAsset({
+          collection: entry.get('collection'),
+          entry: entry,
+          path: heroPath,
+        });
+        return { path: heroPath, url: asset.toString() };
+      }
+
+      function loadImageDimensions(url) {
+        return new Promise(function (resolve, reject) {
+          var img = new Image();
+          img.onload = function () {
+            resolve({ width: img.naturalWidth, height: img.naturalHeight });
+          };
+          img.onerror = function () {
+            reject(new Error('Could not load hero image for validation.'));
+          };
+          img.src = url;
+        });
+      }
+
+      CMS.registerEventListener({
+        name: 'preSave',
+        handler: async function (event) {
+          var resolved = await resolveHeroImageUrl(event.entry);
+          if (!resolved) return;
+
+          var dims = await loadImageDimensions(resolved.url);
+
+          var errors = [];
+          if (dims.width < 1920 || dims.height < 1080) {
+            errors.push(
+              'Hero image is ' + dims.width + '×' + dims.height +
+              '. Minimum is 1920×1080.'
+            );
+          }
+
+          if (errors.length) {
+            throw new Error(errors.join('\n'));
+          }
+        },
+      });
     </script>
   </body>
 </html>
