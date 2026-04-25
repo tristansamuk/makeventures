@@ -145,3 +145,7 @@ The Decap CMS video editor widget (defined in `public/admin/index.html`) produce
 ## Tags
 
 Tags are `string[]` in post frontmatter. The `TagList` component renders them as pill links.
+
+## Pull requests
+
+The repo has a template at `.github/pull_request_template.md` with three sections: Issue, Summary, Changes. PR descriptions should be concise and high-level — use bullet points of 5–10 words maximum.
