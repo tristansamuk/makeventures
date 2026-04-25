@@ -1,5 +1,5 @@
 ---
-title: Test
+title: Feels good man
 description: Test
 pubDate: 2026-04-25T16:30:00.000Z
 heroImage: ../../assets/pexels-coding-1853305_1920.jpg
