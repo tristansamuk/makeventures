@@ -132,7 +132,7 @@
             required: false,
           },
         ],
-        pattern: /{{< video "([^"]+)"(?:\s+"([^"]*)")? >}}/,
+        pattern: /{{< video ["“”]([^"“”]+)["“”](?:\s+["“”]([^"“”]*)["“”])? >}}/,
         fromBlock: function (match) {
           return { url: match[1], title: match[2] || '' };
         },
@@ -231,14 +231,14 @@
                 dims.width +
                 '×' +
                 dims.height +
-                ') is too tall. Use a landscape image — width must be at least 1.5× height.',
+                ') is too tall. Use a landscape image. width must be at least 1.5× height.',
             );
           }
           if (blob.size > 800 * 1024) {
             errors.push(
               'Hero image is ' +
                 formatBytes(blob.size) +
-                '. Maximum is 800 KB — compress with Squoosh (https://squoosh.app).',
+                '. Maximum is 800 KB. Please compress and re-upload.',
             );
           }
 
