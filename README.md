@@ -145,7 +145,7 @@ All content is managed through **Decap CMS** at [makeventures.netlify.app/admin/
    - **Description** — a short summary shown in cards and meta tags
    - **Publish Date** — when the post should be dated
 4. Optionally set:
-   - **Hero Image** — landscape JPG, at least 1920×1080 (compress with [Squoosh](https://squoosh.app) before uploading)
+   - **Hero Image** — landscape JPG, at least 1920×1080, max 800 KB (compress with [Squoosh](https://squoosh.app) before uploading). The CMS will reject uploads that don't meet these requirements.
    - **Tags** — add tags one at a time (e.g. `iot`, `home-lab`)
    - **Author** — defaults to Igor Samuk if left blank
 5. Write the post body in the Markdown editor. Use the live preview panel to check formatting.
@@ -161,7 +161,7 @@ All content is managed through **Decap CMS** at [makeventures.netlify.app/admin/
 4. Optionally set:
    - **Status** — `completed`, `in-progress`, or `paused` (defaults to `in-progress`)
    - **Completed Date** — when the project was finished
-   - **Hero Image** — landscape JPG, at least 1920×1080 (compress with [Squoosh](https://squoosh.app) before uploading)
+   - **Hero Image** — landscape JPG, at least 1920×1080, max 800 KB (compress with [Squoosh](https://squoosh.app) before uploading). The CMS will reject uploads that don't meet these requirements.
 5. Write the project body in the Markdown editor.
 6. Click **Publish** to commit and deploy.
 
