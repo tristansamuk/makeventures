@@ -148,19 +148,54 @@
         });
       }
 
+      function loadImageBlob(url) {
+        return fetch(url).then(function (response) {
+          if (!response.ok) throw new Error('Could not fetch hero image for validation.');
+          return response.blob();
+        });
+      }
+
+      function formatBytes(bytes) {
+        if (bytes >= 1024 * 1024) {
+          return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+        return Math.round(bytes / 1024) + ' KB';
+      }
+
       CMS.registerEventListener({
         name: 'preSave',
         handler: async function (event) {
           var resolved = await resolveHeroImageUrl(event.entry);
           if (!resolved) return;
 
-          var dims = await loadImageDimensions(resolved.url);
+          var results = await Promise.all([
+            loadImageDimensions(resolved.url),
+            loadImageBlob(resolved.url),
+          ]);
+          var dims = results[0];
+          var blob = results[1];
 
           var errors = [];
+          var pathLower = resolved.path.toLowerCase();
+          if (!pathLower.endsWith('.jpg') && !pathLower.endsWith('.jpeg')) {
+            errors.push('Hero image must be a JPG. Re-export from Squoosh as JPEG.');
+          }
           if (dims.width < 1920 || dims.height < 1080) {
             errors.push(
               'Hero image is ' + dims.width + '×' + dims.height +
               '. Minimum is 1920×1080.'
+            );
+          }
+          if (dims.width / dims.height < 1.5) {
+            errors.push(
+              'Hero image (' + dims.width + '×' + dims.height +
+              ') is too tall. Use a landscape image — width must be at least 1.5× height.'
+            );
+          }
+          if (blob.size > 800 * 1024) {
+            errors.push(
+              'Hero image is ' + formatBytes(blob.size) +
+              '. Maximum is 800 KB — compress with Squoosh (https://squoosh.app).'
             );
           }
 
