@@ -216,13 +216,13 @@
           if (!pathLower.endsWith('.jpg') && !pathLower.endsWith('.jpeg')) {
             errors.push('Hero image must be a JPG/JPEG.');
           }
-          if (dims.width < 1920 || dims.height < 1080) {
+          if (dims.width < 1920 || dims.height < 900) {
             errors.push(
               'Hero image is ' +
                 dims.width +
                 '×' +
                 dims.height +
-                '. Minimum is 1920×1080.',
+                '. Minimum is 1920×900.',
             );
           }
           if (dims.width / dims.height < 1.5) {
