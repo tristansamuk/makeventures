@@ -44,7 +44,7 @@ export function remarkVideo() {
 
 			parent.children[index] = {
 				type: 'html',
-				value: `<div class="youtube-embed"><iframe src="${src}" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`,
+				value: `<div class="video-embed"><iframe src="${src}" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`,
 			};
 		});
 	};

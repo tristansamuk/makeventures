@@ -7,7 +7,7 @@ interface Props {
 const { id, title = 'YouTube video' } = Astro.props;
 ---
 
-<div class="youtube-embed">
+<div class="video-embed">
 	<iframe
 		src={`https://www.youtube-nocookie.com/embed/${id}`}
 		title={title}
