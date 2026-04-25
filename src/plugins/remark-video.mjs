@@ -1,6 +1,9 @@
 import { visit } from 'unist-util-visit';
 
-const VIDEO_PATTERN = /{{< video "([^"]+)"(?:\s+"([^"]*)")? >}}/;
+// Accept straight (") and curly (“ / ”) quotes — Astro's default
+// markdown.smartypants rewrites straight quotes before this plugin runs.
+const VIDEO_PATTERN =
+	/{{< video ["“”]([^"“”]+)["“”](?:\s+["“”]([^"“”]*)["“”])? >}}/;
 
 function escapeAttr(str) {
 	return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
@@ -18,13 +21,18 @@ function embedUrl(url) {
 	return null;
 }
 
+// Recursively collect text from a node tree. Needed because GFM autolinks
+// bare URLs into `link` nodes, splitting the shortcode across siblings.
+function collectText(node) {
+	if (node.type === 'text') return node.value;
+	if (node.children) return node.children.map(collectText).join('');
+	return '';
+}
+
 export function remarkVideo() {
 	return (tree) => {
 		visit(tree, 'paragraph', (node, index, parent) => {
-			const text = node.children
-				.filter((c) => c.type === 'text')
-				.map((c) => c.value)
-				.join('');
+			const text = node.children.map(collectText).join('');
 
 			const match = VIDEO_PATTERN.exec(text.trim());
 			if (!match) return;
