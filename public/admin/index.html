@@ -13,7 +13,9 @@
     <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
     <script>
       function videoEmbedUrl(url) {
-        var yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+        var yt = url.match(
+          /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/,
+        );
         if (yt) return 'https://www.youtube-nocookie.com/embed/' + yt[1];
         var vm = url.match(/vimeo\.com\/(\d+)/);
         if (vm) return 'https://player.vimeo.com/video/' + vm[1];
@@ -24,7 +26,11 @@
 
       function formatDate(date) {
         if (!date) return '';
-        return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        return new Date(date).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        });
       }
 
       // Blog preview template
@@ -38,21 +44,32 @@
           var tags = entry.getIn(['data', 'tags']);
           var heroImage = this.props.widgetFor('heroImage');
 
-          return h('article', {},
+          return h(
+            'article',
+            {},
             heroImage && h('div', { className: 'hero-image' }, heroImage),
-            h('div', { className: 'post-meta' },
+            h(
+              'div',
+              { className: 'post-meta' },
               dateStr && h('time', { className: 'post-date' }, dateStr),
-              author && h('span', { className: 'post-author' }, 'by ' + author)
+              author && h('span', { className: 'post-author' }, 'by ' + author),
             ),
             h('h1', { className: 'post-title' }, title),
-            description && h('p', { className: 'post-description' }, description),
-            tags && tags.size > 0 && h('div', { className: 'post-tags' },
-              tags.map(function (tag) {
-                return h('span', { key: tag, className: 'tag' }, '#' + tag);
-              }).toArray()
-            ),
+            description &&
+              h('p', { className: 'post-description' }, description),
+            tags &&
+              tags.size > 0 &&
+              h(
+                'div',
+                { className: 'post-tags' },
+                tags
+                  .map(function (tag) {
+                    return h('span', { key: tag, className: 'tag' }, '#' + tag);
+                  })
+                  .toArray(),
+              ),
             h('hr'),
-            h('div', {}, this.props.widgetFor('body'))
+            h('div', {}, this.props.widgetFor('body')),
           );
         },
       });
@@ -67,21 +84,37 @@
           var dateStr = formatDate(entry.getIn(['data', 'completedDate']));
           var heroImage = this.props.widgetFor('heroImage');
 
-          return h('article', {},
-            heroImage && h('div', { className: 'project-hero' },
-              heroImage,
-              h('div', { className: 'hero-overlay' },
-                h('div', { className: 'hero-inner' },
-                  h('h1', { className: 'hero-title' }, title)
-                )
-              )
-            ),
+          return h(
+            'article',
+            {},
+            heroImage &&
+              h(
+                'div',
+                { className: 'project-hero' },
+                heroImage,
+                h(
+                  'div',
+                  { className: 'hero-overlay' },
+                  h(
+                    'div',
+                    { className: 'hero-inner' },
+                    h('h1', { className: 'hero-title' }, title),
+                  ),
+                ),
+              ),
             !heroImage && h('h1', { className: 'project-title' }, title),
-            h('div', { className: 'project-meta-bar' },
-              status && h('span', { className: 'status-badge status-' + status }, status),
-              dateStr && h('time', { className: 'meta-date' }, dateStr)
+            h(
+              'div',
+              { className: 'project-meta-bar' },
+              status &&
+                h(
+                  'span',
+                  { className: 'status-badge status-' + status },
+                  status,
+                ),
+              dateStr && h('time', { className: 'meta-date' }, dateStr),
             ),
-            h('div', {}, this.props.widgetFor('body'))
+            h('div', {}, this.props.widgetFor('body')),
           );
         },
       });
@@ -92,7 +125,12 @@
         label: 'Video',
         fields: [
           { name: 'url', label: 'YouTube or Vimeo URL', widget: 'string' },
-          { name: 'title', label: 'Title (optional)', widget: 'string', required: false },
+          {
+            name: 'title',
+            label: 'Title (optional)',
+            widget: 'string',
+            required: false,
+          },
         ],
         pattern: /{{< video "([^"]+)"(?:\s+"([^"]*)")? >}}/,
         fromBlock: function (match) {
@@ -105,34 +143,31 @@
         },
         toPreview: function (data) {
           var src = videoEmbedUrl(data.url || '');
-          return '<div style="position:relative;aspect-ratio:16/9"><iframe src="' + src + '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe></div>';
+          return (
+            '<div style="position:relative;aspect-ratio:16/9"><iframe src="' +
+            src +
+            '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe></div>'
+          );
         },
       });
 
-      // Hero image validation — blocks Save if the heroImage fails our constraints.
-      // Runs on every save (including re-saves of existing entries).
-      async function resolveHeroImageUrl(entry) {
+      // Hero image validation — blocks Save when a pending heroImage upload fails our constraints.
+      function resolveHeroImageUrl(entry) {
         var heroPath = entry.getIn(['data', 'heroImage']);
         if (!heroPath) return null;
 
-        // Pending upload: blob URL lives on entry.mediaFiles until commit.
         var mediaFiles = entry.get('mediaFiles');
-        if (mediaFiles && mediaFiles.size) {
-          var pending = mediaFiles.find(function (f) {
-            return f.get('path') === heroPath;
-          });
-          if (pending && pending.get('url')) {
-            return { path: heroPath, url: pending.get('url') };
-          }
-        }
+        if (!mediaFiles || !mediaFiles.size) return null;
 
-        // Already-committed asset (re-save case): resolve via Decap's asset API.
-        var asset = await CMS.getAsset({
-          collection: entry.get('collection'),
-          entry: entry,
-          path: heroPath,
+        // heroPath is post-relative (../../assets/foo.jpg); mediaFile.path is repo-relative
+        // (src/assets/foo.jpg). Match by basename to bridge the two.
+        var heroName = heroPath.split('/').pop();
+        var pending = mediaFiles.find(function (f) {
+          return (f.get('path') || '').split('/').pop() === heroName;
         });
-        return { path: heroPath, url: asset.toString() };
+        if (!pending || !pending.get('url')) return null;
+
+        return { path: heroPath, url: pending.get('url') };
       }
 
       function loadImageDimensions(url) {
@@ -150,7 +185,8 @@
 
       function loadImageBlob(url) {
         return fetch(url).then(function (response) {
-          if (!response.ok) throw new Error('Could not fetch hero image for validation.');
+          if (!response.ok)
+            throw new Error('Could not fetch hero image for validation.');
           return response.blob();
         });
       }
@@ -178,24 +214,31 @@
           var errors = [];
           var pathLower = resolved.path.toLowerCase();
           if (!pathLower.endsWith('.jpg') && !pathLower.endsWith('.jpeg')) {
-            errors.push('Hero image must be a JPG. Re-export from Squoosh as JPEG.');
+            errors.push('Hero image must be a JPG/JPEG.');
           }
           if (dims.width < 1920 || dims.height < 1080) {
             errors.push(
-              'Hero image is ' + dims.width + '×' + dims.height +
-              '. Minimum is 1920×1080.'
+              'Hero image is ' +
+                dims.width +
+                '×' +
+                dims.height +
+                '. Minimum is 1920×1080.',
             );
           }
           if (dims.width / dims.height < 1.5) {
             errors.push(
-              'Hero image (' + dims.width + '×' + dims.height +
-              ') is too tall. Use a landscape image — width must be at least 1.5× height.'
+              'Hero image (' +
+                dims.width +
+                '×' +
+                dims.height +
+                ') is too tall. Use a landscape image — width must be at least 1.5× height.',
             );
           }
           if (blob.size > 800 * 1024) {
             errors.push(
-              'Hero image is ' + formatBytes(blob.size) +
-              '. Maximum is 800 KB — compress with Squoosh (https://squoosh.app).'
+              'Hero image is ' +
+                formatBytes(blob.size) +
+                '. Maximum is 800 KB — compress with Squoosh (https://squoosh.app).',
             );
           }
 
