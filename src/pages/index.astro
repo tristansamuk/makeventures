@@ -4,6 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import HomeSection from '../components/HomeSection.astro';
 import PostRow from '../components/PostRow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
@@ -41,95 +42,28 @@ const recentPosts = posts.slice(0, 3);
 		<main>
 			<Hero />
 
-			<section class="featured-projects">
-				<div class="section-header">
-					<h2>Featured Projects</h2>
-					<a href="/projects" class="view-all">All projects →</a>
-				</div>
-				<ul class="projects-grid" role="list">
-					{featuredProjects.map((project) => (
-						<ProjectCard project={project} />
-					))}
-				</ul>
-			</section>
+			<HomeSection
+				title="Featured Projects"
+				href="/projects"
+				linkLabel="All projects"
+				layout="grid"
+			>
+				{featuredProjects.map((project) => (
+					<ProjectCard project={project} />
+				))}
+			</HomeSection>
 
-			<section class="recent-posts">
-				<div class="section-header">
-					<h2>Recent Posts</h2>
-					<a href="/blog" class="view-all">All posts →</a>
-				</div>
-				<ul class="post-list" role="list">
-					{recentPosts.map((post) => (
-						<PostRow post={post} />
-					))}
-				</ul>
-			</section>
+			<HomeSection
+				title="Recent Posts"
+				href="/blog"
+				linkLabel="All posts"
+				layout="list"
+			>
+				{recentPosts.map((post) => (
+					<PostRow post={post} />
+				))}
+			</HomeSection>
 		</main>
 		<Footer />
 	</body>
 </html>
-
-<style>
-	/* ── Featured Projects ── */
-	.featured-projects {
-		padding: var(--sp-4) 0;
-		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-		animation-delay: 0.32s;
-	}
-	.projects-grid {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--sp-6);
-	}
-	@media (max-width: 900px) {
-		.projects-grid { grid-template-columns: repeat(2, 1fr); }
-	}
-	@media (max-width: 600px) {
-		.projects-grid { grid-template-columns: 1fr; gap: var(--sp-4); }
-	}
-
-	/* ── Recent Posts ── */
-	.recent-posts {
-		padding: var(--sp-8) 0 var(--sp-4);
-		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-		animation-delay: 0.35s;
-	}
-	.section-header {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		margin-bottom: var(--sp-8);
-	}
-	.section-header h2 {
-		margin: 0;
-	}
-	.view-all {
-		font-family: var(--font-body);
-		font-size: var(--fs-xs);
-		color: var(--color-ink-muted);
-		text-decoration: none;
-		transition: color var(--ease);
-	}
-	.view-all:hover {
-		color: var(--color-ink);
-	}
-	.post-list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	@keyframes fadeUp {
-		from { opacity: 0; transform: translateY(8px); }
-		to   { opacity: 1; transform: translateY(0); }
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.featured-projects, .recent-posts {
-			animation: none;
-		}
-	}
-</style>

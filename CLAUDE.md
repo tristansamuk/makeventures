@@ -73,6 +73,7 @@ This is an **Astro 6** static site (SSG) — all routes are pre-built at build t
 | `StatusBadge.astro`   | `status: 'completed' \| 'in-progress' \| 'paused'`, `class?` | Styled status badge with three visual variants                                                                         |
 | `FormattedDate.astro` | `date: Date`                                                 | Formats a `Date` as "MMM d, yyyy"                                                                                      |
 | `Hero.astro`          | —                                                            | Homepage hero: SVG logo, typewriter eyebrow, stat bar                                                                  |
+| `HomeSection.astro`   | `title`, `href`, `linkLabel`, `layout: 'grid' \| 'list'`     | Wraps a homepage section (header with title + view-all link, then a `<ul>`); children passed via slot                  |
 | `YouTube.astro`       | `id: string`, `title?`                                       | Responsive 16:9 iframe embed via `youtube-nocookie.com`, lazy loaded                                                   |
 
 ## Design System
