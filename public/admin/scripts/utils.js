@@ -1,3 +1,7 @@
+// Shared pure helpers for admin scripts. Exposed on window.AdminHelpers and
+// consumed by the preview templates, the video editor, and the hero-image
+// validator. Must load before any of those scripts.
+
 window.AdminHelpers = window.AdminHelpers || {};
 
 window.AdminHelpers.videoEmbedUrl = function videoEmbedUrl(url) {

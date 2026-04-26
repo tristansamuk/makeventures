@@ -1,3 +1,9 @@
+// Project preview template — renders the right-hand preview pane in the CMS
+// editor for entries in the 'projects' collection. Class names mirror those
+// in preview.css. Field names (title, status, completedDate, heroImage) must
+// match the 'projects' collection schema in config.yml.
+// Decap globals used: CMS, createClass, h.
+
 (() => {
   const { formatDate } = window.AdminHelpers;
 

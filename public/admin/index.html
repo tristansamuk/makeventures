@@ -9,6 +9,13 @@
     <title>Content Manager</title>
   </head>
   <body>
+    <!--
+      Decap CMS admin entry. Load order matters:
+        1. decap-cms.js (UMD) defines the globals: CMS, createClass, h
+        2. constants.js + utils.js seed window.AdminHelpers
+        3. remaining scripts register preview templates, the video editor
+           component, and the preSave hero-image validator
+    -->
     <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
     <script src="scripts/constants.js"></script>
     <script src="scripts/utils.js"></script>

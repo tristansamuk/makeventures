@@ -1,3 +1,9 @@
+// Blog preview template — renders the right-hand preview pane in the CMS
+// editor for entries in the 'blog' collection. Class names mirror those in
+// preview.css. Field names (title, description, author, pubDate, tags,
+// heroImage) must match the 'blog' collection schema in config.yml.
+// Decap globals used: CMS, createClass, h.
+
 (() => {
   const { formatDate } = window.AdminHelpers;
 

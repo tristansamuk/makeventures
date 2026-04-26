@@ -1,3 +1,9 @@
+// Markdown editor component that adds a "Video" button to the toolbar.
+// Produces and parses the {{< video "url" "title" >}} shortcode that
+// src/plugins/remark-video.mjs converts into a responsive iframe at build
+// time. The toBlock/fromBlock pair must stay in sync with the regex in
+// remark-video.mjs.
+
 (() => {
   const { videoEmbedUrl } = window.AdminHelpers;
 

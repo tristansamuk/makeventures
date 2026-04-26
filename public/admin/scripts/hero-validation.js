@@ -1,3 +1,9 @@
+// preSave event listener that blocks Save when a pending heroImage upload
+// fails our constraints (format, dimensions, aspect ratio, file size). Only
+// validates uploads that haven't been committed yet — already-saved hero
+// images are skipped. All thresholds and matching error-message values come
+// from HERO_LIMITS in constants.js.
+
 (() => {
   const { HERO_LIMITS, formatBytes } = window.AdminHelpers;
 
