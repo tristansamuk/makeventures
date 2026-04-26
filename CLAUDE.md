@@ -146,6 +146,10 @@ The Decap CMS video editor widget (defined in `public/admin/index.html`) produce
 
 Tags are `string[]` in post frontmatter. The `TagList` component renders them as pill links.
 
+## Commits
+
+Commit messages must be 10 words or fewer. Keep them in the imperative mood (e.g. "Add image preview to recent posts").
+
 ## Pull requests
 
 The repo has a template at `.github/pull_request_template.md` with three sections: Issue, Summary, Changes. PR descriptions should be concise and high-level — use bullet points of 5–10 words maximum.

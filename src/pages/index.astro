@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -69,10 +70,17 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 					{recentPosts.map((post, i) => (
 						<li class="post-item" style={`animation-delay: ${0.1 + i * 0.08}s`}>
 							<a href={`/blog/${post.id}/`} class="post-link">
-								<time class="post-date">
-									<FormattedDate date={post.data.pubDate} />
-								</time>
+								<div class="post-thumbnail">
+									{post.data.heroImage ? (
+										<Image width={320} height={180} src={post.data.heroImage} alt="" />
+									) : (
+										<div class="post-thumbnail-placeholder" aria-hidden="true"></div>
+									)}
+								</div>
 								<div class="post-info">
+									<time class="post-date">
+										<FormattedDate date={post.data.pubDate} />
+									</time>
 									<h3 class="post-title">{post.data.title}</h3>
 									<p class="post-description">{post.data.description}</p>
 								</div>
@@ -150,22 +158,46 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 	}
 	.post-link {
 		display: grid;
-		grid-template-columns: 112px 1fr auto;
-		align-items: baseline;
+		grid-template-columns: 200px 1fr auto;
+		align-items: center;
 		gap: var(--sp-6);
 		padding: var(--sp-5) 0 var(--sp-3);
 		text-decoration: none;
 		color: inherit;
 	}
+	.post-thumbnail {
+		aspect-ratio: 16 / 9;
+		width: 100%;
+		overflow: hidden;
+		border-radius: var(--radius-md);
+		background: var(--color-surface);
+	}
+	.post-thumbnail img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform var(--ease-slow);
+	}
+	.post-thumbnail-placeholder {
+		width: 100%;
+		height: 100%;
+		background: var(--color-surface);
+	}
+	.post-link:hover .post-thumbnail img {
+		transform: scale(1.04);
+	}
+	.post-info {
+		min-width: 0;
+	}
 	.post-date {
+		display: block;
 		font-family: var(--font-mono);
 		font-size: var(--fs-xs);
 		font-weight: 500;
 		color: var(--color-ink-muted);
+		margin-bottom: var(--sp-2);
 		white-space: nowrap;
-	}
-	.post-info {
-		min-width: 0;
 	}
 	.post-title {
 		font-family: var(--font-body);
@@ -183,6 +215,10 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 		font-size: var(--fs-sm);
 		color: var(--color-ink-muted);
 		line-height: 1.6;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 	.post-arrow {
 		font-size: var(--fs-xl);
@@ -195,26 +231,28 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 		transform: translateX(4px);
 	}
 	.post-tags {
-		padding-left: calc(112px + var(--sp-6));
+		padding-left: calc(200px + var(--sp-6));
 		padding-bottom: var(--sp-5);
 	}
-	@media (max-width: 768px) {
+	@media (max-width: 900px) {
 		.post-link {
-			grid-template-columns: 1fr auto;
-			grid-template-rows: auto auto;
+			grid-template-columns: 160px 1fr auto;
+			gap: var(--sp-5);
 		}
-		.post-date {
-			grid-column: 1;
-			grid-row: 1;
+		.post-tags {
+			padding-left: calc(160px + var(--sp-5));
 		}
-		.post-info {
-			grid-column: 1;
-			grid-row: 2;
+	}
+	@media (max-width: 600px) {
+		.post-link {
+			grid-template-columns: 160px 1fr;
+			gap: var(--sp-4);
 		}
 		.post-arrow {
-			grid-column: 2;
-			grid-row: 1 / 3;
-			align-self: center;
+			display: none;
+		}
+		.post-description {
+			display: none;
 		}
 		.post-tags {
 			padding-left: 0;
