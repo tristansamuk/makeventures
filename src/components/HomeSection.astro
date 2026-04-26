@@ -65,15 +65,4 @@ const { title, href, linkLabel, layout } = Astro.props;
 	@media (max-width: 600px) {
 		.section-grid { grid-template-columns: 1fr; gap: var(--sp-4); }
 	}
-
-	@keyframes fadeUp {
-		from { opacity: 0; transform: translateY(8px); }
-		to   { opacity: 1; transform: translateY(0); }
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.home-section {
-			animation: none;
-		}
-	}
 </style>
