@@ -44,13 +44,21 @@
       // Blog preview template
       const BlogPreview = createClass({
         render: function () {
-          var entry = this.props.entry;
-          var title = entry.getIn(['data', 'title']) || '';
-          var description = entry.getIn(['data', 'description']) || '';
-          var author = entry.getIn(['data', 'author']) || '';
-          var dateStr = formatDate(entry.getIn(['data', 'pubDate']));
-          var tags = entry.getIn(['data', 'tags']);
-          var heroImage = this.props.widgetFor('heroImage');
+          const { entry } = this.props;
+          const title = entry.getIn(['data', 'title']) || '';
+          const description = entry.getIn(['data', 'description']) || '';
+          const author = entry.getIn(['data', 'author']) || '';
+          const dateStr = formatDate(entry.getIn(['data', 'pubDate']));
+          const tags = entry.getIn(['data', 'tags']);
+          const heroImage = this.props.widgetFor('heroImage');
+          const tagNodes =
+            tags && tags.size > 0
+              ? tags
+                  .map((tag) =>
+                    h('span', { key: tag, className: 'tag' }, `#${tag}`),
+                  )
+                  .toArray()
+              : null;
 
           return h(
             'article',
@@ -60,22 +68,12 @@
               'div',
               { className: 'post-meta' },
               dateStr && h('time', { className: 'post-date' }, dateStr),
-              author && h('span', { className: 'post-author' }, 'by ' + author),
+              author && h('span', { className: 'post-author' }, `by ${author}`),
             ),
             h('h1', { className: 'post-title' }, title),
             description &&
               h('p', { className: 'post-description' }, description),
-            tags &&
-              tags.size > 0 &&
-              h(
-                'div',
-                { className: 'post-tags' },
-                tags
-                  .map(function (tag) {
-                    return h('span', { key: tag, className: 'tag' }, '#' + tag);
-                  })
-                  .toArray(),
-              ),
+            tagNodes && h('div', { className: 'post-tags' }, tagNodes),
             h('hr'),
             h('div', {}, this.props.widgetFor('body')),
           );
@@ -86,11 +84,11 @@
       // Project preview template
       const ProjectPreview = createClass({
         render: function () {
-          var entry = this.props.entry;
-          var title = entry.getIn(['data', 'title']) || '';
-          var status = entry.getIn(['data', 'status']) || '';
-          var dateStr = formatDate(entry.getIn(['data', 'completedDate']));
-          var heroImage = this.props.widgetFor('heroImage');
+          const { entry } = this.props;
+          const title = entry.getIn(['data', 'title']) || '';
+          const status = entry.getIn(['data', 'status']) || '';
+          const dateStr = formatDate(entry.getIn(['data', 'completedDate']));
+          const heroImage = this.props.widgetFor('heroImage');
 
           return h(
             'article',
@@ -117,7 +115,7 @@
               status &&
                 h(
                   'span',
-                  { className: 'status-badge status-' + status },
+                  { className: `status-badge status-${status}` },
                   status,
                 ),
               dateStr && h('time', { className: 'meta-date' }, dateStr),
