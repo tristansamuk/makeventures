@@ -12,13 +12,21 @@
     <!-- Include the script that builds the page and powers Decap CMS -->
     <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
     <script>
+      const HERO_LIMITS = {
+        minWidth: 1920,
+        minHeight: 900,
+        minAspectRatio: 1.5,
+        maxBytes: 800 * 1024,
+        allowedExtensions: ['.jpg', '.jpeg'],
+      };
+
       function videoEmbedUrl(url) {
-        var yt = url.match(
+        const yt = url.match(
           /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/,
         );
-        if (yt) return 'https://www.youtube-nocookie.com/embed/' + yt[1];
-        var vm = url.match(/vimeo\.com\/(\d+)/);
-        if (vm) return 'https://player.vimeo.com/video/' + vm[1];
+        if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}`;
+        const vm = url.match(/vimeo\.com\/(\d+)/);
+        if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
         return url;
       }
 
@@ -34,7 +42,7 @@
       }
 
       // Blog preview template
-      var BlogPreview = createClass({
+      const BlogPreview = createClass({
         render: function () {
           var entry = this.props.entry;
           var title = entry.getIn(['data', 'title']) || '';
@@ -76,7 +84,7 @@
       CMS.registerPreviewTemplate('blog', BlogPreview);
 
       // Project preview template
-      var ProjectPreview = createClass({
+      const ProjectPreview = createClass({
         render: function () {
           var entry = this.props.entry;
           var title = entry.getIn(['data', 'title']) || '';
@@ -133,58 +141,49 @@
           },
         ],
         pattern: /{{< video ["“”]([^"“”]+)["“”](?:\s+["“”]([^"“”]*)["“”])? >}}/,
-        fromBlock: function (match) {
-          return { url: match[1], title: match[2] || '' };
-        },
-        toBlock: function (data) {
-          return data.title
-            ? '{{< video "' + data.url + '" "' + data.title + '" >}}'
-            : '{{< video "' + data.url + '" >}}';
-        },
-        toPreview: function (data) {
-          var src = videoEmbedUrl(data.url || '');
-          return (
-            '<div style="position:relative;aspect-ratio:16/9"><iframe src="' +
-            src +
-            '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe></div>'
-          );
+        fromBlock: (match) => ({ url: match[1], title: match[2] || '' }),
+        toBlock: (data) =>
+          data.title
+            ? `{{< video "${data.url}" "${data.title}" >}}`
+            : `{{< video "${data.url}" >}}`,
+        toPreview: (data) => {
+          const src = videoEmbedUrl(data.url || '');
+          return `<div style="position:relative;aspect-ratio:16/9"><iframe src="${src}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe></div>`;
         },
       });
 
       // Hero image validation — blocks Save when a pending heroImage upload fails our constraints.
       function resolveHeroImageUrl(entry) {
-        var heroPath = entry.getIn(['data', 'heroImage']);
+        const heroPath = entry.getIn(['data', 'heroImage']);
         if (!heroPath) return null;
 
-        var mediaFiles = entry.get('mediaFiles');
+        const mediaFiles = entry.get('mediaFiles');
         if (!mediaFiles || !mediaFiles.size) return null;
 
         // heroPath is post-relative (../../assets/foo.jpg); mediaFile.path is repo-relative
         // (src/assets/foo.jpg). Match by basename to bridge the two.
-        var heroName = heroPath.split('/').pop();
-        var pending = mediaFiles.find(function (f) {
-          return (f.get('path') || '').split('/').pop() === heroName;
-        });
+        const heroName = heroPath.split('/').pop();
+        const pending = mediaFiles.find(
+          (f) => (f.get('path') || '').split('/').pop() === heroName,
+        );
         if (!pending || !pending.get('url')) return null;
 
         return { path: heroPath, url: pending.get('url') };
       }
 
       function loadImageDimensions(url) {
-        return new Promise(function (resolve, reject) {
-          var img = new Image();
-          img.onload = function () {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () =>
             resolve({ width: img.naturalWidth, height: img.naturalHeight });
-          };
-          img.onerror = function () {
+          img.onerror = () =>
             reject(new Error('Could not load hero image for validation.'));
-          };
           img.src = url;
         });
       }
 
       function loadImageBlob(url) {
-        return fetch(url).then(function (response) {
+        return fetch(url).then((response) => {
           if (!response.ok)
             throw new Error('Could not fetch hero image for validation.');
           return response.blob();
@@ -193,52 +192,40 @@
 
       function formatBytes(bytes) {
         if (bytes >= 1024 * 1024) {
-          return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+          return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
         }
-        return Math.round(bytes / 1024) + ' KB';
+        return `${Math.round(bytes / 1024)} KB`;
       }
 
       CMS.registerEventListener({
         name: 'preSave',
-        handler: async function (event) {
-          var resolved = await resolveHeroImageUrl(event.entry);
+        handler: async (event) => {
+          const resolved = await resolveHeroImageUrl(event.entry);
           if (!resolved) return;
 
-          var results = await Promise.all([
+          const [dims, blob] = await Promise.all([
             loadImageDimensions(resolved.url),
             loadImageBlob(resolved.url),
           ]);
-          var dims = results[0];
-          var blob = results[1];
 
-          var errors = [];
-          var pathLower = resolved.path.toLowerCase();
+          const errors = [];
+          const pathLower = resolved.path.toLowerCase();
           if (!pathLower.endsWith('.jpg') && !pathLower.endsWith('.jpeg')) {
             errors.push('Hero image must be a JPG/JPEG.');
           }
           if (dims.width < 1920 || dims.height < 900) {
             errors.push(
-              'Hero image is ' +
-                dims.width +
-                '×' +
-                dims.height +
-                '. Minimum is 1920×900.',
+              `Hero image is ${dims.width}×${dims.height}. Minimum is 1920×900.`,
             );
           }
           if (dims.width / dims.height < 1.5) {
             errors.push(
-              'Hero image (' +
-                dims.width +
-                '×' +
-                dims.height +
-                ') is too tall. Use a landscape image. width must be at least 1.5× height.',
+              `Hero image (${dims.width}×${dims.height}) is too tall. Use a landscape image. width must be at least 1.5× height.`,
             );
           }
           if (blob.size > 800 * 1024) {
             errors.push(
-              'Hero image is ' +
-                formatBytes(blob.size) +
-                '. Maximum is 800 KB. Please compress and re-upload.',
+              `Hero image is ${formatBytes(blob.size)}. Maximum is 800 KB. Please compress and re-upload.`,
             );
           }
 
