@@ -1,0 +1,68 @@
+---
+interface Props {
+	title: string;
+	href: string;
+	linkLabel: string;
+	layout: 'grid' | 'list';
+}
+
+const { title, href, linkLabel, layout } = Astro.props;
+---
+
+<section class="home-section">
+	<div class="section-header">
+		<h2>{title}</h2>
+		<a {href} class="view-all">{linkLabel}</a>
+	</div>
+	<ul class={layout === 'grid' ? 'section-grid' : undefined} role="list">
+		<slot />
+	</ul>
+</section>
+
+<style>
+	.home-section {
+		padding: var(--sp-6) 0;
+		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+		animation-delay: 0.32s;
+	}
+	.section-header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: var(--sp-8);
+	}
+	.section-header h2 {
+		margin: 0;
+	}
+	.view-all {
+		font-family: var(--font-body);
+		font-size: var(--fs-xs);
+		color: var(--color-ink-muted);
+		text-decoration: none;
+		transition: color var(--ease);
+	}
+	.view-all::after {
+		content: ' →';
+	}
+	.view-all:hover {
+		color: var(--color-ink);
+	}
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.section-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--sp-6);
+	}
+	@media (max-width: 900px) {
+		.section-grid { grid-template-columns: repeat(2, 1fr); }
+	}
+	@media (max-width: 600px) {
+		.section-grid { grid-template-columns: 1fr; gap: var(--sp-4); }
+	}
+</style>

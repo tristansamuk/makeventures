@@ -68,10 +68,12 @@ This is an **Astro 6** static site (SSG) — all routes are pre-built at build t
 | `Footer.astro`        | —                                                            | Copyright year (auto), mono social links (github, vimeo, linkedin), Netlify Identity login redirect                    |
 | `TagList.astro`       | `tags: string[]`                                             | Renders clickable `#tag` pill links to `/blog/tags/[tag]/`                                                             |
 | `PostCard.astro`      | `post: CollectionEntry<'blog'>`                              | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages                                              |
-| `ProjectCard.astro`   | `project: CollectionEntry<'projects'>`, `style?: string`     | Project card (`<li>`) with image, status badge, title, description, optional featuredStat                              |
+| `PostRow.astro`       | `post: CollectionEntry<'blog'>`                              | Blog post row (`<li>`) with thumbnail, date, title, description; used in the recent posts list on the homepage         |
+| `ProjectCard.astro`   | `project: CollectionEntry<'projects'>`                       | Project card (`<li>`) with image, status badge, title, description, optional featuredStat                              |
 | `StatusBadge.astro`   | `status: 'completed' \| 'in-progress' \| 'paused'`, `class?` | Styled status badge with three visual variants                                                                         |
 | `FormattedDate.astro` | `date: Date`                                                 | Formats a `Date` as "MMM d, yyyy"                                                                                      |
 | `Hero.astro`          | —                                                            | Homepage hero: SVG logo, typewriter eyebrow, stat bar                                                                  |
+| `HomeSection.astro`   | `title`, `href`, `linkLabel`, `layout: 'grid' \| 'list'`     | Wraps a homepage section (header with title + view-all link, then a `<ul>`); children passed via slot                  |
 | `YouTube.astro`       | `id: string`, `title?`                                       | Responsive 16:9 iframe embed via `youtube-nocookie.com`, lazy loaded                                                   |
 
 ## Design System
@@ -145,6 +147,10 @@ The Decap CMS video editor widget (defined in `public/admin/index.html`) produce
 ## Tags
 
 Tags are `string[]` in post frontmatter. The `TagList` component renders them as pill links.
+
+## Commits
+
+Commit messages must be 10 words or fewer. Keep them in the imperative mood (e.g. "Add image preview to recent posts").
 
 ## Pull requests
 
