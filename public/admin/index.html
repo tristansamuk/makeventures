@@ -41,7 +41,6 @@
         });
       }
 
-      // Blog preview template
       const BlogPreview = createClass({
         render: function () {
           const { entry } = this.props;
@@ -81,7 +80,6 @@
       });
       CMS.registerPreviewTemplate('blog', BlogPreview);
 
-      // Project preview template
       const ProjectPreview = createClass({
         render: function () {
           const { entry } = this.props;
@@ -150,7 +148,6 @@
         },
       });
 
-      // Hero image validation — blocks Save when a pending heroImage upload fails our constraints.
       function resolveHeroImageUrl(entry) {
         const heroPath = entry.getIn(['data', 'heroImage']);
         if (!heroPath) return null;
@@ -158,8 +155,7 @@
         const mediaFiles = entry.get('mediaFiles');
         if (!mediaFiles || !mediaFiles.size) return null;
 
-        // heroPath is post-relative (../../assets/foo.jpg); mediaFile.path is repo-relative
-        // (src/assets/foo.jpg). Match by basename to bridge the two.
+        // heroPath is post-relative; mediaFile.path is repo-relative — match by basename.
         const heroName = heroPath.split('/').pop();
         const pending = mediaFiles.find(
           (f) => (f.get('path') || '').split('/').pop() === heroName,
@@ -207,23 +203,29 @@
           ]);
 
           const errors = [];
-          const pathLower = resolved.path.toLowerCase();
-          if (!pathLower.endsWith('.jpg') && !pathLower.endsWith('.jpeg')) {
+          const path = resolved.path.toLowerCase();
+          const hasAllowedExt = HERO_LIMITS.allowedExtensions.some((ext) =>
+            path.endsWith(ext),
+          );
+          if (!hasAllowedExt) {
             errors.push('Hero image must be a JPG/JPEG.');
           }
-          if (dims.width < 1920 || dims.height < 900) {
+          if (
+            dims.width < HERO_LIMITS.minWidth ||
+            dims.height < HERO_LIMITS.minHeight
+          ) {
             errors.push(
-              `Hero image is ${dims.width}×${dims.height}. Minimum is 1920×900.`,
+              `Hero image is ${dims.width}×${dims.height}. Minimum is ${HERO_LIMITS.minWidth}×${HERO_LIMITS.minHeight}.`,
             );
           }
-          if (dims.width / dims.height < 1.5) {
+          if (dims.width / dims.height < HERO_LIMITS.minAspectRatio) {
             errors.push(
-              `Hero image (${dims.width}×${dims.height}) is too tall. Use a landscape image. width must be at least 1.5× height.`,
+              `Hero image (${dims.width}×${dims.height}) is too tall. Use a landscape image. width must be at least ${HERO_LIMITS.minAspectRatio}× height.`,
             );
           }
-          if (blob.size > 800 * 1024) {
+          if (blob.size > HERO_LIMITS.maxBytes) {
             errors.push(
-              `Hero image is ${formatBytes(blob.size)}. Maximum is 800 KB. Please compress and re-upload.`,
+              `Hero image is ${formatBytes(blob.size)}. Maximum is ${formatBytes(HERO_LIMITS.maxBytes)}. Please compress and re-upload.`,
             );
           }
 
