@@ -7,7 +7,6 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import TagList from '../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 // ── Featured projects ── edit this array to change which projects are shown
@@ -86,11 +85,6 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 								</div>
 								<span class="post-arrow" aria-hidden="true">→</span>
 							</a>
-							{post.data.tags && post.data.tags.length > 0 && (
-								<div class="post-tags">
-									<TagList tags={post.data.tags} />
-								</div>
-							)}
 						</li>
 					))}
 				</ul>
@@ -230,17 +224,10 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 		color: var(--color-ink-muted);
 		transform: translateX(4px);
 	}
-	.post-tags {
-		padding-left: calc(200px + var(--sp-6));
-		padding-bottom: var(--sp-5);
-	}
 	@media (max-width: 900px) {
 		.post-link {
 			grid-template-columns: 160px 1fr auto;
 			gap: var(--sp-5);
-		}
-		.post-tags {
-			padding-left: calc(160px + var(--sp-5));
 		}
 	}
 	@media (max-width: 600px) {
@@ -253,9 +240,6 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 		}
 		.post-description {
 			display: none;
-		}
-		.post-tags {
-			padding-left: 0;
 		}
 	}
 
