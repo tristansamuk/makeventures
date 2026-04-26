@@ -68,7 +68,8 @@ This is an **Astro 6** static site (SSG) — all routes are pre-built at build t
 | `Footer.astro`        | —                                                            | Copyright year (auto), mono social links (github, vimeo, linkedin), Netlify Identity login redirect                    |
 | `TagList.astro`       | `tags: string[]`                                             | Renders clickable `#tag` pill links to `/blog/tags/[tag]/`                                                             |
 | `PostCard.astro`      | `post: CollectionEntry<'blog'>`                              | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages                                              |
-| `ProjectCard.astro`   | `project: CollectionEntry<'projects'>`, `style?: string`     | Project card (`<li>`) with image, status badge, title, description, optional featuredStat                              |
+| `PostRow.astro`       | `post: CollectionEntry<'blog'>`                              | Blog post row (`<li>`) with thumbnail, date, title, description; used in the recent posts list on the homepage         |
+| `ProjectCard.astro`   | `project: CollectionEntry<'projects'>`                       | Project card (`<li>`) with image, status badge, title, description, optional featuredStat                              |
 | `StatusBadge.astro`   | `status: 'completed' \| 'in-progress' \| 'paused'`, `class?` | Styled status badge with three visual variants                                                                         |
 | `FormattedDate.astro` | `date: Date`                                                 | Formats a `Date` as "MMM d, yyyy"                                                                                      |
 | `Hero.astro`          | —                                                            | Homepage hero: SVG logo, typewriter eyebrow, stat bar                                                                  |

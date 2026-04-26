@@ -1,11 +1,10 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import PostRow from '../components/PostRow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
@@ -30,9 +29,6 @@ const posts = allPosts.sort(
 );
 const recentPosts = posts.slice(0, 3);
 
-const allTags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
-const postCount = posts.length;
-const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 ---
 
 <!doctype html>
@@ -51,11 +47,8 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 					<a href="/projects" class="view-all">All projects →</a>
 				</div>
 				<ul class="projects-grid" role="list">
-					{featuredProjects.map((project, i) => (
-						<ProjectCard
-							project={project}
-							style={`animation-delay:${0.1 + i * 0.07}s`}
-						/>
+					{featuredProjects.map((project) => (
+						<ProjectCard project={project} />
 					))}
 				</ul>
 			</section>
@@ -66,26 +59,8 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 					<a href="/blog" class="view-all">All posts →</a>
 				</div>
 				<ul class="post-list" role="list">
-					{recentPosts.map((post, i) => (
-						<li class="post-item" style={`animation-delay: ${0.1 + i * 0.08}s`}>
-							<a href={`/blog/${post.id}/`} class="post-link">
-								<div class="post-thumbnail">
-									{post.data.heroImage ? (
-										<Image width={320} height={180} src={post.data.heroImage} alt="" />
-									) : (
-										<div class="post-thumbnail-placeholder" aria-hidden="true"></div>
-									)}
-								</div>
-								<div class="post-info">
-									<time class="post-date">
-										<FormattedDate date={post.data.pubDate} />
-									</time>
-									<h3 class="post-title">{post.data.title}</h3>
-									<p class="post-description">{post.data.description}</p>
-								</div>
-								<span class="post-arrow" aria-hidden="true">→</span>
-							</a>
-						</li>
+					{recentPosts.map((post) => (
+						<PostRow post={post} />
 					))}
 				</ul>
 			</section>
@@ -146,102 +121,6 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 		margin: 0;
 		padding: 0;
 	}
-	.post-item {
-		border-top: 1px solid var(--color-border-subtle);
-		animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-	}
-	.post-link {
-		display: grid;
-		grid-template-columns: 200px 1fr auto;
-		align-items: center;
-		gap: var(--sp-6);
-		padding: var(--sp-5) 0;
-		text-decoration: none;
-		color: inherit;
-	}
-	.post-thumbnail {
-		aspect-ratio: 16 / 9;
-		width: 100%;
-		overflow: hidden;
-		border-radius: var(--radius-md);
-		background: var(--color-surface);
-	}
-	.post-thumbnail img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-		transition: transform var(--ease-slow);
-	}
-	.post-thumbnail-placeholder {
-		width: 100%;
-		height: 100%;
-		background: var(--color-surface);
-	}
-	.post-link:hover .post-thumbnail img {
-		transform: scale(1.04);
-	}
-	.post-info {
-		min-width: 0;
-	}
-	.post-date {
-		display: block;
-		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
-		font-weight: 500;
-		color: var(--color-ink-muted);
-		margin-bottom: var(--sp-2);
-		white-space: nowrap;
-	}
-	.post-title {
-		font-family: var(--font-body);
-		font-size: var(--fs-xl);
-		font-weight: 600;
-		margin: 0 0 var(--sp-1);
-		transition: color var(--ease);
-		line-height: 1.3;
-	}
-	.post-link:hover .post-title {
-		color: var(--color-ink-muted);
-	}
-	.post-description {
-		margin: 0;
-		font-size: var(--fs-sm);
-		color: var(--color-ink-muted);
-		line-height: 1.6;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-	.post-arrow {
-		font-size: var(--fs-xl);
-		color: var(--color-border);
-		flex-shrink: 0;
-		transition: color var(--ease), transform var(--ease);
-	}
-	.post-link:hover .post-arrow {
-		color: var(--color-ink-muted);
-		transform: translateX(4px);
-	}
-	@media (max-width: 900px) {
-		.post-link {
-			grid-template-columns: 160px 1fr auto;
-			gap: var(--sp-5);
-		}
-	}
-	@media (max-width: 600px) {
-		.post-link {
-			grid-template-columns: 160px 1fr;
-			gap: var(--sp-4);
-		}
-		.post-arrow {
-			display: none;
-		}
-		.post-description {
-			display: none;
-		}
-	}
 
 	@keyframes fadeUp {
 		from { opacity: 0; transform: translateY(8px); }
@@ -249,7 +128,7 @@ const firstYear = posts[posts.length - 1]?.data.pubDate.getFullYear();
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.featured-projects, .recent-posts, .post-item {
+		.featured-projects, .recent-posts {
 			animation: none;
 		}
 	}
