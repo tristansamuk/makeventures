@@ -1,31 +1,36 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-2.jpg';
-import { SITE_TITLE } from '../consts';
+import "../styles/global.css";
+import type { ImageMetadata } from "astro";
+import FallbackImage from "../assets/blog-placeholder-2.jpg";
+import { SITE_TITLE } from "../consts";
 
 interface Props {
-	title: string;
-	description: string;
-	image?: ImageMetadata;
-	ogType?: 'website' | 'article';
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+  ogType?: "website" | "article";
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, ogType = 'website' } = Astro.props;
+const {
+  title,
+  description,
+  image = FallbackImage,
+  ogType = "website",
+} = Astro.props;
 ---
 
 <!-- Theme: applied before first paint to avoid flash of wrong theme -->
 <script is:inline>
-	(function () {
-		var saved = localStorage.getItem('theme');
-		var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		document.documentElement.dataset.theme =
-			saved === 'dark' || (!saved && prefersDark) ? 'dark' : 'light';
-	})();
+  (function () {
+    var saved = localStorage.getItem("theme");
+    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.dataset.theme =
+      saved === "dark" || (!saved && prefersDark) ? "dark" : "light";
+  })();
 </script>
 
 <!-- Global Metadata -->
@@ -35,19 +40,22 @@ const { title, description, image = FallbackImage, ogType = 'website' } = Astro.
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Righteous&display=swap" />
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Righteous&display=swap"
+/>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+></script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_TITLE}
+  href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
-
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -70,3 +78,11 @@ const { title, description, image = FallbackImage, ogType = 'website' } = Astro.
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+
+<!-- Cloudflare Web Analytics -->
+<script
+  is:inline
+  defer
+  src="https://static.cloudflareinsights.com/beacon.min.js"
+  data-cf-beacon='{"token": "dff56f334387477599d14cb531d75eab"}'
+></script><!-- End Cloudflare Web Analytics -->
