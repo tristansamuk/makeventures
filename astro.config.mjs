@@ -11,5 +11,10 @@ export default defineConfig({
 	markdown: {
 		remarkPlugins: [remarkVideo],
 	},
-	integrations: [mdx(), sitemap()],
+	integrations: [
+		mdx(),
+		sitemap({
+			filter: (page) => !page.includes('/admin/'),
+		}),
+	],
 });
