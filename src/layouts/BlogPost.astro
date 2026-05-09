@@ -15,7 +15,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} ogType="article" />
-		<script type="application/ld+json" set:html={JSON.stringify({
+		<script is:inline type="application/ld+json" set:html={JSON.stringify({
 			'@context': 'https://schema.org',
 			'@type': 'Article',
 			headline: title,
