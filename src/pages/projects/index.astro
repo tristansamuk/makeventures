@@ -78,11 +78,8 @@ const pausedCount     = projects.filter(p => p.data.status === 'paused').length;
 			</div>
 
 			<ul class="project-grid" role="list">
-				{rest.map((project, i) => (
-					<ProjectCard
-						project={project}
-						style={`animation-delay:${Math.min(0.1 + i * 0.05, 0.35)}s`}
-					/>
+				{rest.map((project) => (
+					<ProjectCard project={project} />
 				))}
 			</ul>
 		</main>
