@@ -8,15 +8,12 @@ import ProjectCard from '../../components/ProjectCard.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
-const statusOrder = { completed: 0, 'in-progress': 1, paused: 2 } as const;
-
-const projects = (await getCollection('projects')).sort((a, b) => {
-	const aOrder = statusOrder[a.data.status ?? 'in-progress'];
-	const bOrder = statusOrder[b.data.status ?? 'in-progress'];
-	return aOrder - bOrder;
-});
+const projects = (await getCollection('projects')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 
 const [featured, ...rest] = projects;
+if (!featured) throw new Error('No projects found');
 
 const completedCount  = projects.filter(p => p.data.status === 'completed').length;
 const inProgressCount = projects.filter(p => (p.data.status ?? 'in-progress') === 'in-progress').length;

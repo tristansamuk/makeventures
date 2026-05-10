@@ -3,6 +3,7 @@ title: "Six Monitors: A Necessary and Completely Reasonable Life Decision"
 description: "I want to be upfront about something: I work from home, I am one
   person, and I have six monitors. I'm not going to apologize for this. What I
   *am* going to do is explain it, because the explanation is airtight"
+pubDate: 2026-04-06
 status: in-progress
 completedDate: 2026-04-06T09:00:00.000Z
 heroImage: ../../assets/monitors.jpg

@@ -2,6 +2,7 @@
 title: The Little Library Project
 description: Modernize and expand on data collection of a front-lawn Library
   Exchange with ESPHOME and Home Assistant
+pubDate: 2026-04-07
 status: in-progress
 heroImage: ../../assets/screenshot-2026-04-06-at-10.09.18 pm.png
 ---

@@ -27,6 +27,7 @@ const projects = defineCollection({
 			navTitle: z.string().optional(),
 			description: z.string(),
 			heroImage: z.optional(image()),
+			pubDate: z.coerce.date(),
 			status: z.enum(['completed', 'in-progress', 'paused']).optional(),
 			completedDate: z.coerce.date().optional(),
 			featuredStat: z.string().optional(),

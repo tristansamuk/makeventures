@@ -23,7 +23,7 @@ const [allProjects, allPosts] = await Promise.all([
 
 const featuredProjects = FEATURED_PROJECT_IDS
 	.map(id => allProjects.find(p => p.id === id))
-	.filter(p => p !== undefined);
+	.filter((p): p is NonNullable<typeof p> => p !== undefined);
 
 const posts = allPosts.sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),

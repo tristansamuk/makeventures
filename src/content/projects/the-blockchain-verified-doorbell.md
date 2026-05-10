@@ -1,6 +1,7 @@
 ---
 title: The Blockchain-Verified Doorbell
 description: "Why ring a doorbell like it's 1995? "
+pubDate: 2026-04-26
 status: in-progress
 heroImage: ../../assets/doorbell.jpg
 ---
