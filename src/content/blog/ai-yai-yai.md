@@ -19,4 +19,4 @@ The key is to start small and keep an eye on the /cost command and the dashboard
 
 Rarely though has there been software capability introduced that can adapt to your needs, develop a plan and execute for you the way these evolving AI coding tools do. What a great era to be a maker!  
 
-Now to go and give my A.I. a personality like Commander Data and solve the universes problems.
+Now to go and give my A.I. a personality like Commander Data and solve the universes' problems.
