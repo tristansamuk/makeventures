@@ -1,4 +1,11 @@
 ---
+<<<<<<< HEAD
+title: Test this new Blog
+description: This is just a test. If this was a real test it would be real.
+pubDate: 2026-04-06T21:57:00.000Z
+heroImage: ../../assets/a-study-in-bubbles.jpg
+tags: ['test']
+=======
 title: The bedsider
 description: "A device that controls dimmable lights. Like those typically
   beside the bed and both lights can be controlled (dim and on/off) "
@@ -6,6 +13,7 @@ pubDate: 2026-05-11T21:17:00.000Z
 heroImage: ""
 tags:
   - Lighting
+>>>>>>> main
 author: Igor Samuk
 ---
 I've had this light control idea brewing for a while and I finally thought I would just build it to see if it's just me being lazy or the the device will be useful.  The basic premise is a small box with a rotary encoder, a switch and 2 leds. Each Led represents one of the two possible lights to control. Think your bedside light and that of your partner (assuming you sleep with one) Control means you can turn it on/off or dim it. 
