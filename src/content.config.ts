@@ -13,9 +13,9 @@ const blog = defineCollection({
 			// Transform string to Date object
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
-			heroImage: z.optional(image()),
-			tags: z.array(z.string()).optional(),
-			author: z.string().optional(),
+			heroImage: image(),
+			tags: z.array(z.string()),
+			author: z.string(),
 		}),
 });
 
@@ -26,7 +26,7 @@ const projects = defineCollection({
 			title: z.string(),
 			navTitle: z.string().optional(),
 			description: z.string(),
-			heroImage: z.optional(image()),
+			heroImage: image(),
 			pubDate: z.coerce.date(),
 			status: z.enum(['completed', 'in-progress', 'paused']).optional(),
 			completedDate: z.coerce.date().optional(),

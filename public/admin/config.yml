@@ -29,14 +29,14 @@ collections:
           label: 'Hero Image',
           name: 'heroImage',
           widget: 'image',
-          required: false,
+          required: true,
           hint: 'Landscape JPG, at least 1920×900, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - {
           label: 'Tags',
           name: 'tags',
           widget: 'list',
-          required: false,
+          required: true,
           field: { label: 'Tag', name: 'tag', widget: 'string' },
           hint: 'Add tags one at a time',
         }
@@ -44,7 +44,7 @@ collections:
           label: 'Author',
           name: 'author',
           widget: 'string',
-          required: false,
+          required: true,
           default: 'Igor Samuk',
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }
@@ -80,7 +80,7 @@ collections:
           label: 'Hero Image',
           name: 'heroImage',
           widget: 'image',
-          required: false,
+          required: true,
           hint: 'Landscape JPG, at least 1920×900, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }

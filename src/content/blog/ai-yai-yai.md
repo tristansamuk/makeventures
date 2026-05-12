@@ -5,6 +5,7 @@ description: >
   Picard would not have been nearly as effective or successful in battle. 
 pubDate: 2026-04-12T19:44:00.000Z
 heroImage: ../../assets/data.jpeg
+tags: ['AI']
 author: Igor Samuk
 ---
 From the moment I first installed and typed "Claude" at my raspiOS command prompt, I have been blown away by what is possible with this tool.  The Star Trek character Captain Jean Luke Picard had an A.I. android; Commander Data, next to him providing him with the sum total of the universe's knowledge and hands on capability at his finger tips whenever it was needed.  That is how I feel when I wake up my instance of Claude and begin solving, building, learning and above all else saving a tonne of time to get things done.
