@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
@@ -8,19 +9,18 @@ import ProjectCard from '../../components/ProjectCard.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
-const statusOrder = { completed: 0, 'in-progress': 1, paused: 2 } as const;
+type Project = CollectionEntry<'projects'>;
 
-const projects = (await getCollection('projects')).sort((a, b) => {
-	const aOrder = statusOrder[a.data.status ?? 'in-progress'];
-	const bOrder = statusOrder[b.data.status ?? 'in-progress'];
-	return aOrder - bOrder;
-});
+const projects = (await getCollection('projects')).sort(
+	(a: Project, b: Project) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 
 const [featured, ...rest] = projects;
+if (!featured) throw new Error('No projects found');
 
-const completedCount  = projects.filter(p => p.data.status === 'completed').length;
-const inProgressCount = projects.filter(p => (p.data.status ?? 'in-progress') === 'in-progress').length;
-const pausedCount     = projects.filter(p => p.data.status === 'paused').length;
+const completedCount  = projects.filter((p: Project) => p.data.status === 'completed').length;
+const inProgressCount = projects.filter((p: Project) => (p.data.status ?? 'in-progress') === 'in-progress').length;
+const pausedCount     = projects.filter((p: Project) => p.data.status === 'paused').length;
 ---
 
 <!doctype html>
@@ -78,11 +78,8 @@ const pausedCount     = projects.filter(p => p.data.status === 'paused').length;
 			</div>
 
 			<ul class="project-grid" role="list">
-				{rest.map((project, i) => (
-					<ProjectCard
-						project={project}
-						style={`animation-delay:${Math.min(0.1 + i * 0.05, 0.35)}s`}
-					/>
+				{rest.map((project: Project) => (
+					<ProjectCard project={project} />
 				))}
 			</ul>
 		</main>

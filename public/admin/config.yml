@@ -54,13 +54,14 @@ collections:
     folder: 'src/content/projects'
     create: true
     slug: '{{slug}}'
-    summary: '{{status}} — {{title}}'
-    sortable_fields: ['title', 'status']
+    summary: '{{pubDate | date("YYYY-MM-DD")}} — {{title}}'
+    sortable_fields: ['pubDate', 'title', 'status']
     media_folder: '../../assets'
     public_folder: '../../assets'
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Description', name: 'description', widget: 'text' }
+      - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
       - {
           label: 'Status',
           name: 'status',
