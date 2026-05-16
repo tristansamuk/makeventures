@@ -371,9 +371,7 @@ display:
 
 ## ScreenShot of raw device info
 
-
-
-![]()
+![](../../assets/screenshot-2026-05-16-at-9.02.55 am.png)
 
 ## Usability
 
