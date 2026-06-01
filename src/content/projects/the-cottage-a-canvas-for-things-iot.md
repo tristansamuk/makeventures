@@ -5,9 +5,11 @@ pubDate: 2026-06-01T11:29:00.000Z
 status: in-progress
 heroImage: ../../assets/cottage1.jpg
 ---
-Ten  years ago, I found a spot that I just had to buy in the woods and on a lake. Once I had it decent a livable condition (a story by it self) I realized I had a whole canvas to build IOT devices and of course, monitoring. 
+Ten  years ago, I found a spot that I just had to buy in the woods and on a lake. Once I had it in decent and livable condition (a story by it-self) I realized I had a whole canvas to build IOT devices and of course, monitoring. 
 
-Just like at home a great candidate for a centralized controller is Home Assistant. HA had me from it works offline and without internet which is always an intermittent possibility in the country. I started to ponder a bunch of ideas and this calls for specific projects which I'll preix with Cottage but to give you an idea this is the start of my list:
+Just like at home this was a great candidate for a centralized controller: Home Assistant. HA had me from "it works offline" and without internet which is always an intermittent possibility in the north country. 
+
+I started to ponder a bunch of ideas and this calls for specific projects which I'll prefix with Cottage but to give you an idea this is the start of my list:
 
 \- Landscape lighting system 
 
