@@ -22,7 +22,7 @@ Things I thought would be helpful to measure were: Temperature both in and out o
 
 There have been, as usual, several iterations of build. Starting it's brains with ESP8266 and now in the more current ESP32. The idea was initially to monitor pool water temp, external temp, and the upper and lower levels of pool water. Why - well I had some issues with a leak once and it almost caused the pump to run dry and that would be in the +$3,000 range to fix. I also want to know if the rain and other filling sources cause the water to go too high well before it flows over the edge and leaks in between liner causing more issues or worse the water makes it's way to the  house. Temperature of course is more something my wife wants to know before she commits to a swim in the morning, reminding me that 80 F is a happy wife scenario.   Finally, I wanted a display on the controller for quick viewing if I don't have my phone handy. Meanwhile I had built a second small system to power the Pool Light GFI controls - more on that in later iterations.
 
-### First iteration 
+### First iteration
 
 The larger design issues here were: Power safety - for the solenoid used to start/stop water flow, weather proofing the gear, corrosion resistance and distance between the pool and the controller .
 
@@ -34,21 +34,13 @@ I had HA sense water levels and notify me and I had an important automation that
 
 ### *The experience*
 
-This is the crux of the design process - what does the user experience and what's the feedback. Well U used the system for 2 years and the Solenoid automation saved me from myself a few times as did the level indicators. My wife love the fact she could yell at me to turn the heater on any time too LOL. 
+This is the crux of the design process - what does the user experience and what's the feedback. Well we used the system for two seasons and the Solenoid automation saved me from myself a few times as did the level indicators. My wife loved the fact I could no longer exaggerate that the pool was at a great temperature to swim.
 
 But... after a two seasons,  corrosion destroyed the level sensors and the system needed repair. Why? I simply did not think them through nor was I aware that salt water pool water can really corrode copper and solder ends. 
 
+### Second Iteration
 
-
-### Second Iteration 
-
-The other thing I thought was a bit inefficient was the fact that 
-
-
-
-
-
-
+The other thing I thought was a bit inefficient was the fact that the pool lights were on a separate controller and the whole pool automation entity should just be in one place. I also had Claude Code in the loop now to help. So the new plan was to build a still-well to house the sensors, make the sensor package a cartridge that can be replaced in case of severe corrosion and add the pool lights in the mix by adding another  30Amp 240V max SLA-05VDC-SL-C relay. Probably the most critical element of this is if you are not VERY familiar with house AC power and how to connect things to it then DON'T - let and electrician do that part for you and it could even be that in your area by code,  that is a legal requirement when it comes to pools. There are only very low 5V DC voltages in the pool sensors so that is not an issue but over at the controller you want be safe and secure with any power line work.
 
 ## Parts
 
