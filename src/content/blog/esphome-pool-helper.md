@@ -14,20 +14,48 @@ author: Igor Samuk
 
 We also have a summer vacation property. If we are away long enough - things can get clogged or water levels can change leading to more issues. Ofcourse chemical balance is also important but that will be for some future automation.
 
-## The "phase one" automation
+## The "Phase one" automation
 
-Things I thought would be helpfull to measure were: Temperature both in and out of the pool, Humidity, whether the pool water level was getting too high or worse; too low. I also wanted a way to fill the pool while I was away or for convenience. I know that sounds a bit risky but I figured I would just give my self a maximum range away like at the cottage when controlling water levels knowing I can get home within a few hours and not days. All of this assumes someone from the family is skimming the pool of course.   
+Things I thought would be helpful to measure were: Temperature both in and out of the pool, Humidity, whether the pool water level was getting too high or worse; too low. I also wanted a way to fill the pool while I was away or for convenience. I know that sounds a bit risky but I figured I would just give my self a maximum range away like at the cottage when controlling water levels knowing I can get home within a few hours and not days. All of this assumes someone from the family is skimming the pool and availabkle to shut the water off if needed.   
 
 ## The build
 
-I made a few iterations and at one time separate controls but decided to have all the areas managed by one ESP32 and HomeAssistant. I also thought a display was a good idea for when I'm standing in front of the pump and don't have the available hands to look at my companion app.
+There have been, as usual, several iterations of build. Starting it's brains with ESP8266 and now in the more current ESP32. The idea was initially to monitor pool water temp, external temp, and the upper and lower levels of pool water. Why - well I had some issues with a leak once and it almost caused the pump to run dry and that would be in the +$3,000 range to fix. I also want to know if the rain and other filling sources cause the water to go too high well before it flows over the edge and leaks in between liner causing more issues or worse the water makes it's way to the  house. Temperature of course is more something my wife wants to know before she commits to a swim in the morning, reminding me that 80 F is a happy wife scenario.   Finally, I wanted a display on the controller for quick viewing if I don't have my phone handy. Meanwhile I had built a second small system to power the Pool Light GFI controls - more on that in later iterations.
+
+### First iteration 
+
+The larger design issues here were: Power safety - for the solenoid used to start/stop water flow, weather proofing the gear, corrosion resistance and distance between the pool and the controller .
+
+Sensing water depth, it turns out, has several possible methods with some being "touch-less" but bulky and others being more complex like that used in water etc. tank applications. I thought I would keep things simple ands just use a four channel moister sensor (using 2 here) -LC1BD04 board I had on hand for a few dollars from Aliexpress. The concept is simple: each electrode pair is measured for resistance and sets that board channel to high (with an LED too) when the electrode pair encounters resistance like water. Each electrode pair sits at it's base along the line of what I decide is the high and low water mark. Then came the water temp sensor which I chose to use DS18B20 Temperature Sensor Probe 304 Stainless Steel. So that requied a total of 7 contacts to be able to get to the pool which is about 10 feet away. I was lucky to be able to lay a simple corrugated pipe from the area of the controller to the pool and sort of hide it next to my old-school diving-board. I used a basic 0.96 OLED to show both pool and local temp as well ar water level status. I ran a hose along with that corrugated wire pipe to the pool from the solenoid so it just sits for filling. I used a pex pipe to hold a wire probe ends and hide the thermo in it which seemed to work well and was small enough not to look too DIY.
+
+### Automations
+
+I had HA sense water levels and notify me and I had an important automation that turned off the solenoid after 30 min operation no matter what turned it on.
+
+### *The experience*
+
+This is the crux of the design process - what does the user experience and what's the feedback. Well U used the system for 2 years and the Solenoid automation saved me from myself a few times as did the level indicators. My wife love the fact she could yell at me to turn the heater on any time too LOL. 
+
+But... after a two seasons,  corrosion destroyed the level sensors and the system needed repair. Why? I simply did not think them through nor was I aware that salt water pool water can really corrode copper and solder ends. 
+
+
+
+### Second Iteration 
+
+The other thing I thought was a bit inefficient was the fact that 
+
+
+
+
+
+
 
 ## Parts
 
 * ESP32
 * 30Amp 240V max SLA-05VDC-SL-C relay
 * 0.96 OLED
-* Dallas thermal sensor
+* DS18B20 Temperature Sensor Probe 304 Stainless Steel
 * Four channel moister sensor (using 2 here) -LC1BD04 
 * 240VAC -5VDC power converter (Modified to be a bit more safe: Original Hi-Link HLK-PM01 with fuses and thermal safty added.
 * Solinoid 
