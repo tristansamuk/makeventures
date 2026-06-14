@@ -8,15 +8,15 @@ heroImage: ../../assets/screenshot-2026-04-06-at-10.09.18 pm.png
 ---
 # In the Beginning
 
-My friend Bob and his son Timmy are enthusiasts of the Little Free Library System. The idea is a network of DIY prefab  cabinet kits in various models that sit on the front lawn adjacent to the sidewalk.  In some ways its about promoting literature by sharing books for free.  Passers-by can "borrow" a book and swap or return it when read.  [Read about the system here](https://littlefreelibrary.org/). We decided to use this project as an opportunity to automate. Of course. 
+My friend Bob and his son Timmy are enthusiasts of the Little Free Library System. The idea is a network of DIY prefab  cabinet kits in various models that sit on the front lawn adjacent to the sidewalk.  In some ways its about promoting open literature by sharing books for free.  Passers-by can borrow or donate a book and swap or return it when read.  [Read about the system here](https://littlefreelibrary.org/). We decided to use this project as an opportunity to automate. Of course. 
 
 > Bob is quite technical and likes data and his 10 year old is the kind of kid who plays with Lego including building Lego machines that are programmed to for example solve rubics cubes.
 
-B's Library door has a contact switch and manual counter that increments to indicate number of times the door is opened.  Our thinking was to work with T and build a system that does the counting, reports it as well as other data like temperature and humidity and make it expandable to more data. We chose to use docker on a rasperry pi and **[ESPHOME](https://esphome.io/)** and **[HomeAssistant](https://www.home-assistant.io/)**. in containers. 
+Bob's Library door has a contact switch and manual counter that increments to indicate number of times the door is opened.  Our thinking was to work with Timmy and build a system that does the counting, reports it as well as other data like temperature and humidity and make it expandable to more data. We chose to use docker on a Raspberry pi and **[ESPHOME](https://esphome.io/)** and **[HomeAssistant](https://www.home-assistant.io/)**. in containers. 
 
 #### Highlights of the journey
 
-This turned out to be a build happening at the same time I finally decided to dive into using a pay-per-use AI (Claude code). The experience was kind of mind-blowing. I had no idea these tools could be this powerful even for this small project. I spend allot of time in the typical trial and error of coding in ESPHOME yaml,  making devices. Those earlier days of learning were very fun but it also often felt daunting to revisit the knowledge after long time gaps between builds. Now I can conceptualize and get some amazing code that both get's me to the end result faster and enhances my learning.  Allot less grunt, allot more results, allot faster. Once the code was in a reasonable state I even began to experiment with Claude to see if it could build a PCB schematic for Kicad ( an open source pcb design tool set). It came close but I know it was a tall order and I do think over-time it would have through iterations got the job done. I just was getting a bit ahead of myself as I wanted the build to be solid and tested in prototype mode first.  
+This turned out to be a build happening at the same time I finally decided to dive into using a pay-per-use AI (Claude code). The experience was kind of mind-blowing. I had no idea these tools could be this powerful even for this small project. I spend allot of time in the typical trial and error of coding in ESPHOME yaml,  making devices. Those earlier days of learning were very fun but it also often felt daunting to revisit the knowledge after long time gaps between builds. Now I can conceptualize and get some amazing code that both get's me to the end result faster and enhances my learning.  
 
 #### The build
 
@@ -26,9 +26,11 @@ The initial iteration worked in testing but the use of solar meant we really sho
 
 I also found the panel I was using was a bit slow to charge and the thought was to double up the panel to 2 and connect them in parallel for more power. 
 
-The A0 GPIO on the ESP8266 and related output can be a bit inconsistent so AI (Claude) made a suggestion to use ADC1111 board that uses I2C and more accurate readings for voltages. 
+The A0 GPIO on the ESP8266 and related output can be a bit inconsistent when measuring voltages so AI (Claude) made a suggestion to use ADC1111 board that uses I2C and more accurate readings for voltages. 
 
-This became V2 and looks like this:
+We decided it made sense to collect Solar panel charge, battery charge, humidity, door count and the state of charging or not charging of the battery. Bob and Timmy would then be able to play with all sorts of automations and dashboards on the HA side. 
+
+The mAh of the battery and our related power draw determines how long we will survive with little or no sun. We also decided to make our panel transportable to an area of maximum sunlight.  
 
 
 
