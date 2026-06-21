@@ -30,7 +30,7 @@ collections:
           name: 'heroImage',
           widget: 'image',
           required: true,
-          hint: 'Landscape JPG, at least 1920×900, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
+          hint: 'JPG, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - {
           label: 'Tags',
@@ -81,6 +81,6 @@ collections:
           name: 'heroImage',
           widget: 'image',
           required: true,
-          hint: 'Landscape JPG, at least 1920×900, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
+          hint: 'JPG, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }
