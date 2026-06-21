@@ -40,7 +40,7 @@ const logoSvg = readFileSync(resolve('src/assets/mv-logo.svg'), 'utf-8')
 		title.classList.add('fitted');
 	}
 
-	requestAnimationFrame(fitTitle);
+	document.fonts.ready.then(() => requestAnimationFrame(fitTitle));
 	window.addEventListener('resize', fitTitle);
 	window.visualViewport?.addEventListener('resize', fitTitle);
 </script>

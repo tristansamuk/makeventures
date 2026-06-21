@@ -29,14 +29,14 @@ collections:
           label: 'Hero Image',
           name: 'heroImage',
           widget: 'image',
-          required: false,
-          hint: 'Landscape JPG, at least 1920×900, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
+          required: true,
+          hint: 'JPG, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - {
           label: 'Tags',
           name: 'tags',
           widget: 'list',
-          required: false,
+          required: true,
           field: { label: 'Tag', name: 'tag', widget: 'string' },
           hint: 'Add tags one at a time',
         }
@@ -44,7 +44,7 @@ collections:
           label: 'Author',
           name: 'author',
           widget: 'string',
-          required: false,
+          required: true,
           default: 'Igor Samuk',
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }
@@ -54,13 +54,14 @@ collections:
     folder: 'src/content/projects'
     create: true
     slug: '{{slug}}'
-    summary: '{{status}} — {{title}}'
-    sortable_fields: ['title', 'status']
+    summary: '{{pubDate | date("YYYY-MM-DD")}} — {{title}}'
+    sortable_fields: ['pubDate', 'title', 'status']
     media_folder: '../../assets'
     public_folder: '../../assets'
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Description', name: 'description', widget: 'text' }
+      - { label: 'Publish Date', name: 'pubDate', widget: 'datetime' }
       - {
           label: 'Status',
           name: 'status',
@@ -79,7 +80,7 @@ collections:
           label: 'Hero Image',
           name: 'heroImage',
           widget: 'image',
-          required: false,
-          hint: 'Landscape JPG, at least 1920×900, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
+          required: true,
+          hint: 'JPG, max 800 KB. Compress with Squoosh (https://squoosh.app) before uploading.',
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }

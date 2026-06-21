@@ -34,9 +34,21 @@ import { SITE_TITLE } from '../consts';
 		display: flex;
 		align-items: center;
 		min-height: calc(100dvh - var(--nav-height) - 96px);
+		padding-inline: var(--sp-6);
+	}
+	@media (max-width: 768px) {
+		main {
+			padding-inline: var(--sp-4);
+		}
 	}
 	.container {
 		max-width: 576px;
+		animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.container {
+			animation: none;
+		}
 	}
 	.code {
 		font-family: var(--font-mono);
@@ -47,7 +59,6 @@ import { SITE_TITLE } from '../consts';
 		margin: 0 0 var(--sp-4);
 	}
 	h1 {
-		font-size: var(--fs-4xl);
 		margin-bottom: var(--sp-4);
 		line-height: 1.1;
 	}

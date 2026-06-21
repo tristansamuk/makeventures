@@ -14,7 +14,18 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} ogType="article" />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'Article',
+			headline: title,
+			description,
+			datePublished: pubDate.toISOString(),
+			...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+			...(author ? { author: { '@type': 'Person', name: author } } : {}),
+			...(heroImage ? { image: new URL(heroImage.src, Astro.site).toString() } : {}),
+			url: new URL(Astro.url.pathname, Astro.site).toString(),
+		})} />
 	</head>
 
 	<body>

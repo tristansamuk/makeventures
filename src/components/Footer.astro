@@ -3,68 +3,81 @@ const today = new Date();
 ---
 
 <footer>
-	<div class="footer-inner">
-		<p class="copyright">&copy; {today.getFullYear()} Igor Samuk</p>
-		<nav class="social-links" aria-label="Social links">
-			<a href="https://github.com" target="_blank" rel="noopener noreferrer">github</a>
-			<a href="https://vimeo.com" target="_blank" rel="noopener noreferrer">vimeo</a>
-			<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">linkedin</a>
-		</nav>
-	</div>
+  <div class="footer-inner">
+    <p class="copyright">&copy; {today.getFullYear()} Igor Samuk</p>
+    <nav class="social-links" aria-label="Social links">
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+        >github</a
+      >
+      <a href="https://vimeo.com" target="_blank" rel="noopener noreferrer"
+        >vimeo</a
+      >
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+        >linkedin</a
+      >
+    </nav>
+  </div>
 </footer>
 
+<!-- Cloudflare Web Analytics -->
+<script
+  is:inline
+  defer
+  src="https://static.cloudflareinsights.com/beacon.min.js"
+  data-cf-beacon='{"token": "dff56f334387477599d14cb531d75eab"}'></script>
+
 <script is:inline>
-	if (window.netlifyIdentity) {
-		window.netlifyIdentity.on("init", function(user) {
-			if (!user) {
-				window.netlifyIdentity.on("login", function() {
-					document.location.href = "/admin/";
-				});
-			}
-		});
-	}
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", function (user) {
+      if (!user) {
+        window.netlifyIdentity.on("login", function () {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
 </script>
 
 <style>
-	footer {
-		background-color: var(--color-bg);
-		border-top: 1px solid var(--color-border);
-	}
-	.footer-inner {
-		max-width: var(--container);
-		margin: 0 auto;
-		padding: var(--sp-6) var(--sp-6);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--sp-4);
-	}
-	.copyright {
-		margin: 0;
-		font-family: var(--font-mono);
-		font-size: var(--fs-xs);
-		color: var(--color-ink-muted);
-	}
-	.social-links {
-		display: flex;
-		gap: var(--sp-5);
-		align-items: center;
-	}
-	.social-links a {
-		font-family: var(--font-mono);
-		font-size: 12px;
-		color: var(--color-ink-muted);
-		text-decoration: none;
-		transition: color var(--ease);
-	}
-	.social-links a:hover {
-		color: var(--color-ink);
-	}
-	@media (max-width: 480px) {
-		.footer-inner {
-			flex-direction: column;
-			align-items: center;
-			padding: var(--sp-6) var(--sp-4);
-		}
-	}
+  footer {
+    background-color: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+  }
+  .footer-inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: var(--sp-6) var(--sp-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+  }
+  .copyright {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--color-ink-muted);
+  }
+  .social-links {
+    display: flex;
+    gap: var(--sp-5);
+    align-items: center;
+  }
+  .social-links a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-ink-muted);
+    text-decoration: none;
+    transition: color var(--ease);
+  }
+  .social-links a:hover {
+    color: var(--color-ink);
+  }
+  @media (max-width: 480px) {
+    .footer-inner {
+      flex-direction: column;
+      align-items: center;
+      padding: var(--sp-6) var(--sp-4);
+    }
+  }
 </style>
