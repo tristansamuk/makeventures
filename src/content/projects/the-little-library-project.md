@@ -30,7 +30,7 @@ The A0 GPIO on the ESP8266 and related output can be a bit inconsistent when mea
 
 ![](../../assets/overview-medium.jpeg)
 
-
+![](../../assets/controller-installed.jpeg)
 
 We decided it made sense to collect Solar panel charge, battery charge, humidity, door count and the state of charging or not charging of the battery. Bob and Timmy would then be able to play with all sorts of automations and dashboards on the HA side. 
 
