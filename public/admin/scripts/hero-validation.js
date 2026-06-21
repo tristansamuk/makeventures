@@ -1,8 +1,8 @@
 // preSave event listener that blocks Save when a pending heroImage upload
-// fails our constraints (format, file size). Only validates uploads that
-// haven't been committed yet — already-saved hero images are skipped. All
-// thresholds and matching error-message values come from HERO_LIMITS in
-// constants.js.
+// fails our constraints (format, decodability, file size). Only validates
+// uploads that haven't been committed yet — already-saved hero images are
+// skipped. All thresholds and matching error-message values come from
+// HERO_LIMITS in constants.js.
 
 (() => {
   const { HERO_LIMITS, formatBytes } = window.AdminHelpers;
@@ -24,11 +24,28 @@
     return { path: heroPath, url: pending.get("url") };
   }
 
+  function hasAllowedExtension(path) {
+    const lowerPath = path.toLowerCase();
+    return HERO_LIMITS.allowedExtensions.some((ext) => lowerPath.endsWith(ext));
+  }
+
   function loadImageBlob(url) {
     return fetch(url).then((response) => {
       if (!response.ok)
         throw new Error("Could not fetch hero image for validation.");
       return response.blob();
+    });
+  }
+
+  // Confirms the bytes are a real, decodable image — catches a corrupted
+  // upload or a non-image file that was merely renamed to .jpg, which the
+  // extension check alone can't detect.
+  function isDecodableImage(url) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
     });
   }
 
@@ -38,24 +55,22 @@
       const resolved = resolveHeroImageUrl(event.entry);
       if (!resolved) return;
 
-      const blob = await loadImageBlob(resolved.url);
+      if (!hasAllowedExtension(resolved.path)) {
+        throw new Error("Hero image must be a JPG/JPEG.");
+      }
 
-      const errors = [];
-      const path = resolved.path.toLowerCase();
-      const hasAllowedExt = HERO_LIMITS.allowedExtensions.some((ext) =>
-        path.endsWith(ext),
-      );
-      if (!hasAllowedExt) {
-        errors.push("Hero image must be a JPG/JPEG.");
+      const [blob, decodable] = await Promise.all([
+        loadImageBlob(resolved.url),
+        isDecodableImage(resolved.url),
+      ]);
+
+      if (!decodable) {
+        throw new Error("Hero image could not be read as a valid image.");
       }
       if (blob.size > HERO_LIMITS.maxBytes) {
-        errors.push(
+        throw new Error(
           `Hero image is ${formatBytes(blob.size)}. Maximum is ${formatBytes(HERO_LIMITS.maxBytes)}. Please compress and re-upload.`,
         );
-      }
-
-      if (errors.length) {
-        throw new Error(errors.join("\n"));
       }
     },
   });
