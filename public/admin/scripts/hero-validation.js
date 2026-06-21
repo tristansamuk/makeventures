@@ -1,8 +1,7 @@
 // preSave event listener that blocks Save when a pending heroImage upload
-// fails our constraints (format, dimensions, aspect ratio, file size). Only
-// validates uploads that haven't been committed yet — already-saved hero
-// images are skipped. All thresholds and matching error-message values come
-// from HERO_LIMITS in constants.js.
+// exceeds our file-size limit. Only validates uploads that haven't been
+// committed yet — already-saved hero images are skipped. The threshold and
+// matching error-message value come from HERO_LIMITS in constants.js.
 
 (() => {
   const { HERO_LIMITS, formatBytes } = window.AdminHelpers;
@@ -19,20 +18,7 @@
     const pending = mediaFiles.find(
       (f) => (f.get('path') || '').split('/').pop() === heroName,
     );
-    if (!pending || !pending.get('url')) return null;
-
-    return { path: heroPath, url: pending.get('url') };
-  }
-
-  function loadImageDimensions(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () =>
-        resolve({ width: img.naturalWidth, height: img.naturalHeight });
-      img.onerror = () =>
-        reject(new Error('Could not load hero image for validation.'));
-      img.src = url;
-    });
+    return pending ? pending.get('url') : null;
   }
 
   function loadImageBlob(url) {
@@ -46,43 +32,15 @@
   CMS.registerEventListener({
     name: 'preSave',
     handler: async (event) => {
-      const resolved = await resolveHeroImageUrl(event.entry);
-      if (!resolved) return;
+      const url = resolveHeroImageUrl(event.entry);
+      if (!url) return;
 
-      const [dims, blob] = await Promise.all([
-        loadImageDimensions(resolved.url),
-        loadImageBlob(resolved.url),
-      ]);
+      const blob = await loadImageBlob(url);
 
-      const errors = [];
-      const path = resolved.path.toLowerCase();
-      const hasAllowedExt = HERO_LIMITS.allowedExtensions.some((ext) =>
-        path.endsWith(ext),
-      );
-      if (!hasAllowedExt) {
-        errors.push('Hero image must be a JPG/JPEG.');
-      }
-      if (
-        dims.width < HERO_LIMITS.minWidth ||
-        dims.height < HERO_LIMITS.minHeight
-      ) {
-        errors.push(
-          `Hero image is ${dims.width}×${dims.height}. Minimum is ${HERO_LIMITS.minWidth}×${HERO_LIMITS.minHeight}.`,
-        );
-      }
-      if (dims.width / dims.height < HERO_LIMITS.minAspectRatio) {
-        errors.push(
-          `Hero image (${dims.width}×${dims.height}) is too tall. Use a landscape image. width must be at least ${HERO_LIMITS.minAspectRatio}× height.`,
-        );
-      }
       if (blob.size > HERO_LIMITS.maxBytes) {
-        errors.push(
+        throw new Error(
           `Hero image is ${formatBytes(blob.size)}. Maximum is ${formatBytes(HERO_LIMITS.maxBytes)}. Please compress and re-upload.`,
         );
-      }
-
-      if (errors.length) {
-        throw new Error(errors.join('\n'));
       }
     },
   });
