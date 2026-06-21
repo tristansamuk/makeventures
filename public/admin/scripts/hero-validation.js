@@ -1,7 +1,8 @@
 // preSave event listener that blocks Save when a pending heroImage upload
-// exceeds our file-size limit. Only validates uploads that haven't been
-// committed yet — already-saved hero images are skipped. The threshold and
-// matching error-message value come from HERO_LIMITS in constants.js.
+// fails our constraints (format, file size). Only validates uploads that
+// haven't been committed yet — already-saved hero images are skipped. All
+// thresholds and matching error-message values come from HERO_LIMITS in
+// constants.js.
 
 (() => {
   const { HERO_LIMITS, formatBytes } = window.AdminHelpers;
@@ -18,7 +19,9 @@
     const pending = mediaFiles.find(
       (f) => (f.get('path') || '').split('/').pop() === heroName,
     );
-    return pending ? pending.get('url') : null;
+    if (!pending || !pending.get('url')) return null;
+
+    return { path: heroPath, url: pending.get('url') };
   }
 
   function loadImageBlob(url) {
@@ -32,15 +35,27 @@
   CMS.registerEventListener({
     name: 'preSave',
     handler: async (event) => {
-      const url = resolveHeroImageUrl(event.entry);
-      if (!url) return;
+      const resolved = resolveHeroImageUrl(event.entry);
+      if (!resolved) return;
 
-      const blob = await loadImageBlob(url);
+      const blob = await loadImageBlob(resolved.url);
 
+      const errors = [];
+      const path = resolved.path.toLowerCase();
+      const hasAllowedExt = HERO_LIMITS.allowedExtensions.some((ext) =>
+        path.endsWith(ext),
+      );
+      if (!hasAllowedExt) {
+        errors.push('Hero image must be a JPG/JPEG.');
+      }
       if (blob.size > HERO_LIMITS.maxBytes) {
-        throw new Error(
+        errors.push(
           `Hero image is ${formatBytes(blob.size)}. Maximum is ${formatBytes(HERO_LIMITS.maxBytes)}. Please compress and re-upload.`,
         );
+      }
+
+      if (errors.length) {
+        throw new Error(errors.join('\n'));
       }
     },
   });
