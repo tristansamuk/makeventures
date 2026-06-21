@@ -28,6 +28,10 @@ I also found the panel I was using was a bit slow to charge and the thought was 
 
 The A0 GPIO on the ESP8266 and related output can be a bit inconsistent when measuring voltages so we decided to take Claude Codes suggestion to use an ADC1111 board that uses I2C and is more accurate readings for voltages. 
 
+![](../../assets/overview-medium.jpeg)
+
+
+
 We decided it made sense to collect Solar panel charge, battery charge, humidity, door count and the state of charging or not charging of the battery. Bob and Timmy would then be able to play with all sorts of automations and dashboards on the HA side. 
 
 The mAh of the battery and our related power draw determines how long we will survive with little or no sun. We also decided to make our panel transportable to an area of maximum sunlight.  So we just extended the pannel connections with long wires and enclosed the panels in a frame, allowing us to mount the panel where Bob has the most sun possible. 
