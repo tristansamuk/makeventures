@@ -32,7 +32,7 @@ We decided it made sense to collect Solar panel charge, battery charge, humidity
 
 The mAh of the battery and our related power draw determines how long we will survive with little or no sun. We also decided to make our panel transportable to an area of maximum sunlight.  So we just extended the pannel connections with long wires and enclosed the panels in a frame, allowing us to mount the panel where Bob has the most sun possible. 
 
-
+![](../../assets/panel-setup-medium.jpeg)
 
 
 
