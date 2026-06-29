@@ -2,7 +2,7 @@
 title: whoami
 description: Just a guy with insatiable curiosity about the world and the way things work.
 pubDate: 2026-06-29T11:04:00.000Z
-heroImage: ../../assets/20260610_201826-blog.jpg
+heroImage: ../../assets/img_4279-large.jpeg
 author: Igor Samuk
 ---
 Hello! I'm Igor and I've had the privilege to work in IT for the better part of 40 years. Working as a senior leader in a large IT vendor put me on the front lines of the evolution of compute, storage and networking technologies. 
