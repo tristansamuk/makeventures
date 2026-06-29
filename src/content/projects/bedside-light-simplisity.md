@@ -50,7 +50,7 @@ Only home assistant controlled lights with dimming capability can be assigned to
 
 ### The fun of it
 
-What's kid of funny is I interact almost daily with this device as it has a basic use case and is easy and convenient. Possibly the stuff of good design. I do know I could iterate may times to get the perfect design but some times good enough is sufficient. This was also the first time I used Claude Code to help me. My code was, in a word - flawed - to begin with,  so I learned much from the changes it recommended.  Maybe it's an age thing - but manually dimming has a nice simple feel to it. 
+What's kind of funny is I interact almost daily with this device as it has a basic use case and is easy and convenient. Possibly the stuff of good design. I do know I could iterate may times to get the perfect design but some times good enough is sufficient. This was also the first time I used Claude Code to help me. My code was, in a word - flawed - to begin with,  so I learned much from the changes it recommended.  Maybe it's an age thing - but manually dimming has a nice simple feel to it. 
 
 Here is the code you can use as a base and refine to your liking:
 
