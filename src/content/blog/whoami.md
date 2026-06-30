@@ -3,6 +3,9 @@ title: whoami
 description: Just a guy with insatiable curiosity about the world and the way things work.
 pubDate: 2026-06-29T11:04:00.000Z
 heroImage: ../../assets/img_4279-large.jpeg
+tags:
+  - Building practical home automation, electronics, and IoT projects—one
+    experiment at a time.
 author: Igor Samuk
 ---
 # Welcome!
