@@ -136,5 +136,3 @@ If you're **not** genuinely comfortable working with household AC and how things
 * PVC stilling well (pipe + 90° elbow) and plexiglass electrode carrier
 * Pull-down resistors (output pins), 4.7 kΩ pull-up (DS18B20)
 * Hookup wire, heat-shrink, neutral-cure silicone
-
-*Optional GPIO map — Solenoid GPIO5, Lights GPIO23, Level-board power GPIO16, level outputs GPIO21/GPIO18, DS18B20 data GPIO17.*
