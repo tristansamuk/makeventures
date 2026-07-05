@@ -38,8 +38,6 @@ The mAh of the battery and our related power draw determines how long we will su
 
 ![](../../assets/panel-setup-medium.jpeg)
 
-
-
 #### Future thinking
 
 We have all kinds of ideas of how to make the system even more useful including possibly knowing what titles are being swapped back and forth in the Library. That seems like it might include  image recognition and AI. But alas that may throw us into the cloud which is a bit of a controversy in the HA world.
