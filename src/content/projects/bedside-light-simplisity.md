@@ -1,58 +1,51 @@
 ---
-title: Bedside Light Simplisity
-description: An esphome project using the "older" ESP8266 to manually control
-  i.e. on/off and dim two (bedside) selected homeassistant entity lights.
+title: A Dual Bedside Dimmer Built with ESPHome
+description: "We’ve all been there. It’s 3:00 AM, you need to dim the bedside
+  lamp, and you reach for your smartphone. Suddenly, a blinding blast of blue
+  light shocks you awake. Voice commands aren't an option either unless you want
+  to wake your partner.I wanted a physical, tactile solution: a single, simple
+  control box that could manage both bedside lights from either side of the
+  bed.Here is how I built a dual-zone smart dimmer using an old ESP8266,
+  ESPHome, and a little bit of AI assistance."
 pubDate: 2026-05-14T10:07:00.000Z
 status: in-progress
 heroImage: ../../assets/20260514_102853-3-.jpg
 ---
-# Simple and functional
+## The Goal: Analog Feel, Smart Control
 
-The concept is simple. Enable the user to control both left and right bedside lights from either side with a simple control box. The box has a dial (rotary encoder) that turns the lights off or on and dims them in an analog way. There is a selector button (momentary switch) that selects which of the two lights is the active light (indicated by green and yellow LEDs). 
+The concept is simple but highly functional. The box features a **rotary encoder** (the dial) to turn the lights on/off and dim them with a satisfying, analog feel. A **momentary switch** acts as a selector button to toggle which light you are controlling, indicated by green and yellow LEDs.
 
-There is actually some level of complexity here as it uses an old ESP8266 (using up the last of them) with yaml code that integrates with Home Assistant via the homeassistant platform and lambda calls. Knowing the state of a lamp at time of control matters for a reasonably consistent user experience.
+While it sounds straightforward, achieving a consistent user experience required some under-the-hood complexity. The device integrates with **Home Assistant** using `homeassistant` platforms and lambda calls to track the live state of the lamps. Knowing the state of the lamp at the exact moment of control is crucial for a smooth user experience.
 
-### Inner workings
+## How It Works (The Logic)
 
-Here is a paste of the outline of functionality I have in the code comments - Actually I asked Claude Code to make sure were there :
+To keep the bedside experience seamless, the ESPHome YAML handles a few clever UX tricks:
 
-HOW IT WORKS:
+* **Dual-Zone Control:** Toggle between Light 1 (Guest Room Lamp) and Light 2 (3D Printer Lamp) with the selector button.
+* **The Dial:** Press the encoder to toggle the active light on/off; rotate it to dim or brighten from 0% to 100%.
+* **Boot Drama:** On boot, the LEDs blink back and forth three times just to add a little cinematic flair.
+* **Smart Sleep Timer:** Indicator LEDs turn off after 60 seconds of inactivity so they don't light up the bedroom. Any physical input wakes them back up. 
+* **The 3 AM Rule:** If a light's brightness is changed via the Home Assistant app or an automation, the box's LEDs **stay dark**. Your phone tweaks won't turn the controller into an accidental nightlight.
 
-\# - One "active light" is selected at a time (Light1 or Light2)
+## The Hardware and the AI Sidekick
 
-\# - GreenLED lit = Light1 (guest room lamp) is active
+For the enclosure, I 3D-printed a basic housing. It works perfectly, though it's a bit lightweight. In a future iteration, I’d add some weight to the base so it doesn't slide around when turning the dial.
 
-\# - YellowLED lit = Light2 (3D printer lamp) is active
+The real twist in this project was the code. I used up the last of my ancient **ESP8266** chips for this. My initial YAML code was, frankly, flawed. This was my first time using **Claude Code**, and it was a fantastic learning experience. It helped me clean up my logic and bridge the gap between the physical hardware and Home Assistant's state engine.
 
-\# - SELECTOR button : toggles which light is active, LEDs update to show selection
+## Limitations and Practicality
 
-\# - ENCODER press : toggles the active light ON / OFF
+This controller isn't standalone; it relies entirely on Home Assistant. The lights must already exist in your setup as dimmable entities—whether they are Zigbee, Z-Wave, or a custom controlled LED strip. 
 
-\# - ENCODER rotate : dims or brightens the active light (0-100%)
+## Final Thoughts: "Good Enough" is Great Design
 
-\# - On boot : LEDs blink back and forth 3 times, then settle on active light
+Maybe it’s an age thing, but manually turning a dial just feels better than tapping a glass screen. 
 
-\# - Sleep timer : after 60s of no user input, indicator LEDs go dark (night-friendly).
+What cracks me up is that I interact with this little box almost daily. It solves a basic, boring problem so conveniently that it has become my favorite smart home addition. I could iterate a dozen times to find the "perfect" design, but sometimes, "good enough" is exactly what makes a project perfect
 
-\# Any user input (selector / encoder press / rotary turn) re-lights
+### Roadmap
 
-\# the active LED and restarts the 60s timer. HA-pushed brightness
-
-\# changes do NOT wake the LEDs (so a phone tweak at 3am stays dark).
-
-The blinking is really just to add some drama LOL, but the sleep timer was important because I found the LED lights were a bit bright at night so I just assumed the user was finished playing with lights after 60 seconds and the LED can just go to sleep until any action on the controls wakes them again.
-
-I made a fairly crude box on the 3d printer to house everything including the dimming dial. But it seems to work well although it's a bit lite and could be more stable so it does not move around when you touch it.
-
-### Limitations
-
-Only home assistant controlled lights with dimming capability can be assigned to the code. So Zigbee, Z-wave or even some sort of MOSFET controlled led light. The entity has to be existing and controllable from HA. 
-
-### The fun of it
-
-What's kind of funny is I interact almost daily with this device as it has a basic use case and is easy and convenient. Possibly the stuff of good design. I do know I could iterate may times to get the perfect design but some times good enough is sufficient. This was also the first time I used Claude Code to help me. My code was, in a word - flawed - to begin with,  so I learned much from the changes it recommended.  Maybe it's an age thing - but manually dimming has a nice simple feel to it. 
-
-Here is the code you can use as a base and refine to your liking:
+From my learnings with the MVDialer project, this kind of device will be usefull build with a battery and ESP32 level controller (where sleep and deep sleep) can be used. Making it mobile rather than a USB powered device just makes sense and means my partner can just grab it and put it on her side. Hmmm... maybe I should build one for each of us!
 
 ```
 ################################################################################
