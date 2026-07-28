@@ -1,5 +1,5 @@
 ---
-title: Dial Remote
+title: Dial an IOT
 description: "A convenience device loosely based on the bed-sider idea for the cottage. "
 pubDate: 2026-07-11T11:22:00.000Z
 status: in-progress
