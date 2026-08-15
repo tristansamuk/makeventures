@@ -4,6 +4,7 @@ description: Modernize and expand on data collection of a front-lawn Library
   Exchange with ESPHOME and Home Assistant
 pubDate: 2026-04-07
 status: in-progress
+completedDate: 2026-07-11T11:32:00.000Z
 heroImage: ../../assets/screenshot-2026-04-06-at-10.09.18 pm.png
 ---
 # In the Beginning
@@ -37,8 +38,6 @@ We decided it made sense to collect Solar panel charge, battery charge, humidity
 The mAh of the battery and our related power draw determines how long we will survive with little or no sun. We also decided to make our panel transportable to an area of maximum sunlight.  So we just extended the pannel connections with long wires and enclosed the panels in a frame, allowing us to mount the panel where Bob has the most sun possible. 
 
 ![](../../assets/panel-setup-medium.jpeg)
-
-
 
 #### Future thinking
 
