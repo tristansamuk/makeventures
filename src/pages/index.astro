@@ -1,81 +1,95 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import HomeSection from '../components/HomeSection.astro';
-import PostRow from '../components/PostRow.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import HomeSection from "../components/HomeSection.astro";
+import PostRow from "../components/PostRow.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import type { Project } from "./projects/index.astro";
 
 // ── Featured projects ── edit this array to change which projects are shown
-const FEATURED_PROJECT_IDS = [
-	'beside-lights',
-	'lab-desk',
-	'outdoor-stair-decay',
+const FEATURED_PROJECT_IDS: string[] = [
+  // "beside-lights",
+  // "lab-desk",
+  // "outdoor-stair-decay",
 ];
 
 const [allProjects, allPosts] = await Promise.all([
-	getCollection('projects'),
-	getCollection('blog'),
+  getCollection("projects"),
+  getCollection("blog"),
 ]);
 
-const featuredProjects = FEATURED_PROJECT_IDS
-	.map(id => allProjects.find(p => p.id === id))
-	.filter((p): p is NonNullable<typeof p> => p !== undefined);
+/**
+ * Filters three featured projects to display on the homepage.
+ * If the `FEATURED_PROJECT_IDS` array is empty, falls back to the three
+ * most recent projects.
+ * @param allProjects: `Project[]`
+ */
+const getProjectsForDisplay = (allProjects: Project[]) => {
+  if (!allProjects.length) return [];
+
+  if (!FEATURED_PROJECT_IDS.length) {
+    return allProjects.slice(0, 3);
+  }
+
+  return FEATURED_PROJECT_IDS.map((id) =>
+    allProjects.find((proj) => proj.id === id),
+  );
+};
+
+const projects = getProjectsForDisplay(allProjects);
 
 const posts = allPosts.sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const recentPosts = posts.slice(0, 3);
 
+const recentPosts = posts.slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<Hero />
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+    ></script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <Hero />
 
-			<HomeSection
-				title="Featured Projects"
-				href="/projects"
-				linkLabel="All projects"
-				layout="grid"
-			>
-				{featuredProjects.map((project) => (
-					<ProjectCard project={project} />
-				))}
-			</HomeSection>
+      <HomeSection
+        title="Featured Projects"
+        href="/projects"
+        linkLabel="All projects"
+        layout="grid"
+      >
+        {projects.map((proj) => proj && <ProjectCard project={proj} />)}
+      </HomeSection>
 
-			<HomeSection
-				title="Recent Posts"
-				href="/blog"
-				linkLabel="All posts"
-				layout="list"
-			>
-				{recentPosts.map((post) => (
-					<PostRow post={post} />
-				))}
-			</HomeSection>
-		</main>
-		<Footer />
-		<script is:inline>
-			if (window.netlifyIdentity) {
-				window.netlifyIdentity.on("init", (user) => {
-					if (!user) {
-						window.netlifyIdentity.on("login", () => {
-							document.location.href = "/admin/index.html";
-						});
-					}
-				});
-			}
-		</script>
-	</body>
+      <HomeSection
+        title="Recent Posts"
+        href="/blog"
+        linkLabel="All posts"
+        layout="list"
+      >
+        {recentPosts.map((post) => <PostRow post={post} />)}
+      </HomeSection>
+    </main>
+    <Footer />
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/index.html";
+            });
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
