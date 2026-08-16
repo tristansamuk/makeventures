@@ -16,7 +16,7 @@ Requires Node >= 22.12.0. No test runner is configured. Always run `pnpm build` 
 
 This is an **Astro 6** site deployed to Netlify with `output: "server"` via `@astrojs/netlify`. All content pages (home, blog, projects, about, 404) explicitly opt into prerendering with `export const prerender = true;`, so they still build as static HTML with zero client-side JS by default. Only EmDash's own routes (`/_emdash/*`) render dynamically. When adding a new page under `src/pages/`, add `export const prerender = true;` unless it genuinely needs per-request rendering.
 
-**Key integrations:** `@astrojs/mdx`, `@astrojs/sitemap`, `@astrojs/rss`, `@astrojs/react`, `@astrojs/netlify` (adapter), `emdash` (CMS), `sharp` (image optimization)
+**Key integrations:**: `@astrojs/sitemap`, `@astrojs/rss`, `@astrojs/react`, `@astrojs/netlify` (adapter), `emdash` (CMS), `sharp` (image optimization)
 
 **Routing model:**
 
@@ -28,8 +28,8 @@ This is an **Astro 6** site deployed to Netlify with `output: "server"` via `@as
 
 **Content Collections:**
 
-- Blog posts live in `src/content/blog/` as `.md` or `.mdx` files
-- Projects live in `src/content/projects/` as `.md` or `.mdx` files
+- Blog posts live in `src/content/blog/` as `.md` files
+- Projects live in `src/content/projects/` as `.md` files
 - Schema defined in `src/content.config.ts` using Astro's glob loader and Zod
 - Blog required fields: `title`, `description`, `pubDate`
 - Blog optional fields: `updatedDate`, `heroImage`, `tags` (string[]), `author`

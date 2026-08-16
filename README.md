@@ -12,7 +12,7 @@ A personal maker blog covering IoT, home labs, videography, and coding. Built wi
 ## Stack
 
 - **Framework:** Astro 6 (static site generation — all pages pre-built, no server needed)
-- **Content:** Markdown/MDX files in `src/content/blog/` (posts) and `src/content/projects/` (projects)
+- **Content:** Markdown files in `src/content/blog/` (posts) and `src/content/projects/` (projects)
 - **Styling:** Custom CSS design system with dark mode support
 - **CMS:** [Decap CMS](https://decapcms.org/) — Git-based headless CMS at `/admin/`
 - **Deployment:** Netlify (auto-deploys on push to `main` and `staging`)
@@ -32,8 +32,8 @@ src/
 │       ├── index.astro         → /projects
 │       └── [...slug].astro     → /projects/project-slug
 ├── content/
-│   ├── blog/           # Blog posts as .md / .mdx files
-│   └── projects/       # Project pages as .md / .mdx files
+│   ├── blog/           # Blog posts as .md files
+│   └── projects/       # Project pages as .md files
 ├── components/         # Reusable UI pieces (header, footer, post cards, etc.)
 ├── layouts/            # Page templates (BlogPost.astro, ProjectPost.astro)
 └── styles/             # Global CSS, design tokens, theme variables

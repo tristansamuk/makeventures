@@ -1,6 +1,5 @@
 // @ts-check
 
-import mdx from "@astrojs/mdx";
 import netlify from "@astrojs/netlify";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
@@ -18,7 +17,6 @@ export default defineConfig({
     remarkPlugins: [remarkVideo],
   },
   integrations: [
-    mdx(),
     sitemap({
       filter: (page) => !page.includes("/admin/"),
     }),
