@@ -53,8 +53,6 @@ const recentPosts = posts.slice(0, 3);
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-    ></script>
   </head>
   <body>
     <Header />
@@ -80,16 +78,5 @@ const recentPosts = posts.slice(0, 3);
       </HomeSection>
     </main>
     <Footer />
-    <script is:inline>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", (user) => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/index.html";
-            });
-          }
-        });
-      }
-    </script>
   </body>
 </html>

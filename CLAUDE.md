@@ -16,7 +16,7 @@ Requires Node >= 22.12.0. No test runner is configured. Always run `pnpm build` 
 
 This is an **Astro 6** static site (SSG) — all routes are pre-built at build time, zero client-side JS by default.
 
-**Key integrations:** `@astrojs/mdx`, `@astrojs/sitemap`, `@astrojs/rss`, `sharp` (image optimization), `decap-cms-app` (Git-based CMS at `/admin/`)
+**Key integrations:** `@astrojs/mdx`, `@astrojs/sitemap`, `@astrojs/rss`, `sharp` (image optimization)
 
 **Routing model:**
 
@@ -118,31 +118,15 @@ This is an **Astro 6** static site (SSG) — all routes are pre-built at build t
 - Featured projects section shows 3 projects by slug (configured via `FEATURED_PROJECT_IDS` in `index.astro`) using `ProjectCard`
 - Topics strip renders all unique tags as pill links below the CTA
 
-## Decap CMS
+## Admin CMS
 
-A Git-based headless CMS served from `public/admin/`. Accessible at `/admin/` on the deployed site.
-
-**Backend:** Netlify Git Gateway — commits directly to the `main` branch. Auth via Netlify Identity (widget loaded in `BaseHead.astro`, login redirect in `Footer.astro`).
-
-**Configuration:** `public/admin/config.yml` defines two collections (`blog`, `projects`) with fields that mirror the Zod schemas in `content.config.ts`. When updating content schemas, keep both files in sync.
-
-**Key files:**
-
-- `public/admin/config.yml` — collection definitions, backend settings, media folder config
-- `public/admin/index.html` — CMS entry point with custom React preview templates for both collections and a video embed editor component
-- `public/admin/preview.css` — preview styles matching the site's design tokens and fonts
-
-**Media:** Images uploaded via the CMS go to `src/assets/` (configured via `media_folder` / `public_folder` in `config.yml`).
-
-**Editorial workflow:** Currently disabled. Posts publish directly to `main` on save.
+Decap CMS has been removed. The site is being migrated to EmDash CMS; this section will be updated once that integration lands.
 
 ## Video embeds
 
 A custom remark plugin (`src/plugins/remark-video.mjs`) converts shortcodes in Markdown into responsive iframe embeds. Supports YouTube and Vimeo URLs.
 
 **Syntax:** `{{< video "https://youtube.com/watch?v=abc123" "Optional title" >}}`
-
-The Decap CMS video editor widget (defined in `public/admin/index.html`) produces this same shortcode format, so videos added through the CMS work automatically.
 
 ## Tags
 
