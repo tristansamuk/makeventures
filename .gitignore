@@ -25,3 +25,10 @@ pnpm-debug.log*
 .github/
 .vscode/
 .zed/
+
+# Local Netlify folder
+.netlify
+
+# EmDash local database and media uploads
+data.db
+uploads/

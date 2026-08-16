@@ -10,6 +10,8 @@ import ProjectCard from "../components/ProjectCard.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import type { Project } from "./projects/index.astro";
 
+export const prerender = true;
+
 // ── Featured projects ── edit this array to change which projects are shown
 const FEATURED_PROJECT_IDS: string[] = [
   // "beside-lights",

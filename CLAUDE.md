@@ -14,9 +14,9 @@ Requires Node >= 22.12.0. No test runner is configured. Always run `pnpm build` 
 
 ## Architecture
 
-This is an **Astro 6** static site (SSG) — all routes are pre-built at build time, zero client-side JS by default.
+This is an **Astro 6** site deployed to Netlify with `output: "server"` via `@astrojs/netlify`. All content pages (home, blog, projects, about, 404) explicitly opt into prerendering with `export const prerender = true;`, so they still build as static HTML with zero client-side JS by default. Only EmDash's own routes (`/_emdash/*`) render dynamically. When adding a new page under `src/pages/`, add `export const prerender = true;` unless it genuinely needs per-request rendering.
 
-**Key integrations:** `@astrojs/mdx`, `@astrojs/sitemap`, `@astrojs/rss`, `sharp` (image optimization)
+**Key integrations:** `@astrojs/mdx`, `@astrojs/sitemap`, `@astrojs/rss`, `@astrojs/react`, `@astrojs/netlify` (adapter), `emdash` (CMS), `sharp` (image optimization)
 
 **Routing model:**
 
