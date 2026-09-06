@@ -50,6 +50,22 @@ Once you survive the hardware assembly and flash ESPHome, you can go to town wit
 
 •	Distance-Aware Automations: Because the LD2410 reports exact distance, you can set up actions that trigger only when you step right up to a desk or workbench, ignoring people just walking past the doorway.
 
-The plan is to use this for when we first arrive as an “opening automation” – it will start small but here are some of the things that I could automate when we first arrive and in order of what might happen (after any external automations like landscape lights etc).
+The plan is to use this for when we first arrive as an “opening automation” – it will start small but here are some of the things that I could automate when we first arrive and in order of what might happen (after any external automations like landscape lights etc). Some situations will need an over-ride the actions like when I ask someone to enter the cottage breifly while I am away. So conditions and flags will be key.
 
-The basic knowledge that there is presence is a good one - a simple one time notification that there is presence is helpful. Starting up some basic things like lights, fans etc will also help - but there has to be some sort of over-write flag so none of those actions happen if you don't want them to.
+Something like: If we sense presence and that presence persists for more than 5 seconds... 
+
+\- Notify the owner
+
+\- Turn on main lights if it's sundown
+
+\- Turn on the bunky path lights
+
+\- Chime some sort of welcom
+
+\- Bring up a list of items on the TV of things the first entry person(s) are to do to get the cottage started or maybe do this with voice
+
+If we know there has been no movement for 2hrs turn off things we don't need running like local lights and fans
+
+The list goes on. 
+
+The fun part is figuring out how to deal with those unique scenarios for cottage automation. Think long periods of vacancy, weather events, fire ratings, camera activity, security, water management, heat management etc.
