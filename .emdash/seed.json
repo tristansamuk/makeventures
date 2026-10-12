@@ -1,0 +1,143 @@
+{
+  "$schema": "https://emdashcms.com/seed.schema.json",
+  "version": "1",
+  "meta": {
+    "name": "MakeVentures",
+    "description": "Blog posts and projects for makeventures.ca"
+  },
+  "settings": {
+    "title": "MakeVentures"
+  },
+  "collections": [
+    {
+      "slug": "posts",
+      "label": "Posts",
+      "labelSingular": "Post",
+      "urlPattern": "/blog/{slug}",
+      "supports": ["drafts", "revisions", "preview", "scheduling", "search", "seo"],
+      "dateField": "pub_date",
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "description",
+          "label": "Description",
+          "type": "text",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "featured_image",
+          "label": "Hero Image",
+          "type": "image",
+          "required": true
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        },
+        {
+          "slug": "pub_date",
+          "label": "Publish Date",
+          "type": "datetime",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "slug": "updated_date",
+          "label": "Updated Date",
+          "type": "datetime"
+        },
+        {
+          "slug": "author",
+          "label": "Author",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "slug": "projects",
+      "label": "Projects",
+      "labelSingular": "Project",
+      "urlPattern": "/projects/{slug}",
+      "supports": ["drafts", "revisions", "preview", "scheduling", "search", "seo"],
+      "dateField": "pub_date",
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "nav_title",
+          "label": "Nav Title",
+          "type": "string"
+        },
+        {
+          "slug": "description",
+          "label": "Description",
+          "type": "text",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "featured_image",
+          "label": "Hero Image",
+          "type": "image",
+          "required": true
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        },
+        {
+          "slug": "pub_date",
+          "label": "Publish Date",
+          "type": "datetime",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "slug": "project_status",
+          "label": "Status",
+          "type": "select",
+          "defaultValue": "in-progress",
+          "validation": {
+            "options": ["completed", "in-progress", "paused"]
+          }
+        },
+        {
+          "slug": "completed_date",
+          "label": "Completed Date",
+          "type": "datetime"
+        },
+        {
+          "slug": "featured_stat",
+          "label": "Featured Stat",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "taxonomies": [
+    {
+      "name": "tag",
+      "label": "Tags",
+      "labelSingular": "Tag",
+      "hierarchical": false,
+      "collections": ["posts"]
+    }
+  ]
+}
