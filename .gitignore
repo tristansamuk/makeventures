@@ -31,4 +31,9 @@ pnpm-debug.log*
 
 # EmDash local database and media uploads
 data.db
+data.db-shm
+data.db-wal
 uploads/
+
+# EmDash build output
+.emdash/migrations.json
