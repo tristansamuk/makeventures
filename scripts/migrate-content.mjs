@@ -18,6 +18,9 @@ import remarkParse from "remark-parse";
 import { unified } from "unified";
 import { parse as parseYaml } from "yaml";
 
+// Date-only frontmatter values ("Mar 20 2026") must not shift with the machine's timezone.
+process.env.TZ = "UTC";
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = path.join(ROOT, "migration/content");
 const BASE_URL = (process.env.EMDASH_URL ?? "http://localhost:4321").replace(/\/$/, "");
