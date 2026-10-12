@@ -1,32 +1,29 @@
 // @ts-check
 
-import netlify from "@astrojs/netlify";
-import sitemap from "@astrojs/sitemap";
-import { defineConfig } from "astro/config";
-import { remarkVideo } from "./src/plugins/remark-video.mjs";
+import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
-import emdash, { local } from "emdash/astro";
-import { sqlite } from "emdash/db";
+import sitemap from "@astrojs/sitemap";
+import { d1, r2 } from "@emdash-cms/cloudflare";
+import { defineConfig } from "astro/config";
+import emdash from "emdash/astro";
+import { remarkVideo } from "./src/plugins/remark-video.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://makeventures.netlify.app",
+  site: "https://makeventures.ca",
   output: "server",
-  adapter: netlify(),
+  adapter: cloudflare(),
   markdown: {
     remarkPlugins: [remarkVideo],
   },
   integrations: [
     sitemap({
-      filter: (page) => !page.includes("/admin/"),
+      filter: (page) => !page.includes("/_emdash/"),
     }),
     react(),
     emdash({
-      database: sqlite({ url: "file:./data.db" }),
-      storage: local({
-        directory: "./uploads",
-        baseUrl: "/_emdash/api/media/file",
-      }),
+      database: d1({ binding: "DB" }),
+      storage: r2({ binding: "MEDIA" }),
     }),
   ],
 });

@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "makeventures",
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "makeventures",
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "makeventures-media",
+    },
+  ],
+  // General maintenance cron trigger
+  "triggers": {
+    "crons": ["* * * * *"],
+  },
+  // Named environments do not inherit bindings, so each repeats them.
+  "env": {
+    "staging": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "makeventures-staging",
+        },
+      ],
+      "r2_buckets": [
+        {
+          "binding": "MEDIA",
+          "bucket_name": "makeventures-media-staging",
+        },
+      ],
+      "triggers": {
+        "crons": ["* * * * *"],
+      },
+    },
+  },
+}

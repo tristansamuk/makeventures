@@ -26,8 +26,10 @@ pnpm-debug.log*
 .vscode/
 .zed/
 
-# Local Netlify folder
-.netlify
+# Local Wrangler state and secrets
+.wrangler/
+.dev.vars
+.dev.vars.*
 
 # EmDash local database and media uploads
 data.db

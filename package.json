@@ -12,17 +12,21 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/netlify": "^7.0.13",
+    "@astrojs/cloudflare": "^13.7.0",
     "@astrojs/react": "^5.0.7",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
+    "@emdash-cms/cloudflare": "1.2.0",
     "@fontsource-variable/inter": "^5.2.8",
     "astro": "^6.4.8",
-    "better-sqlite3": "^13.0.3",
     "emdash": "^1.2.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "sharp": "^0.34.3",
     "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261012.1",
+    "wrangler": "^4.149.0"
   }
 }
