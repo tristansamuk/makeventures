@@ -1,15 +1,30 @@
 ---
+import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import { Image as MediaImage } from 'emdash/ui';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import TagList from '../components/TagList.astro';
+import { type HeroImage, type Tag, mediaUrl } from '../lib/content';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	/** A local asset (static pages) or an EmDash media value (posts). */
+	heroImage?: ImageMetadata | HeroImage;
+	tags?: Tag[];
+	author?: string;
+}
 
 const { title, description, pubDate, updatedDate, heroImage, tags, author } = Astro.props;
+
+const isLocalImage = (image: ImageMetadata | HeroImage): image is ImageMetadata =>
+	'format' in image;
+const heroUrl = heroImage && (isLocalImage(heroImage) ? heroImage.src : mediaUrl(heroImage));
 ---
 
 <html lang="en">
@@ -23,7 +38,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 			datePublished: pubDate.toISOString(),
 			...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
 			...(author ? { author: { '@type': 'Person', name: author } } : {}),
-			...(heroImage ? { image: new URL(heroImage.src, Astro.site).toString() } : {}),
+			...(heroUrl ? { image: new URL(heroUrl, Astro.site).toString() } : {}),
 			url: new URL(Astro.url.pathname, Astro.site).toString(),
 		})} />
 	</head>
@@ -34,7 +49,11 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 			<article>
 				{heroImage && (
 					<div class="hero-image">
-						<Image width={1200} height={630} src={heroImage} alt="" />
+						{isLocalImage(heroImage) ? (
+							<Image width={1200} height={630} src={heroImage} alt="" />
+						) : (
+							<MediaImage width={1200} height={630} image={heroImage} alt="" priority />
+						)}
 					</div>
 				)}
 				<div class="prose">
@@ -81,6 +100,9 @@ const { title, description, pubDate, updatedDate, heroImage, tags, author } = As
 	.hero-image img {
 		width: 100%;
 		height: auto;
+		/* Hold the hero's shape even when the image service returns the original uncropped. */
+		aspect-ratio: 1200 / 630;
+		object-fit: cover;
 		border-radius: 0;
 	}
 

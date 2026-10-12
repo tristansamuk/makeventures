@@ -1,32 +1,29 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import PostCard from '../../../components/PostCard.astro';
 import { SITE_TITLE } from '../../../consts';
+import { getPosts, getTag } from '../../../lib/content';
 
-export const prerender = true;
+const param = Astro.params.tag ?? '';
+const tag = await getTag(param);
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	const tags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
-	return tags.map((tag) => ({ params: { tag } }));
+if (!tag) {
+	// Tag URLs used the tag's original casing before the move to EmDash (`/blog/tags/AI/`).
+	const legacy = param !== param.toLowerCase() && (await getTag(param.toLowerCase()));
+	return legacy ? Astro.redirect(`/blog/tags/${legacy.slug}/`, 301) : Astro.rewrite('/404');
 }
 
-const { tag } = Astro.params;
-
-const posts = (await getCollection('blog'))
-	.filter((p) => p.data.tags?.includes(tag!))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const posts = await getPosts({ tag: tag.slug });
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`#${tag} — ${SITE_TITLE}`}
-			description={`All posts tagged with "${tag}"`}
+			title={`#${tag.label} — ${SITE_TITLE}`}
+			description={`All posts tagged with "${tag.label}"`}
 		/>
 	</head>
 	<body>
@@ -34,7 +31,7 @@ const posts = (await getCollection('blog'))
 		<main>
 			<header class="page-header">
 				<p class="page-eyebrow">Tag</p>
-				<h1>{tag}</h1>
+				<h1>{tag.label}</h1>
 				<p class="page-subtitle">
 					{posts.length} post{posts.length !== 1 ? 's' : ''}
 				</p>
