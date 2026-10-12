@@ -8,9 +8,7 @@ import HomeSection from "../components/HomeSection.astro";
 import PostRow from "../components/PostRow.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
-import type { Project } from "./projects/index.astro";
-
-export const prerender = true;
+import { type Project, getProjects } from "../lib/content";
 
 // ── Featured projects ── edit this array to change which projects are shown
 const FEATURED_PROJECT_IDS: string[] = [
@@ -20,7 +18,7 @@ const FEATURED_PROJECT_IDS: string[] = [
 ];
 
 const [allProjects, allPosts] = await Promise.all([
-  getCollection("projects"),
+  getProjects(),
   getCollection("blog"),
 ]);
 
@@ -38,7 +36,7 @@ const getProjectsForDisplay = (allProjects: Project[]) => {
   }
 
   return FEATURED_PROJECT_IDS.map((id) =>
-    allProjects.find((proj) => proj.id === id),
+    allProjects.find((proj) => proj.slug === id),
   );
 };
 

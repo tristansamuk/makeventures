@@ -14,6 +14,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { EmDashClient } from "emdash/client";
 import remarkGfm from "remark-gfm";
+import sharp from "sharp";
 import remarkParse from "remark-parse";
 import { unified } from "unified";
 import { parse as parseYaml } from "yaml";
@@ -55,7 +56,8 @@ function inlineToSpans(nodes, markDefs, marks = []) {
   for (const node of nodes) {
     switch (node.type) {
       case "text":
-        spans.push({ _type: "span", _key: key(), text: node.value, marks });
+        // A newline inside a text node is a soft wrap in the source, not a line break.
+        spans.push({ _type: "span", _key: key(), text: node.value.replace(/\s*\n\s*/g, " "), marks });
         break;
       case "inlineCode":
         spans.push({ _type: "span", _key: key(), text: node.value, marks: [...marks, "code"] });
@@ -128,7 +130,8 @@ async function blocksFrom(nodes, ctx, list) {
             _key: key(),
             asset: { _ref: media.id, url: media.src },
             alt: only.alt || undefined,
-            caption: only.title || undefined,
+            // Markdown image titles were tooltips, not visible captions.
+            title: only.title || undefined,
             width: media.width,
             height: media.height,
           });
@@ -226,6 +229,17 @@ async function readEntries(folder) {
 // EmDash writes
 // ---------------------------------------------------------------------------
 
+/**
+ * EmDash records an upload's raw pixel dimensions and ignores EXIF rotation, so
+ * a photo taken sideways would be laid out with the wrong shape. Bake the
+ * rotation into the pixels for those; leave every other file untouched.
+ */
+async function uprightImage(bytes) {
+  const { orientation = 1 } = await sharp(bytes).metadata();
+  if (orientation === 1) return bytes;
+  return sharp(bytes).rotate().jpeg({ quality: 92 }).toBuffer();
+}
+
 function createMediaResolver(client, existing, stats) {
   const byFilename = new Map(existing.map((item) => [item.filename, item]));
   let dryId = 0;
@@ -237,7 +251,7 @@ function createMediaResolver(client, existing, stats) {
     if (item) {
       stats.mediaSkipped.add(filename);
     } else {
-      const bytes = await readFile(file);
+      const bytes = await uprightImage(await readFile(file));
       item = DRY_RUN
         ? { id: `dry-${dryId++}`, storageKey: filename, filename }
         : await client.mediaUpload(new Uint8Array(bytes), filename);

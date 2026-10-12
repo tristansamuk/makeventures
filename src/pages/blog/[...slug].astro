@@ -1,5 +1,5 @@
 ---
-import { PortableText } from 'emdash/ui';
+import Body from '../../components/Body.astro';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { getPost } from '../../lib/content';
 
@@ -12,5 +12,5 @@ if (!post) {
 ---
 
 <BlogPost {...post}>
-	<PortableText value={post.content} />
+	<Body value={post.content} />
 </BlogPost>
