@@ -240,6 +240,31 @@ async function uprightImage(bytes) {
   return sharp(bytes).rotate().jpeg({ quality: 92 }).toBuffer();
 }
 
+/**
+ * Upload an image the way the admin does: with its dimensions and a small
+ * preview the server decodes for the blur placeholder. Without the preview the
+ * server decodes the full photo, which takes far more CPU than the Workers Free
+ * plan allows a request. `EmDashClient.mediaUpload` cannot send these fields,
+ * so this posts the form through the client's authenticated transport.
+ */
+async function uploadWithPreview(client, bytes, filename) {
+  const { width, height, format } = await sharp(bytes).metadata();
+  const preview = await sharp(bytes).resize(64, 64, { fit: "inside" }).jpeg({ quality: 70 }).toBuffer();
+
+  const form = new FormData();
+  form.append("file", new Blob([bytes], { type: `image/${format}` }), filename);
+  form.append("width", String(width));
+  form.append("height", String(height));
+  form.append("thumbnail", new Blob([preview], { type: "image/jpeg" }), `preview-${filename}`);
+
+  const request = new Request(`${BASE_URL}/_emdash/api/media`, { method: "POST", body: form });
+  const response = await client.transport.fetch(request);
+  if (!response.ok) {
+    throw new Error(`Uploading ${filename} failed: ${response.status} ${await response.text()}`);
+  }
+  return (await response.json()).data.item;
+}
+
 function createMediaResolver(client, existing, stats) {
   const byFilename = new Map(existing.map((item) => [item.filename, item]));
   let dryId = 0;
@@ -254,7 +279,7 @@ function createMediaResolver(client, existing, stats) {
       const bytes = await uprightImage(await readFile(file));
       item = DRY_RUN
         ? { id: `dry-${dryId++}`, storageKey: filename, filename }
-        : await client.mediaUpload(new Uint8Array(bytes), filename);
+        : await uploadWithPreview(client, bytes, filename);
       byFilename.set(filename, item);
       stats.mediaUploaded.add(filename);
     }
