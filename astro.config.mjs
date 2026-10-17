@@ -13,6 +13,21 @@ export default defineConfig({
   site: "https://makeventures.ca",
   output: "server",
   adapter: cloudflare(),
+  // Astro only resizes images whose URL is on this allow-list. EmDash serves
+  // media from each environment's own origin, so list every place the site
+  // runs. The production workers.dev entry is only needed until makeventures.ca
+  // points at Cloudflare.
+  image: {
+    remotePatterns: [
+      "makeventures.ca",
+      "makeventures-staging.tsamuk.workers.dev",
+      "makeventures.tsamuk.workers.dev",
+    ].map((hostname) => ({
+      protocol: "https",
+      hostname,
+      pathname: "/_emdash/api/media/file/**",
+    })),
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes("/_emdash/"),
