@@ -1,0 +1,14 @@
+---
+import { PortableText } from 'emdash/ui';
+import type { Body } from '../lib/content';
+import CodeBlock from './portable-text/CodeBlock.astro';
+import VideoEmbed from './portable-text/VideoEmbed.astro';
+
+interface Props {
+	value: Body;
+}
+
+const { value } = Astro.props;
+---
+
+<PortableText {value} components={{ type: { code: CodeBlock, embed: VideoEmbed } }} />

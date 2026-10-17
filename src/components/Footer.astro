@@ -26,18 +26,6 @@ const today = new Date();
   src="https://static.cloudflareinsights.com/beacon.min.js"
   data-cf-beacon='{"token": "dff56f334387477599d14cb531d75eab"}'></script>
 
-<script is:inline>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", function (user) {
-      if (!user) {
-        window.netlifyIdentity.on("login", function () {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-  }
-</script>
-
 <style>
   footer {
     background-color: var(--color-bg);

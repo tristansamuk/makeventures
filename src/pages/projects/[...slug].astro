@@ -1,21 +1,16 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import Body from '../../components/Body.astro';
 import ProjectPost from '../../layouts/ProjectPost.astro';
+import { getProject } from '../../lib/content';
 
-export async function getStaticPaths() {
-	const projects = await getCollection('projects');
-	return projects.map((project) => ({
-		params: { slug: project.id },
-		props: project,
-	}));
+const { slug } = Astro.params;
+const project = slug ? await getProject(slug) : undefined;
+
+if (!project) {
+	return Astro.rewrite('/404');
 }
-
-type Props = CollectionEntry<'projects'>;
-
-const project = Astro.props;
-const { Content } = await render(project);
 ---
 
-<ProjectPost {...project.data}>
-	<Content />
+<ProjectPost {...project}>
+	<Body value={project.content} />
 </ProjectPost>

@@ -269,6 +269,13 @@ blockquote {
   color: var(--color-ink-muted);
 }
 
+/* EmDash renders a one-paragraph quote without the inner <p> that Markdown
+   produced. Add that paragraph's margins back so quotes keep their spacing. */
+.prose blockquote:not(:has(> p)) {
+  padding-top: calc(var(--sp-2) + 1em);
+  padding-bottom: calc(var(--sp-2) + var(--sp-6));
+}
+
 code {
   font-family: var(--font-mono);
   font-size: 0.85em;
@@ -305,6 +312,30 @@ pre > code {
 table {
   width: 100%;
   border-collapse: collapse;
+}
+
+/* EmDash's table block ships its own light-theme look (borders, padding,
+   striped rows). Reset it to the site's plain table. `!important` is needed
+   because the component's scoped styles outrank anything written here. */
+.prose .emdash-table-wrapper {
+  margin-block: 0 !important;
+}
+.prose .emdash-table {
+  font-size: inherit !important;
+}
+.prose .emdash-table th,
+.prose .emdash-table td {
+  border: 0 !important;
+  padding: 1px !important;
+  vertical-align: middle !important;
+  background: none !important;
+}
+.prose .emdash-table th {
+  text-align: center !important;
+  font-weight: 700 !important;
+}
+.prose .emdash-table tbody tr {
+  background: none !important;
 }
 
 textarea,
