@@ -10,13 +10,17 @@ pnpm build      # Build production site to ./dist/
 pnpm preview    # Preview production build locally
 ```
 
-Requires Node >= 22.12.0. No test runner is configured. Always run `pnpm build` after making changes to verify the site compiles cleanly before finishing a task.
+Requires Node >= 22.16.0. No test runner is configured. Always run `pnpm build` after making changes to verify the site compiles cleanly before finishing a task.
 
 ## Architecture
 
-This is an **Astro 6** site deployed to Netlify with `output: "server"` via `@astrojs/netlify`. All content pages (home, blog, projects, about, 404) explicitly opt into prerendering with `export const prerender = true;`, so they still build as static HTML with zero client-side JS by default. Only EmDash's own routes (`/_emdash/*`) render dynamically. When adding a new page under `src/pages/`, add `export const prerender = true;` unless it genuinely needs per-request rendering.
+This is an **Astro 6** site with `output: "server"`, deployed to **Cloudflare Workers** via `@astrojs/cloudflare` (pinned to 13.x; 14.x needs Astro 7). Content lives in **EmDash**: a D1 database (binding `DB`) and an R2 bucket for media (binding `MEDIA`), configured in `astro.config.mjs` and `wrangler.jsonc`. Pages that show content render on each request, so a publish in the admin appears immediately; pages are still zero client-side JS by default. When adding a page that reads EmDash content, do **not** add `export const prerender = true;` — a prerendered page only contains what was in the database at build time. Fully static pages may prerender.
 
-**Key integrations:**: `@astrojs/sitemap`, `@astrojs/rss`, `@astrojs/react`, `@astrojs/netlify` (adapter), `emdash` (CMS), `sharp` (image optimization)
+`/about` is prerendered. `/404` renders on request because content routes rewrite to it (`Astro.rewrite('/404')`), and Astro cannot rewrite an on-demand route to a prerendered one.
+
+**Environments:** `wrangler.jsonc` defines production (`makeventures`) and `env.staging` (`makeventures-staging`), each with its own database and bucket. The environment is chosen at **build** time: build staging with `CLOUDFLARE_ENV=staging pnpm build`.
+
+**Key integrations:**: `@astrojs/sitemap`, `@astrojs/rss`, `@astrojs/react` (needed by the EmDash admin), `@astrojs/cloudflare` (adapter), `emdash` + `@emdash-cms/cloudflare` (CMS), `sharp` (build-time images for prerendered pages)
 
 **Routing model:**
 
@@ -24,18 +28,18 @@ This is an **Astro 6** site deployed to Netlify with `output: "server"` via `@as
 - `src/pages/blog/[...slug].astro` — dynamic routes for individual blog posts
 - `src/pages/blog/tags/[tag].astro` — dynamic tag archive pages (one per tag)
 - `src/pages/projects/[...slug].astro` — dynamic routes for individual projects
-- Auto-generated `/rss.xml` and `/sitemap-index.xml`
+- `/rss.xml` — built on request from EmDash posts
+- `/sitemap-index.xml` (`@astrojs/sitemap`, fixed pages only) and `/sitemap.xml` (EmDash, every published post and project)
+- `/_emdash/*` — EmDash admin, API and media routes
 
-**Content Collections:**
+**Content (EmDash):**
 
-- Blog posts live in `src/content/blog/` as `.md` files
-- Projects live in `src/content/projects/` as `.md` files
-- Schema defined in `src/content.config.ts` using Astro's glob loader and Zod
-- Blog required fields: `title`, `description`, `pubDate`
-- Blog optional fields: `updatedDate`, `heroImage`, `tags` (string[]), `author`
-- Project required fields: `title`, `description`
-- Project optional fields: `navTitle`, `heroImage`, `status` (`'completed' | 'in-progress' | 'paused'`), `completedDate`, `featuredStat`
-- Access via `getCollection('blog')` or `getCollection('projects')` from `astro:content`
+- Collections and fields are defined in `.emdash/seed.json`, which EmDash applies to a new database on first request. `emdash-env.d.ts` holds the generated types (regenerated on dev server start).
+- `posts` (served at `/blog/<slug>/`): `title`, `description`, `featured_image`, `pub_date`, `author` (required); `updated_date`, `content` (Portable Text). Tags use EmDash's built-in `tag` taxonomy.
+- `projects` (served at `/projects/<slug>/`): `title`, `description`, `featured_image`, `pub_date` (required); `nav_title`, `project_status` (`completed` | `in-progress` | `paused`; `status` is reserved by EmDash), `completed_date`, `featured_stat`, `content`.
+- Pages never query EmDash directly. Use the helpers in `src/lib/content.ts` — `getPosts({ tag? })`, `getPost(slug)`, `getProjects()`, `getProject(slug)`, `getTag(slug)`, `mediaUrl(image)` — which return the `BlogPost`, `Project` and `Tag` types the components take.
+- Post and project bodies render through `src/components/Body.astro`, which wraps EmDash's `PortableText` and swaps in `src/components/portable-text/` renderers for code and video blocks so they match the site's styles.
+- Images from EmDash render with `Image` from `emdash/ui` (`image={...}`), not `astro:assets`.
 
 **Component model:**
 
@@ -62,19 +66,20 @@ This is an **Astro 6** site deployed to Netlify with `output: "server"` via `@as
 
 | Component             | Props                                                        | Purpose                                                                                                                |
 | --------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `BaseHead.astro`      | `title`, `description`, `image?`                             | `<head>` meta/OG tags, theme detection script, Google Fonts, Netlify Identity widget                                   |
+| `BaseHead.astro`      | `title`, `description`, `image?` (asset or URL)              | `<head>` meta/OG tags, theme detection script, Google Fonts                                                            |
 | `Header.astro`        | —                                                            | Sticky nav with blur backdrop, site title, nav links (blog, projects, about), dark/light toggle, mobile hamburger menu |
 | `HeaderLink.astro`    | `href`, HTML anchor attrs                                    | Nav link with underline active state                                                                                   |
-| `Footer.astro`        | —                                                            | Copyright year (auto), mono social links (github, vimeo, linkedin), Netlify Identity login redirect                    |
-| `TagList.astro`       | `tags: string[]`                                             | Renders clickable `#tag` pill links to `/blog/tags/[tag]/`                                                             |
-| `PostCard.astro`      | `post: CollectionEntry<'blog'>`                              | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages                                              |
-| `PostRow.astro`       | `post: CollectionEntry<'blog'>`                              | Blog post row (`<li>`) with thumbnail, date, title, description; used in the recent posts list on the homepage         |
-| `ProjectCard.astro`   | `project: CollectionEntry<'projects'>`                       | Project card (`<li>`) with image, status badge, title, description, optional featuredStat                              |
+| `Footer.astro`        | —                                                            | Copyright year (auto), mono social links (github, vimeo, linkedin)                                                     |
+| `TagList.astro`       | `tags: Tag[]`                                                | Renders clickable `#tag` pill links to `/blog/tags/[slug]/`                                                            |
+| `PostCard.astro`      | `post: BlogPost`                                             | Blog post card (`<li>`) used in the grid on `/blog` and tag archive pages                                              |
+| `PostRow.astro`       | `post: BlogPost`                                             | Blog post row (`<li>`) with thumbnail, date, title, description; used in the recent posts list on the homepage         |
+| `ProjectCard.astro`   | `project: Project`                                           | Project card (`<li>`) with image, status badge, title, description, optional featuredStat                              |
 | `StatusBadge.astro`   | `status: 'completed' \| 'in-progress' \| 'paused'`, `class?` | Styled status badge with three visual variants                                                                         |
 | `FormattedDate.astro` | `date: Date`                                                 | Formats a `Date` as "MMM d, yyyy"                                                                                      |
 | `Hero.astro`          | —                                                            | Homepage hero: SVG logo, typewriter eyebrow, stat bar                                                                  |
 | `HomeSection.astro`   | `title`, `href`, `linkLabel`, `layout: 'grid' \| 'list'`     | Wraps a homepage section (header with title + view-all link, then a `<ul>`); children passed via slot                  |
 | `YouTube.astro`       | `id: string`, `title?`                                       | Responsive 16:9 iframe embed via `youtube-nocookie.com`, lazy loaded                                                   |
+| `Body.astro`          | `value: Body`                                                | Renders a post or project body (Portable Text) with the site's code and video renderers                                |
 
 ## Design System
 
@@ -115,22 +120,22 @@ This is an **Astro 6** site deployed to Netlify with `output: "server"` via `@as
 - Eyebrow label has a typewriter effect (starts 800ms after page load, 45ms/char)
 - Blinking cursor via `.hero-label.typing::after { content: '▍' }`
 - Stat bar shows post count, topic count, and founding year
-- Featured projects section shows 3 projects by slug (configured via `FEATURED_PROJECT_IDS` in `index.astro`) using `ProjectCard`
+- Featured projects section shows the 3 most recent projects using `ProjectCard`; pin specific ones by slug via `FEATURED_PROJECT_IDS` in `index.astro`
 - Topics strip renders all unique tags as pill links below the CTA
 
 ## Admin CMS
 
-Decap CMS has been removed. The site is being migrated to EmDash CMS; this section will be updated once that integration lands.
+EmDash admin at `/_emdash/admin`. Sign-in is by passkey or GitHub (`authProviders: [github()]` in `astro.config.mjs`; credentials in the `EMDASH_OAUTH_GITHUB_CLIENT_ID` / `EMDASH_OAUTH_GITHUB_CLIENT_SECRET` Worker secrets). GitHub sign-in only matches existing users by verified email; it does not let new people sign up.
+
+Locally, the dev server keeps its database and media in `.wrangler/state/`. `/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin` sets up the site and signs in as a dev admin without a passkey (localhost only).
 
 ## Video embeds
 
-A custom remark plugin (`src/plugins/remark-video.mjs`) converts shortcodes in Markdown into responsive iframe embeds. Supports YouTube and Vimeo URLs.
-
-**Syntax:** `{{< video "https://youtube.com/watch?v=abc123" "Optional title" >}}`
+Paste a YouTube or Vimeo link as an embed block in the editor. `src/components/portable-text/VideoEmbed.astro` renders it as a responsive iframe (`.video-embed` in `global.css`); other URLs fall back to a plain link.
 
 ## Tags
 
-Tags are `string[]` in post frontmatter. The `TagList` component renders them as pill links.
+Tags are terms in EmDash's `tag` taxonomy, each with a `slug` and `label`. Tag pages live at `/blog/tags/<slug>/`; mixed-case legacy URLs (e.g. `/blog/tags/AI/`) redirect to the lowercase slug.
 
 ## Commits
 

@@ -1,21 +1,23 @@
 # Makeventures
 
-A personal maker blog covering IoT, home labs, videography, and coding. Built with [Astro](https://astro.build/) — a static site generator that pre-builds all pages at deploy time with zero client-side JavaScript by default.
+A personal maker blog covering IoT, home labs, videography, and coding. Built with [Astro](https://astro.build/) and [EmDash](https://docs.emdashcms.com/), a CMS that runs inside the Astro app. Pages are rendered on the server when requested, with zero client-side JavaScript by default.
 
 ## Deployments
 
-| Branch    | URL                                                                                      |
-| --------- | ---------------------------------------------------------------------------------------- |
-| `main`    | [makeventures.netlify.app](https://makeventures.netlify.app) — production                |
-| `staging` | [staging--makeventures.netlify.app](https://staging--makeventures.netlify.app) — preview |
+| Branch    | Cloudflare Worker      | URL                                                     |
+| --------- | ---------------------- | ------------------------------------------------------- |
+| `main`    | `makeventures`         | [makeventures.ca](https://makeventures.ca) — production |
+| `staging` | `makeventures-staging` | The Worker's `workers.dev` address — preview            |
+
+Each environment has its own database and media bucket, so content published on staging never appears in production.
 
 ## Stack
 
-- **Framework:** Astro 6 (static site generation — all pages pre-built, no server needed)
-- **Content:** Markdown files in `src/content/blog/` (posts) and `src/content/projects/` (projects)
+- **Framework:** Astro 6, server output (pages render on request; `/about` and `/404` are pre-built)
+- **CMS:** [EmDash](https://docs.emdashcms.com/) — admin at `/_emdash/admin`, content stored in a database
+- **Content:** blog posts and projects are EmDash collections, defined in `.emdash/seed.json`
 - **Styling:** Custom CSS design system with dark mode support
-- **CMS:** [Decap CMS](https://decapcms.org/) — Git-based headless CMS at `/admin/`
-- **Deployment:** Netlify (auto-deploys on push to `main` and `staging`)
+- **Hosting:** [Cloudflare Workers](https://developers.cloudflare.com/workers/) — a D1 database holds the content and an R2 bucket holds uploaded images; both auto-deploy on push to `main` and `staging`
 
 ## What's in the repo
 
@@ -31,17 +33,17 @@ src/
 │   └── projects/
 │       ├── index.astro         → /projects
 │       └── [...slug].astro     → /projects/project-slug
-├── content/
-│   ├── blog/           # Blog posts as .md files
-│   └── projects/       # Project pages as .md files
+├── lib/
+│   └── content.ts      # Fetches posts, projects and tags from EmDash
 ├── components/         # Reusable UI pieces (header, footer, post cards, etc.)
+│   └── portable-text/  # Site-styled renderers for code and video blocks
 ├── layouts/            # Page templates (BlogPost.astro, ProjectPost.astro)
+├── live.config.ts      # Connects Astro to EmDash
+├── worker.ts           # Cloudflare Worker entry point
 └── styles/             # Global CSS, design tokens, theme variables
-public/
-└── admin/              # Decap CMS admin panel
-    ├── config.yml      # Collection definitions, backend config
-    ├── index.html      # CMS entry point with custom preview templates
-    └── preview.css     # Preview styling to match site design
+.emdash/
+└── seed.json           # EmDash content model: collections, fields, tags
+wrangler.jsonc          # Cloudflare Worker config: database, media bucket, environments
 ```
 
 ## Feature development flow
@@ -49,7 +51,7 @@ public/
 1. **Open an issue** — add a new issue in GitHub Issues describing the feature or bug
 2. **Branch** — create a new branch off `main`
 3. **Develop** — make changes and preview locally with `pnpm dev`
-4. **Staging** — merge to `staging` to preview on [staging--makeventures.netlify.app](https://staging--makeventures.netlify.app)
+4. **Staging** — merge to `staging` to preview on the staging Worker
 5. **PR** — open a pull request against `main`
 6. **Review & merge** — review, approve, and merge to ship to production
 
@@ -59,7 +61,7 @@ You'll need **Node.js** and **pnpm** installed before you start.
 
 ### 1. Install Node.js
 
-The project requires Node.js version 22.12.0 or higher.
+The project requires Node.js version 22.16.0 or higher.
 
 **On macOS — recommended via [Homebrew](https://brew.sh):**
 
@@ -101,7 +103,7 @@ npm install -g pnpm
 Verify both tools are ready:
 
 ```bash
-node --version   # should print v22.x.x or higher
+node --version   # should print v22.16 or higher
 pnpm --version
 ```
 
@@ -121,7 +123,12 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:4321](http://localhost:4321) in your browser. The server hot-reloads on save — changes to `.astro`, `.md`, and `.css` files appear instantly without refreshing.
+Open [http://localhost:4321](http://localhost:4321) in your browser. The server hot-reloads on save — changes to `.astro` and `.css` files appear instantly without refreshing.
+
+The dev server runs a local copy of the Cloudflare database and media bucket in `.wrangler/`, which starts empty. To get going:
+
+1. Open [http://localhost:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin](http://localhost:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin) to set up the local site and sign in as a dev admin without a passkey. This shortcut only works on localhost.
+2. Add content in the admin. Delete `.wrangler/state/` to start over with an empty site.
 
 ### Other commands
 
@@ -134,35 +141,30 @@ Always run `pnpm build` before opening a PR to catch any compile errors.
 
 ## Adding content
 
-All content is managed through **Decap CMS** at [makeventures.netlify.app/admin/](https://makeventures.netlify.app/admin/).
+All content is managed in the **EmDash admin** at [makeventures.ca/_emdash/admin](https://makeventures.ca/_emdash/admin). Published changes appear on the site immediately; there is no build or deploy step.
+
+Sign in with a passkey or with GitHub. GitHub sign-in only works for an existing admin user whose email matches a verified email on the GitHub account; to give someone access, add them as a user in the admin first.
 
 ### Blog post
 
-1. Go to `/admin/` and log in with Netlify Identity.
-2. Select **Blog** from the sidebar, then click **New Blog**.
-3. Fill in the required fields:
+1. Select **Posts** from the sidebar, then **Add New**.
+2. Fill in the required fields:
    - **Title** — the post headline
    - **Description** — a short summary shown in cards and meta tags
-   - **Publish Date** — when the post should be dated
-4. Optionally set:
-   - **Hero Image** — landscape JPG, at least 1920×900, max 800 KB (compress with [Squoosh](https://squoosh.app) before uploading). The CMS will reject uploads that don't meet these requirements.
-   - **Tags** — add tags one at a time (e.g. `iot`, `home-lab`)
-   - **Author** — defaults to Igor Samuk if left blank
-5. Write the post body in the Markdown editor. Use the live preview panel to check formatting.
-6. Click **Publish** — the CMS commits the file to `main` and triggers a Netlify deploy automatically.
+   - **Hero Image** — upload or pick from the media library
+   - **Publish Date** — the date shown on the post; posts are sorted by it
+   - **Author**
+3. Optionally set **Updated Date** and pick **Tags** in the sidebar.
+4. Write the post in the **Content** editor. Type `/` for blocks such as images, tables, code and video embeds (YouTube or Vimeo links).
+5. Set the slug under **URL & language**; the post lives at `/blog/<slug>/`.
+6. Click **Publish**.
 
 ### Project page
 
-1. Go to `/admin/` and log in with Netlify Identity.
-2. Select **Projects** from the sidebar, then click **New Projects**.
-3. Fill in the required fields:
-   - **Title** — the project name
-   - **Description** — a short summary shown in cards and meta tags
-4. Optionally set:
-   - **Status** — `completed`, `in-progress`, or `paused` (defaults to `in-progress`)
-   - **Completed Date** — when the project was finished
-   - **Hero Image** — landscape JPG, at least 1920×900, max 800 KB (compress with [Squoosh](https://squoosh.app) before uploading). The CMS will reject uploads that don't meet these requirements.
-5. Write the project body in the Markdown editor.
-6. Click **Publish** to commit and deploy.
+1. Select **Projects** from the sidebar, then **Add New**.
+2. Fill in the required fields: **Title**, **Description**, **Hero Image** and **Publish Date**.
+3. Optionally set **Status** (`completed`, `in-progress` or `paused`; defaults to `in-progress`), **Completed Date**, **Nav Title** and **Featured Stat**.
+4. Write the project body in the **Content** editor and set the slug; the project lives at `/projects/<slug>/`.
+5. Click **Publish**.
 
-To feature a project on the homepage, a developer needs to add its slug to the `FEATURED_PROJECT_IDS` array in `src/pages/index.astro`.
+The homepage features the three most recent projects. To pin specific ones instead, a developer adds their slugs to the `FEATURED_PROJECT_IDS` array in `src/pages/index.astro`.
