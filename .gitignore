@@ -26,6 +26,9 @@ pnpm-debug.log*
 .vscode/
 .zed/
 
+# Local Netlify folder (left over from the Netlify era)
+.netlify
+
 # Local Wrangler state and secrets
 .wrangler/
 .dev.vars
