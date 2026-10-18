@@ -1,0 +1,15 @@
+---
+// Renders a Portable Text code block as a bare <pre><code>, which is what
+// the `pre` styles in global.css target.
+interface Props {
+	node: {
+		_type: 'code';
+		code?: string;
+		language?: string;
+	};
+}
+
+const { code, language } = Astro.props.node;
+---
+
+{code && <pre data-language={language ?? 'plaintext'}><code>{code}</code></pre>}

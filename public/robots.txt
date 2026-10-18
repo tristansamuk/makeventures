@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
+Disallow: /_emdash/
 
-Sitemap: https://makeventures.netlify.app/sitemap-index.xml
+Sitemap: https://makeventures.ca/sitemap-index.xml
+Sitemap: https://makeventures.ca/sitemap.xml

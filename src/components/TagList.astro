@@ -1,6 +1,8 @@
 ---
+import type { Tag } from '../lib/content';
+
 interface Props {
-	tags: string[];
+	tags: Tag[];
 }
 
 const { tags } = Astro.props;
@@ -11,8 +13,8 @@ const { tags } = Astro.props;
 		<ul class="tag-list" role="list">
 			{tags.map((tag) => (
 				<li>
-					<a href={`/blog/tags/${tag}/`} class="tag">
-						{tag}
+					<a href={`/blog/tags/${tag.slug}/`} class="tag">
+						{tag.label}
 					</a>
 				</li>
 			))}

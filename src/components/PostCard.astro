@@ -1,34 +1,34 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import { Image } from 'emdash/ui';
+import type { BlogPost } from '../lib/content';
 import FormattedDate from './FormattedDate.astro';
 import TagList from './TagList.astro';
 
 interface Props {
-	post: CollectionEntry<'blog'>;
+	post: BlogPost;
 }
 
 const { post } = Astro.props;
 ---
 
 <li class="post-card">
-	{post.data.heroImage && (
+	{post.heroImage && (
 		<div class="card-image">
-			<Image width={720} height={400} src={post.data.heroImage} alt="" />
+			<Image width={720} height={400} image={post.heroImage} alt="" />
 		</div>
 	)}
 	<div class="card-body">
 		<time class="card-date">
-			<FormattedDate date={post.data.pubDate} />
+			<FormattedDate date={post.pubDate} />
 		</time>
 		<h2 class="card-title">
-			<a href={`/blog/${post.id}/`} class="card-link">
-				{post.data.title}
+			<a href={`/blog/${post.slug}/`} class="card-link">
+				{post.title}
 			</a>
 		</h2>
-		<p class="card-description">{post.data.description}</p>
-		{post.data.tags && post.data.tags.length > 0 && (
-			<TagList tags={post.data.tags} />
+		<p class="card-description">{post.description}</p>
+		{post.tags.length > 0 && (
+			<TagList tags={post.tags} />
 		)}
 	</div>
 </li>

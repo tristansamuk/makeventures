@@ -1,20 +1,20 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import { Image } from 'emdash/ui';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import StatusBadge from '../components/StatusBadge.astro';
+import { type Project, mediaUrl } from '../lib/content';
 
-type Props = CollectionEntry<'projects'>['data'];
+type Props = Omit<Project, 'slug' | 'content'>;
 
 const { title, description, heroImage, status, completedDate, featuredStat } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} image={heroImage} />
+		<BaseHead title={title} description={description} image={mediaUrl(heroImage)} />
 	</head>
 
 	<body>
@@ -26,9 +26,10 @@ const { title, description, heroImage, status, completedDate, featuredStat } = A
 						<Image
 							width={1920}
 							height={823}
-							src={heroImage}
+							image={heroImage}
 							alt=""
 							class="hero-img"
+							priority
 						/>
 						<div class="hero-overlay">
 							<div class="hero-inner">

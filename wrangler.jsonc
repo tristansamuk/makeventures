@@ -1,0 +1,58 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "makeventures",
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "makeventures",
+      "database_id": "1424219b-09b1-440c-8d1e-1ad0bd0500cc",
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "makeventures-media",
+    },
+  ],
+  // Astro sessions (sign-in state for the EmDash admin)
+  "kv_namespaces": [
+    {
+      "binding": "SESSION",
+      "id": "b7ca898f235e40b88c67ef6441c9b10d",
+    },
+  ],
+  // General maintenance cron trigger
+  "triggers": {
+    "crons": ["* * * * *"],
+  },
+  // Named environments do not inherit bindings, so each repeats them.
+  "env": {
+    "staging": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "makeventures-staging",
+          "database_id": "c2bcf62d-b3ab-47fb-9adb-76d4346e5b25",
+        },
+      ],
+      "r2_buckets": [
+        {
+          "binding": "MEDIA",
+          "bucket_name": "makeventures-media-staging",
+        },
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "SESSION",
+          "id": "6b781491b70948209d657816f1dc3b58",
+        },
+      ],
+      "triggers": {
+        "crons": ["* * * * *"],
+      },
+    },
+  },
+}
