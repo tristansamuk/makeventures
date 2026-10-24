@@ -28,9 +28,15 @@
   "triggers": {
     "crons": ["* * * * *"],
   },
+  // Production serves makeventures.ca. Wrangler syncs the Worker's custom domains
+  // to this list on deploy, so a domain added only in the dashboard could be dropped.
+  "routes": [{ "pattern": "makeventures.ca", "custom_domain": true }],
   // Named environments do not inherit bindings, so each repeats them.
   "env": {
     "staging": {
+      // The Astro adapter copies top-level routes into the staging build, which
+      // would move makeventures.ca to the staging Worker. Keep staging on workers.dev.
+      "routes": [],
       "d1_databases": [
         {
           "binding": "DB",
