@@ -24,6 +24,13 @@
       "id": "b7ca898f235e40b88c67ef6441c9b10d",
     },
   ],
+  // Workers Logs: keep request logs (with CPU time and outcome) for the dashboard.
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+    },
+  },
   // General maintenance cron trigger
   "triggers": {
     "crons": ["* * * * *"],
