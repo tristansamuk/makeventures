@@ -13,6 +13,10 @@ export default defineConfig({
   site: "https://makeventures.ca",
   output: "server",
   adapter: cloudflare(),
+  // The Decap CMS admin used to live at /admin; send old bookmarks to EmDash's.
+  redirects: {
+    "/admin": "/_emdash/admin",
+  },
   // Astro only resizes images whose URL is on this allow-list. EmDash serves
   // media from each environment's own origin, so list every place the site runs.
   image: {
